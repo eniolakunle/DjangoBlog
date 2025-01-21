@@ -12,6 +12,8 @@
         </h2>
         <p class ="date">
             Published {{post.publish}} by {{post.author}}
+            <br>
+            {{post.comments.count}} comment{{post.comments.count|pluralize}}
         </p>
     {{ post.body|truncatewords:30|linebreaks }}
 {% endfor %}
