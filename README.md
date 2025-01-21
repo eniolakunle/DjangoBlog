@@ -14,7 +14,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 
 ### Tech Stack 🛠️
 - **Backend**: Django 5 (Python-based web framework) 🐍
-- **Frontend**: HTML, CSS (with a basic responsive design) 🌐
+- **Frontend**: HTML, CSS (Responsive Design provided by [SimpleCSS](https://simplecss.org)) 🌐
 - **Database**: SQLite (default for development) 💾
 - **Authentication**: Django's built-in authentication system 🔑
 <!-- - **Deployment**: Can be deployed using services like Heroku, DigitalOcean, etc. 🚀 -->

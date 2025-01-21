@@ -11,6 +11,17 @@
     </head>
 
     <body>
+        <header>
+            <nav>
+                <a href="{% url 'blog:post_list' %}">
+                    Home
+                </a>
+                <a href="https://github.com/eniolakunle/DjangoBlog">
+                    GitHub
+                </a>
+            </nav>
+        </header>
+        
         <div id="content">
             {% block content %}
             {% endblock %}
