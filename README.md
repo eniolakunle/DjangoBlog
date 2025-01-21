@@ -1,6 +1,6 @@
 # Jesus Blog - A Django 5 Application ✝️📖
 
-This is a simple blog application built with **Django 5** to share inspirational posts, devotionals, and reflections based on the teachings of **Jesus Christ**. The project is designed to help users create, read, update, and delete posts (CRUD functionality) while promoting the message of faith, hope, and love. ❤️
+This is a simple blog application built with **Django 5** to share inspirational posts, devotionals, and reflections based on the teachings of **Jesus Christ**. The project is designed to help users create, read, update, and delete posts (CRUD functionality) while promoting the message of faith, hope, and love. ❤️ Visit [here!](https://eniolakunle.pythonanywhere.com/blog/)
 
 ### Features ✨
 - **Comments Section**: Readers can leave comments on each post, and share articles through email to engage in discussions. 💬
