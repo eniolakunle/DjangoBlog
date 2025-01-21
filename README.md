@@ -6,7 +6,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 - **Comments Section**: Readers can leave comments on each post, and share articles through email to engage in discussions. 💬
 - **Responsive Design**: Built with mobile-first principles to ensure a seamless experience across devices. 📱💻
 
-### Disabled Features 🚧:
+### Disabled Features 🚧
 - **User Authentication**: Users can sign up, log in, and log out to manage their posts. 🔐
 - **Post Management**: Users can create, edit, and delete blog posts based on their reflections or teachings about Jesus. ✍️
 <!-- - **Categories & Tags**: Posts can be organized into categories (e.g., Bible Studies, Devotionals, Sermons) and tagged with relevant keywords (e.g., Grace, Faith, Love). 🏷️ -->
