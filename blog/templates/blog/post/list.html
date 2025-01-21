@@ -10,12 +10,14 @@
                 {{post.title}}
             </a>
         </h2>
-        <p class ="date">
+        <article>
+        <small class ="date">
             Published {{post.publish}} by {{post.author}}
             <br>
             {{post.comments.count}} comment{{post.comments.count|pluralize}}
-        </p>
+        </small>
     {{ post.body|truncatewords:30|linebreaks }}
+</article>
 {% endfor %}
 {% include "blog/post/pagination.html" with page=page_obj %}
 {% endblock %}

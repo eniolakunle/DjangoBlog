@@ -3,7 +3,11 @@
 <html>
     <head>
         <title>{% block title %} {% endblock %}</title>
-        <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+        <!-- <link rel="stylesheet" href="https://unpkg.com/mvp.css">  -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css"> -->
+        <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+        <!-- <link rel="stylesheet" href="{% static 'css/blog.css' %}"> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
 
     <body>
@@ -11,12 +15,12 @@
             {% block content %}
             {% endblock %}
         </div>
-        <div id="sidebar">
+        <footer id="sidebar">
             <a href="{% url 'blog:post_list' %}">
                 <h2>Jesus Blog</h2>
             </a>
-            <p>This is Jesus' blog.</p>
+            <h6>This is Jesus' blog.</h6>
             <img src="{% static 'images/jeezus.jpg' %}" alt="The Christ" id="jesusimg">
-        </div>
+        </footer>
     </body>
 </html>
