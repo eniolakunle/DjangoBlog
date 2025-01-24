@@ -137,12 +137,12 @@ def post_comment(request, post_id):
 
         comment.save()
 
-        return render(
-            request,
-            'blog/post/comment.html',
-            {
-                'post': post,
-                'form': form,
-                'comment': comment,
-            }
-        )
+    return render(
+        request,
+        'blog/post/comment.html',
+        {
+            'post': post,
+            'form': form,
+            'comment': comment,
+        }
+    )

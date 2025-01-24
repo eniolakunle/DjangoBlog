@@ -1,5 +1,6 @@
 from django import forms
 from .models import Comment
+from captcha.fields import CaptchaField
 
 class EmailPostForm(forms.Form):
     name = forms.CharField(max_length=25)
@@ -9,8 +10,10 @@ class EmailPostForm(forms.Form):
         required=False,
         widget=forms.Textarea
     )
+    captcha = CaptchaField()
 
 class CommentForm(forms.ModelForm):
+    captcha = CaptchaField()
     class Meta:
         model = Comment
         fields = ['name', 'email', 'body']
