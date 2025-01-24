@@ -8,6 +8,7 @@
     </div>
     <!-- {{ form.as_p }} -->
       {{ form.body.as_field_group }}
+      {{ form.captcha.as_field_group }}
     {% csrf_token %}
     <p>
         <input type="submit" value="Add a comment">
