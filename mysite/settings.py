@@ -37,8 +37,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CAPTCHA_WORDS_DICTIONARY = 'mysite/names'
-CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.word_challenge'
+# CAPTCHA_WORDS_DICTIONARY = 'mysite/names'
+# CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.word_challenge'
 
 # Application definition
 
