@@ -37,8 +37,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# CAPTCHA_WORDS_DICTIONARY = 'mysite/names'
-# CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.word_challenge'
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
+CAPTCHA_NOISE_FUNCTIONS = ('captcha.helpers.noise_null',)
+CAPTCHA_LETTER_ROTATION = (-1,1)
 
 # Application definition
 
