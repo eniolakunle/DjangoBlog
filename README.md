@@ -5,6 +5,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 ### Features ✨
 - **Comments Section**: Readers can leave comments on each post, and share articles through email to engage in discussions. 💬
 - **Responsive Design**: Built with mobile-first principles to ensure a seamless experience across devices. 📱💻
+- **CAPTCHA Verification**: Implemented via django-simple-captcha to distinguish between real users and bots. 🔒
 
 ### Disabled Features 🚧
 - **User Authentication**: Users can sign up, log in, and log out to manage their posts. 🔐
