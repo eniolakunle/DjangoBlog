@@ -78,10 +78,7 @@ def post_share(request, post_id):
         status=Post.Status.PUBLISHED
     )
     sent = False
-    print("Hello")
-    print(request)
     if request.method == 'POST':
-        print("POST")
         form = EmailPostForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
@@ -107,9 +104,8 @@ def post_share(request, post_id):
             sent = True
         
     else:
-        print("EMAIL YAA")
         form = EmailPostForm()
-    print("Hello!")
+
     return render(
         request,
         'blog/post/share.html',
