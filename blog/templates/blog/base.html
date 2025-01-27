@@ -31,15 +31,11 @@
             {% endblock %}
         </div>
         <footer id="sidebar">
-            <!-- <a href="{% url 'blog:post_list' %}">
-                <h2>Jesus Blog</h2>
-            </a> -->
-            <figure>
-                <figcaption><h6>There is no fear in love, but perfect love casts out fear. For fear has to do with punishment, and whoever fears has not been perfected in love.</h6></figcaption>
-                <a href="https://www.biblegateway.com/passage/?search=1%20John%204%3A18&version=ESV">
-                    <img src="{% static 'images/jeezus.jpg' %}" alt="The Christ" id="jesusimg">
-                </a>
-        </figure>
+            <h6>
+                <div id="dailyVersesWrapper"></div>
+            </h6>
+            <img src="{% static 'images/jeezus.jpg' %}" alt="The Christ" id="jesusimg">
         </footer>
+        <script async defer src="https://dailyverses.net/get/random.js?language=esv"></script>
     </body>
 </html>
