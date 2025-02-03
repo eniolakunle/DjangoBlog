@@ -1,5 +1,5 @@
 from django import forms
-from .models import Comment
+from .models import Comment, Subscriber
 from captcha.fields import CaptchaField
 
 class EmailPostForm(forms.Form):
@@ -17,3 +17,8 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['name', 'email', 'body']
+
+class SubscribeForm(forms.ModelForm):
+    class Meta:
+        model = Subscriber
+        fields = ['email']

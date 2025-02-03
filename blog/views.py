@@ -1,10 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post
 from django.http import Http404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
-from .forms import EmailPostForm, CommentForm
+from .forms import EmailPostForm, CommentForm, SubscribeForm
 from django.core.mail import send_mail
 
 # Create your views here.
@@ -142,3 +142,17 @@ def post_comment(request, post_id):
             'comment': comment,
         }
     )
+
+@require_POST
+def subscribe(request):
+    #Look if person is already subscribed
+    # if not send confirmation email
+    # after confirmation, save email to DB.
+
+    form = SubscribeForm(request.POST)
+    if form.is_valid():
+        return render(
+            request,
+            'blog/subscribe.html',
+            {'form': form}
+            )

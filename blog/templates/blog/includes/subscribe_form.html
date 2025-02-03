@@ -1,0 +1,5 @@
+<form action="{% url 'blog:subscribe' %}" method="post">
+    <input type="email" name="email" placeholder="abc@xyz.com" id="user_email" required>
+    {% csrf_token %}
+    <button type="submit">Subscribe</button>
+</form>

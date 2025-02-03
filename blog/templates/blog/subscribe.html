@@ -1,0 +1,10 @@
+{% extends "blog/base.html" %}
+
+{% block title %} Confirm Subscription {% endblock %}
+
+{% block content %}
+        <hgroup>
+                <h2>Please check your email to confirm your subscription!</h2>
+                <p>Confirm that <b>{{ form.email.value }}</b> is your email.</p>
+        </hgroup>
+{% endblock %}
