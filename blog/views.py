@@ -13,7 +13,7 @@ class PostListView(ListView):
 
     queryset = Post.published.all()
     context_object_name = 'posts'
-    paginate_by = 3
+    paginate_by = 7
     template_name = 'blog/post/list.html'
 
 def post_list(request):
