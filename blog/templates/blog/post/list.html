@@ -14,7 +14,7 @@
         <small class ="date">
             Published {{post.publish}} by {{post.author}}
             <br>
-            {{post.comments.count}} comment{{post.comments.count|pluralize}}
+            <!-- {{post.comments.count}} comment{{post.comments.count|pluralize}} -->
         </small>
     {{ post.body|truncatewords:30|linebreaks }}
 </article>
