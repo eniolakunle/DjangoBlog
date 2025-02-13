@@ -1,0 +1,14 @@
+header {
+    background-image: url('../images/IMG_0229 2.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+
+@media (prefers-color-scheme: light) {
+    header {
+    background-image: url('../images/IMG_0229 2 light.jpg');
+    }
+  }
