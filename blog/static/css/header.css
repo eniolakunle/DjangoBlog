@@ -13,7 +13,7 @@ header {
     }
   }
 
-@supports (-webkit-overflow-scrolling: touch) {
+@media (max-width: 768px) {
     body {
         background-attachment: scroll;
     }
