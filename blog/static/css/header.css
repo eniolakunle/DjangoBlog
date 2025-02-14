@@ -9,12 +9,12 @@ header {
 
 @media (prefers-color-scheme: light) {
     header {
-    background-image: url('../images/IMG_0229 2 light.jpg');
+        background-image: url('../images/IMG_0229 2 light.jpg');
     }
   }
 
-  @supports (-webkit-overflow-scrolling: touch) {
+@supports (-webkit-overflow-scrolling: touch) {
     body {
-      background-attachment: scroll;
+        background-attachment: scroll;
     }
-  }
+}
