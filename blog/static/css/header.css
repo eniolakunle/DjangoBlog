@@ -14,7 +14,7 @@ header {
   }
 
   /*ensures iPhone headers are not zoomed in*/
-@supports (-webkit-overflow-scrolling: touch) {
+@supports (-webkit-touch-callout: none) {
     header {
         background-attachment: scroll;
     }
