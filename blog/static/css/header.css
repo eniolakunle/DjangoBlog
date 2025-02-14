@@ -12,3 +12,9 @@ header {
     background-image: url('../images/IMG_0229 2 light.jpg');
     }
   }
+
+  @supports (-webkit-overflow-scrolling: touch) {
+    body {
+      background-attachment: scroll;
+    }
+  }
