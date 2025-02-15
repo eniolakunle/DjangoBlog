@@ -10,7 +10,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 - **Fun Effects**: A few effects that give a pleasant feeling when looking at article previews. 🤪
     - **Card Effect**: Article previews mimic a playing card. 🃏
     - **Hover Effect**: Depending on the device, article previews float when tapped or when hovered over. 🧞‍♂️
-    - **Transition Effect**: A slick transition when navigating the site! 🔥
+    - **Transition Effect**: A slick transition, implemented via JavaScript, for seamless site navigation! 🔥
     <!-- - **Ripple Effect (Implemented via Javascript)**: When tapped, article preview "cards" flash a ripple. ⚡️ -->
 
 ### Disabled Features 🚧
@@ -21,7 +21,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 
 ### Tech Stack 🛠️
 - **Backend**: Django 5 (Python-based web framework) 🐍
-- **Frontend**: HTML, CSS (Responsive Design provided by [SimpleCSS](https://simplecss.org)) 🌐
+- **Frontend**: JavaScript, HTML, CSS (Responsive Design provided by [SimpleCSS](https://simplecss.org)) 🌐
 - **Database**: SQLite (default for development) 💾
 - **Authentication**: Django's built-in authentication system 🔑
 <!-- - **Deployment**: Can be deployed using services like Heroku, DigitalOcean, etc. 🚀 -->
