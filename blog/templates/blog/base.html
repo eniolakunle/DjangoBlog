@@ -8,6 +8,7 @@
         <!-- <link rel="stylesheet" href="{% static 'css/blog.css' %}"> -->
         <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
         <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+        <link rel="stylesheet" href="{% static 'css/transition.css' %}">
         <link rel="icon" type=”image/x-icon” href="{% static 'images/favicon.ico' %}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -16,7 +17,6 @@
             #content a, 
             #sidebar a {
                 text-decoration: none;
-                /* font-weight: 500; */
             }
     
             #content a:hover, 
@@ -27,6 +27,7 @@
     </head>
 
     <body>
+        <div class="transition-overlay"></div>
         <header>
             <nav>
                 <a href="{% url 'blog:post_list' %}">Home</a>
@@ -53,5 +54,6 @@
             <img src="{% static 'images/jeezus.jpg' %}" alt="The Christ" id="jesusimg">
         </footer>
         <script async defer src="https://dailyverses.net/get/random.js?language=esv"></script>
+        <script src="{% static 'js/transition.js' %}"></script>
     </body>
 </html>
