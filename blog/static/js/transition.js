@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
           setTimeout(() => {
             window.location.href = link.href; // Navigate after fade-out
-          }, 500); // Duration matches transition time
+          }, 200); // Duration matches transition time
         }
       });
     });
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.classList.add("fade-in");
       setTimeout(() => {
         overlay.classList.remove("transition-active"); // Hide overlay after fade-in
-      }, 500); // Fade-in duration
+      }, 300); // Fade-in duration
     });
   });
   
