@@ -1,100 +1,24 @@
 {% extends "blog/base.html" %}
 
+
 {% block title %}The Secret Place{% endblock %}
 
 {% block content %}
-    <style>
-        .blog-card {
-            background-color: #fff;
-            border: 1px solid #ddd;      /* Subtle border for a clean separation */
-            border-radius: 4px;          /* Slight rounding for a modern look */
-            overflow: hidden;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            margin: 1rem auto;       /* Center horizontally and provide vertical spacing */
-            /* max-width: 36rem;        Match article width from Simple.css */
-        }
-
-        .blog-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft lift on hover */
-        }
-
-        .blog-card-image {
-            width: 100%;
-            display: block;
-        }
-
-        .blog-card-content {
-            padding: 1rem;
-        }
-
-        .blog-card-title {
-            margin: 0 0 0.5rem;
-            /* font-size: 1.5rem; */
-            line-height: 1.25;
-        }
-
-        .blog-card-excerpt {
-            font-size: 1rem;
-            line-height: 1.5;
-            color: #555;
-            margin-bottom: 1rem;
-        }
-
-        .blog-card-link {
-            text-decoration: none;
-            /* color: #007acc; */
-            font-weight: 500;
-            border-bottom: 1px solid transparent;
-            /* transition: border-bottom-color 0.2s ease; */
-        }
-
-        .blog-card-link:hover {
-            /* border-bottom-color: #007acc; */
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .blog-card {
-                background-color: #1a1a1a;   /* Deeper dark background */
-                border: 1px solid #333;      /* Stronger border for more definition */
-            }
-            
-            .blog-card-title {
-                color: #fff;
-            }
-            
-            .blog-card-excerpt {
-                color: #ccc;
-            }
-            
-            .blog-card-link {
-                /* color: #58a6ff; */
-            }
-            
-            .blog-card-link:hover {
-                /* border-bottom-color: #58a6ff; */
-            }
-            
-            .blog-card:hover {
-                /* Increased shadow for a more pronounced hover effect in dark mode */
-                box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
-            }
-        }
-    </style>
-    <!-- <h1>Jesus Blog</h1> -->
+    {% load static %}
+        <link rel="stylesheet" href="{% static 'css/list.css' %}">
     {% for post in posts %}
-    <div class="blog-card">
+    <div class="blog-card floating-card" onclick="">
         <!-- <img src="path/to/image.jpg" alt="Blog Post Thumbnail" class="blog-card-image"> -->
         <div class="blog-card-content">
           <h2 class="blog-card-title">{{post.title}}</h2>
-          <p class="blog-card-excerpt">
+          <!-- <p class="blog-card-excerpt"> -->
             <small class ="date">
                 Published {{post.publish}} by {{post.author}}
                 <br>
                 <!-- {{post.comments.count}} comment{{post.comments.count|pluralize}} -->
             </small>
             <span>{{ post.body|truncatewords:30|linebreaks }}</span>
-          </p>
+          <!-- </p> -->
           <a href="{{ post.get_absolute_url }}" class="blog-card-link">Read More</a>
         </div>
       </div>
