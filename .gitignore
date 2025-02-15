@@ -4,3 +4,4 @@ db.*
 .DS_Store
 mysite/prod
 blog/static/admin/
+media/

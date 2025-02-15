@@ -5,19 +5,21 @@
 {% block content %}
     <!-- <h1>Jesus Blog</h1> -->
     {% for post in posts %}
+
+
+    <a href="{{ post.get_absolute_url }}">
         <h2>
-            <a href="{{ post.get_absolute_url }}">
                 {{post.title}}
-            </a>
         </h2>
         <article>
-        <small class ="date">
-            Published {{post.publish}} by {{post.author}}
-            <br>
-            <!-- {{post.comments.count}} comment{{post.comments.count|pluralize}} -->
-        </small>
-    {{ post.body|truncatewords:30|linebreaks }}
-</article>
+            <small class ="date">
+                Published {{post.publish}} by {{post.author}}
+                <br>
+                <!-- {{post.comments.count}} comment{{post.comments.count|pluralize}} -->
+            </small>
+            <span>{{ post.body|truncatewords:30|linebreaks }}</span>
+        </article>
+    </a>
 {% endfor %}
 {% include "blog/post/pagination.html" with page=page_obj %}
 {% endblock %}

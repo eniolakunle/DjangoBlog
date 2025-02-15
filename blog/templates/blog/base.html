@@ -10,6 +10,27 @@
         <link rel="stylesheet" href="{% static 'css/header.css' %}">
         <link rel="icon" type=”image/x-icon” href="{% static 'images/favicon.ico' %}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- style overrides -->
+        <style>
+            #content a, 
+            #sidebar a {
+                text-decoration: none;
+            }
+    
+            #content a:hover, 
+            #sidebar a:hover {
+                text-decoration: underline;
+            }
+            span, small {
+                color: #dcdcdc;
+            }
+            @media (prefers-color-scheme: light) {
+                span, small {
+                color: #212121;
+                }
+            }
+        </style>
     </head>
 
     <body>
