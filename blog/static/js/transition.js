@@ -8,15 +8,12 @@ document.addEventListener("DOMContentLoaded", () => {
           e.preventDefault(); // Prevent default action (navigation)
         
         let blogCard = link;
-        if (blogCard) {
-            while (blogCard){
-                if (blogCard.classList.contains("floating-card")) {
-                    blogCard.classList.add("link-container");
-                    break;
-                }
-                // console.log(blogCard)
-                blogCard = blogCard.parentElement;
+        while (blogCard){
+            if (blogCard.classList.contains("floating-card")) {
+                blogCard.classList.add("link-container");
+                break;
             }
+            blogCard = blogCard.parentElement;
         }
           // Show the overlay and trigger fade-out effect
           overlay.classList.add("transition-active");

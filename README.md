@@ -10,6 +10,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 - **Fun Effects**: A few effects that give a pleasant feeling when looking at article previews. 🤪
     - **Card Effect**: Article previews mimic a playing card. 🃏
     - **Hover Effect**: Depending on the device, article previews float when tapped or when hovered over. 🧞‍♂️
+    - **Transition Effect**: A slick transition when navigating the site! 🔥
     <!-- - **Ripple Effect (Implemented via Javascript)**: When tapped, article preview "cards" flash a ripple. ⚡️ -->
 
 ### Disabled Features 🚧
