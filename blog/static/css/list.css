@@ -56,32 +56,3 @@
 .floating-ripple-card:hover {
 animation: floating 2s ease-in-out infinite;
 }
-
-/* Ripple Effect */
-.ripple {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(0, 0, 0, 0.2); /* Darker ripple for light mode */
-    transform: scale(0);
-    animation: ripple-effect 0.6s ease-out;
-    pointer-events: none;
-    opacity: 0.8;
-}
-/* Adjust Ripple for Dark Mode */
-@media (prefers-color-scheme: dark) {
-    .ripple {
-      background: rgba(255, 255, 255, 0.447); /* Lighter ripple for dark mode */
-    }
-  }
-
-/* Ripple Animation */
-@keyframes ripple-effect {
-    from {
-        transform: scale(0);
-        opacity: 0.8;
-    }
-    to {
-        transform: scale(4);
-        opacity: 0;
-    }
-}

@@ -4,7 +4,6 @@
 {% block title %}The Secret Place{% endblock %}
 
 {% block content %}
-    <!-- <h1>Jesus Blog</h1> -->
     {% load static %}
         <link rel="stylesheet" href="{% static 'css/list.css' %}">
     {% for post in posts %}
@@ -25,5 +24,4 @@
       </div>
 {% endfor %}
 {% include "blog/post/pagination.html" with page=page_obj %}
-<script src="{% static 'js/ripple.js' %}"></script>
 {% endblock %}
