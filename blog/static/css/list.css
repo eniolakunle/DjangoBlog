@@ -53,6 +53,6 @@
 }
 
 /* Apply Floating Animation on Hover */
-.floating-ripple-card:hover {
+.floating-card:hover {
 animation: floating 2s ease-in-out infinite;
 }
