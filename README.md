@@ -7,6 +7,10 @@ This is a simple blog application built with **Django 5** to share inspirational
 - **Responsive Design**: Built with mobile-first principles to ensure a seamless experience across devices. 📱💻
     - **Dark/Light Mode Support**: Dynamically adjusts according to device preference! 🌗
 - **CAPTCHA Verification**: Implemented via django-simple-captcha to distinguish between real users and bots. 🔒
+- **Fun Effects**: A few effects that give a pleasant feeling when looking at article previews. 🤪
+    - **Card Effect**: Article previews mimic a playing card. 🃏
+    - **Hover Effect**: Depending on the device, article previews float on tap or mouse hover. 🧞‍♂️
+    - **Ripple Effect**: When tapped, article previews flash a ripple. 🃏
 
 ### Disabled Features 🚧
 - **User Authentication**: Users can sign up, log in, and log out to manage their posts. 🔐
@@ -16,7 +20,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 
 ### Tech Stack 🛠️
 - **Backend**: Django 5 (Python-based web framework) 🐍
-- **Frontend**: HTML, CSS (Responsive Design provided by [SimpleCSS](https://simplecss.org)) 🌐
+- **Frontend**: JavaScript, HTML, CSS (Responsive Design provided by [SimpleCSS](https://simplecss.org)) 🌐
 - **Database**: SQLite (default for development) 💾
 - **Authentication**: Django's built-in authentication system 🔑
 <!-- - **Deployment**: Can be deployed using services like Heroku, DigitalOcean, etc. 🚀 -->
