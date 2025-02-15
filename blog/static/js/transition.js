@@ -32,5 +32,12 @@ document.addEventListener("DOMContentLoaded", () => {
         overlay.classList.remove("transition-active"); // Hide overlay after fade-in
       }, 300); // Fade-in duration
     });
+
+    // **Fix Back Button Issue: Ensure Page Always Fades Back In**
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+            overlay.classList.remove("transition-active"); // Hide overlay after fade-in
+        }
+    });
   });
   
