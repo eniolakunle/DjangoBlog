@@ -1,9 +1,15 @@
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
 # from django.db.models.functions import Now
 
+def validate_image_max_size(image):
+    max_size_kb = 500
+    if image.size > max_size_kb * 1024:  # convert KB to bytes
+        raise ValidationError(f"Image file too large (maximum {max_size_kb}KB allowed).")
+    
 # Create your models here.
 
 class PublishedManager(models.Manager):
@@ -20,11 +26,17 @@ class Post(models.Model):
     slug = models.SlugField(
         max_length=250,
         unique_for_date='publish'
-        )
+    )
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='blog_posts'
+    )
+    featured_image = models.ImageField(
+        upload_to='featured_images/', 
+        blank=True, 
+        null=True, 
+        validators=[validate_image_max_size]
     )
     body = models.TextField()
     publish = models.DateTimeField(default=timezone.now)

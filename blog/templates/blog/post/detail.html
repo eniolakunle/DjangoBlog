@@ -14,6 +14,15 @@
     <small class="date">
         Updated on {{post.updated}}
     </small>
+
+    {% if post.featured_image %}
+    <br>
+    <br>
+    <picture>
+        <img src="{{ post.featured_image.url }}" alt="featured image for post">
+    </picture>
+    {% endif %}
+
     <hr>
     {{ post.body|linebreaks }}
     <p>
