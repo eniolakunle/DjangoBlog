@@ -11,7 +11,7 @@
         {% if post.featured_image %}
         <a href="{{ post.get_absolute_url }}">
             <picture>
-                <img src="{{ post.featured_image.url }}" alt="" class="blog-card-image">
+                <img src="{{ post.featured_image.url }}" alt="featured image for blog post" class="blog-card-image">
             </picture>
         </a>
         {% endif %}
