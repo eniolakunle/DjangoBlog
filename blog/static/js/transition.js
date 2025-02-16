@@ -50,6 +50,10 @@ document.addEventListener("DOMContentLoaded", () => {
 // endless scrolling is in below listener
 document.addEventListener('DOMContentLoaded', function() {
   const sentinel = document.getElementById('sentinel');
+  
+  if (!sentinel)
+    return;
+  
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -58,9 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  if (!sentinel)
-    return;
-  
   observer.observe(sentinel);
 
   let loading = false;
