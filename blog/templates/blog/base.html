@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
         <link rel="stylesheet" href="{% static 'css/custom.css' %}">
         <link rel="stylesheet" href="{% static 'css/transition.css' %}">
+        <link rel="stylesheet" href="{% static 'css/splash.css' %}">
         <link rel="icon" type=”image/x-icon” href="{% static 'images/favicon.ico' %}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -27,6 +28,14 @@
     </head>
 
     <body>
+        <div id="splash">
+            😀
+            <h1>Its A Pleasure to See You!</h1>
+            <p>
+                Please, enjoy an article <small>(or two, or three).</small>
+            </p>
+        </div>
+        
         <div class="transition-overlay"></div>
         <header>
             <nav>
@@ -55,5 +64,6 @@
         </footer>
         <script async defer src="https://dailyverses.net/get/random.js?language=esv"></script>
         <script src="{% static 'js/transition.js' %}"></script>
+        <script src="{% static 'js/splash.js' %}"></script>
     </body>
 </html>
