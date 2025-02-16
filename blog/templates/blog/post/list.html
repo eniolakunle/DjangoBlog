@@ -1,32 +1,35 @@
 {% extends "blog/base.html" %}
 
+
 {% block title %}The Secret Place{% endblock %}
 
 {% block content %}
-    <!-- <h1>Jesus Blog</h1> -->
+    {% load static %}
+        <link rel="stylesheet" href="{% static 'css/list.css' %}">
     {% for post in posts %}
-
-
-    <a href="{{ post.get_absolute_url }}">
-        <h2>
-                {{post.title}}
-        </h2>
-
+    <div class="blog-card floating-card" onclick="">
         {% if post.featured_image %}
-        <picture>
-            <img src="{{ post.featured_image.url }}" alt="">
-        </picture>
+        <!-- <br>
+        <br> -->
+        <a href="{{ post.get_absolute_url }}">
+            <picture>
+                <img src="{{ post.featured_image.url }}" alt="" class="blog-card-image">
+            </picture>
+        </a>
         {% endif %}
-        
-        <article>
+        <div class="blog-card-content">
+          <h2 class="blog-card-title">{{post.title}}</h2>
+          <!-- <p class="blog-card-excerpt"> -->
             <small class ="date">
                 Published {{post.publish}} by {{post.author}}
                 <br>
                 <!-- {{post.comments.count}} comment{{post.comments.count|pluralize}} -->
             </small>
             <span>{{ post.body|truncatewords:30|linebreaks }}</span>
-        </article>
-    </a>
+          <!-- </p> -->
+          <a href="{{ post.get_absolute_url }}" class="blog-card-link">Read More</a>
+        </div>
+      </div>
 {% endfor %}
 {% include "blog/post/pagination.html" with page=page_obj %}
 {% endblock %}

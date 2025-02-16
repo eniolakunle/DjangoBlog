@@ -7,11 +7,13 @@
         <!-- <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css"> -->
         <!-- <link rel="stylesheet" href="{% static 'css/blog.css' %}"> -->
         <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
-        <link rel="stylesheet" href="{% static 'css/header.css' %}">
+        <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+        <link rel="stylesheet" href="{% static 'css/transition.css' %}">
+        <link rel="stylesheet" href="{% static 'css/splash.css' %}">
         <link rel="icon" type=”image/x-icon” href="{% static 'images/favicon.ico' %}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!-- style overrides -->
+        <!-- style overrides; get rid of underlining on links unless onHover-->
         <style>
             #content a, 
             #sidebar a {
@@ -22,18 +24,19 @@
             #sidebar a:hover {
                 text-decoration: underline;
             }
-            span, small {
-                color: #dcdcdc;
-            }
-            @media (prefers-color-scheme: light) {
-                span, small {
-                color: #212121;
-                }
-            }
         </style>
     </head>
 
     <body>
+        <div id="splash">
+            😀
+            <h1>Its A Pleasure to See You!</h1>
+            <p>
+                Please, enjoy an article <small>(or two, or three).</small>
+            </p>
+        </div>
+        
+        <div class="transition-overlay"></div>
         <header>
             <nav>
                 <a href="{% url 'blog:post_list' %}">Home</a>
@@ -60,5 +63,7 @@
             <img src="{% static 'images/jeezus.jpg' %}" alt="The Christ" id="jesusimg">
         </footer>
         <script async defer src="https://dailyverses.net/get/random.js?language=esv"></script>
+        <script src="{% static 'js/transition.js' %}"></script>
+        <script src="{% static 'js/splash.js' %}"></script>
     </body>
 </html>

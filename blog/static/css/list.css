@@ -1,0 +1,58 @@
+
+.blog-card {
+    background-color: #fff;
+    border: 1px solid #ddd;      /* Subtle border for a clean separation */
+    border-radius: 4px;          /* Slight rounding for a modern look */
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin: 1rem auto;       /* Center horizontally and provide vertical spacing */
+}
+
+.blog-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /*Soft lift on hover*/
+}
+
+.blog-card-image {
+    width: 100%;
+    display: block;
+}
+
+.blog-card-content {
+    padding: 1rem;
+}
+
+.blog-card-title {
+    margin: 0 0 0.5rem;
+}
+
+.blog-card-link {
+    font-weight: 500;
+}
+
+@media (prefers-color-scheme: dark) {
+    .blog-card {
+        background-color: #1a1a1a;   /* Deeper dark background */
+        border: 1px solid #333;      /* Stronger border for more definition */
+    }
+    
+    .blog-card-title {
+        color: #fff;
+    }
+    
+    .blog-card:hover {
+        /* Increased shadow for a more pronounced hover effect in dark mode */
+        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
+    }
+}
+
+/* Floating Animation */
+@keyframes floating {
+0% { transform: translateY(0); }
+50% { transform: translateY(-8px); } /* Move up */
+100% { transform: translateY(0); }  /* Move back down */
+}
+
+/* Apply Floating Animation on Hover */
+.floating-card:hover {
+animation: floating 2s ease-in-out infinite;
+}

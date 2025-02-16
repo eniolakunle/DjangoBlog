@@ -19,3 +19,7 @@ header {
         background-attachment: scroll;
     }
 }
+
+fieldset {
+    width: fit-content;
+}
