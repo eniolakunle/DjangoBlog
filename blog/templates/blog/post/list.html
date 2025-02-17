@@ -6,28 +6,31 @@
 {% block content %}
     {% load static %}
         <link rel="stylesheet" href="{% static 'css/list.css' %}">
-    {% for post in posts %}
-    <div class="blog-card floating-card" onclick="">
-        {% if post.featured_image %}
-        <a href="{{ post.get_absolute_url }}">
-            <picture>
-                <img src="{{ post.featured_image.url }}" alt="featured image for blog post" class="blog-card-image">
-            </picture>
-        </a>
-        {% endif %}
-        <div class="blog-card-content">
-          <h2 class="blog-card-title">{{post.title}}</h2>
-          <!-- <p class="blog-card-excerpt"> -->
-            <small class ="date">
-                Published {{post.publish}} by {{post.author}}
-                <br>
-                <!-- {{post.comments.count}} comment{{post.comments.count|pluralize}} -->
-            </small>
-            <span>{{ post.body|truncatewords:30|linebreaks }}</span>
-          <!-- </p> -->
-          <a href="{{ post.get_absolute_url }}" class="blog-card-link">Read More</a>
+    <div id="item-container">
+        {% for post in posts %}
+        <div class="item blog-card floating-card" onclick="">
+            {% if post.featured_image %}
+            <a href="{{ post.get_absolute_url }}">
+                <picture>
+                    <img src="{{ post.featured_image.url }}" alt="featured image for blog post" class="blog-card-image">
+                </picture>
+            </a>
+            {% endif %}
+            <div class="blog-card-content">
+            <h2 class="blog-card-title">{{post.title}}</h2>
+            <!-- <p class="blog-card-excerpt"> -->
+                <small class ="date">
+                    Published {{post.publish}} by {{post.author}}
+                    <br>
+                    <!-- {{post.comments.count}} comment{{post.comments.count|pluralize}} -->
+                </small>
+                <span>{{ post.body|truncatewords:30|linebreaks }}</span>
+            <!-- </p> -->
+            <a href="{{ post.get_absolute_url }}" class="blog-card-link">Read More</a>
+            </div>
         </div>
-      </div>
-{% endfor %}
+    {% endfor %}
+    </div>
 {% include "blog/post/pagination.html" with page=page_obj %}
+<div id="sentinel"></div>
 {% endblock %}
