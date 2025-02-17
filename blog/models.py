@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from django_ckeditor_5.fields import CKEditor5Field
 # from django.db.models.functions import Now
 
 def validate_image_max_size(image):
@@ -38,7 +39,7 @@ class Post(models.Model):
         null=True, 
         validators=[validate_image_max_size]
     )
-    body = models.TextField()
+    body = CKEditor5Field('Text', config_name='extends')
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

@@ -24,7 +24,7 @@
     {% endif %}
 
     <hr>
-    {{ post.body|linebreaks }}
+    {{ post.body|safe|linebreaks }}
     <p>
         <a href="{% url 'blog:post_share' post.id %}">
             <button>Share this post</button>
