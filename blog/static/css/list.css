@@ -8,7 +8,7 @@
     margin: 1rem auto;       /* Center horizontally and provide vertical spacing */
 }
 
-.blog-card:hover {
+.intersecting-card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /*Soft lift on hover*/
 }
 
@@ -39,7 +39,7 @@
         color: #fff;
     }
     
-    .blog-card:hover {
+    .intersecting-card {
         /* Increased shadow for a more pronounced hover effect in dark mode */
         box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
     }
@@ -53,6 +53,6 @@
 }
 
 /* Apply Floating Animation on Hover */
-.floating-card:hover {
+.intersecting-card {
 animation: floating 2s ease-in-out infinite;
 }
