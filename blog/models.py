@@ -85,11 +85,11 @@ class Comment(models.Model):
     updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
 
+    def __str__(self):
+        return f"Comment by {self.name} on {self.post}"
+    
     class Meta:
         ordering = ['-created']
         indexes = [
             models.Index(fields=['created'])
         ]
-
-        def __str__(self):
-            return f"Comment by {self.name} on {self.post}"
