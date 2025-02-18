@@ -126,7 +126,6 @@ class PostShareViewTest(TestCase):
         self.assertTemplateUsed(response, "blog/post/share.html")
         self.assertContains(response, self.post.title)
 
-    # @override_settings(C)
     def test_post_share_post_valid(self):
         data = {
             "name": "Test User",

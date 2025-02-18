@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="{% static 'css/list.css' %}">
     <div id="item-container">
         {% for post in posts %}
-        <div class="item blog-card floating-card" onclick="">
+        <div class="item blog-card" onclick="">
             {% if post.featured_image %}
             <a href="{{ post.get_absolute_url }}">
                 <picture>
