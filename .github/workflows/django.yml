@@ -14,6 +14,10 @@ jobs:
       matrix:
         python-version: [3.11]
 
+    env:
+      EMAIL_HOST_USER: "email"
+      EMAIL_HOST_PASSWORD: "pass"
+      DEFAULT_FROM_EMAIL: "default"
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
