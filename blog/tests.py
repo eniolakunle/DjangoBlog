@@ -137,7 +137,6 @@ class PostShareViewTest(TestCase):
             "captcha_1": "PASSED",
         }
         response = self.client.post(self.url, data)
-        print(mail.outbox)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "blog/post/share.html")
         self.assertTrue(response.context["sent"])
