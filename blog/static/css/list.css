@@ -9,7 +9,7 @@
 }
 
 .intersecting-card {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /*Soft lift on hover*/
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /*Soft background on intersection*/
 }
 
 .blog-card-image {
@@ -52,7 +52,7 @@
 100% { transform: translateY(0); }  /* Move back down */
 }
 
-/* Apply Floating Animation on Hover */
+/* Apply Floating Animation on intersection */
 .intersecting-card {
 animation: floating 2s ease-in-out infinite;
 }
