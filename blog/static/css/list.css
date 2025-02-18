@@ -10,6 +10,7 @@
 
 .intersecting-card {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /*Soft background on intersection*/
+    animation: floating 2s ease-in-out infinite; /* Apply Floating Animation on intersection */
 }
 
 .blog-card-image {
@@ -50,9 +51,4 @@
 0% { transform: translateY(0); }
 50% { transform: translateY(-8px); } /* Move up */
 100% { transform: translateY(0); }  /* Move back down */
-}
-
-/* Apply Floating Animation on intersection */
-.intersecting-card {
-animation: floating 2s ease-in-out infinite;
 }
