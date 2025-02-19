@@ -39,6 +39,11 @@ fieldset {
     color: white;
     z-index: 1000;
     height: 50px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.hide {
+    transform: translateY(-100%);
 }
 
 .menu-button {
@@ -109,7 +114,7 @@ fieldset {
     header {
         display: none;
     }
-    .top-nav {
+    .mobile-nav {
         display: flex;
     }
     body {
@@ -117,7 +122,7 @@ fieldset {
     }
 }
 @media (min-width: 769px) {
-    .top-nav {
+    .mobile-nav {
         display: none;
     }
     .menu-button {

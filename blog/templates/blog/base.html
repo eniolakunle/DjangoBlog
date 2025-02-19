@@ -52,13 +52,15 @@
             </hgroup>
         </header>
 
-        <div class="top-nav">
+        <div class="top-nav mobile-nav">
             <div class="nav-title">The Secret Place</div>
+        </div>
+        <div class="mobile-nav">
             <button class="menu-button" id="menu-button" onclick="toggleMenu()">☰</button>
-            <div class="menu" id="menu">
-                <a href="{% url 'blog:post_list' %}">Home</a>
-                <a href="https://github.com/eniolakunle/DjangoBlog">GitHub</a>
-            </div>
+                <div class="menu" id="menu">
+                    <a href="{% url 'blog:post_list' %}">Home</a>
+                    <a href="https://github.com/eniolakunle/DjangoBlog">GitHub</a>
+                </div>
         </div>
         
         <div id="content">
@@ -76,12 +78,21 @@
                 var menu = document.getElementById("menu");
                 menu.style.display = menu.style.display === "block" ? "none" : "block";
             }
-            
+
+            let lastScrollY = window.scrollY;
+            const navbar = document.querySelector(".top-nav");
             window.addEventListener('scroll', function() {
                 var menu = document.getElementById('menu');
                 if (menu.style.display !== 'none') {
                     menu.style.display = 'none';
                 }
+
+                if (window.scrollY > 50 && window.scrollY > lastScrollY) {
+                    navbar.classList.add("hide");
+                } else {
+                    navbar.classList.remove("hide");
+                }
+                lastScrollY = window.scrollY;
             });
 
             document.addEventListener('click', function(event) {
