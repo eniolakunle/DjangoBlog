@@ -58,7 +58,7 @@ fieldset {
     font-size: 18px;
     font-weight: bold;
     z-index: 1001;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.718);
 }
 .menu {
     display: none;
@@ -99,6 +99,9 @@ fieldset {
     }
     .menu a:hover {
         background: #666;
+    }
+    .menu-button {
+        box-shadow: 0 5px 10px rgba(235, 233, 233, 0.718);
     }
 }
 
