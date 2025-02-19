@@ -68,6 +68,14 @@ document.addEventListener("DOMContentLoaded", () => {
       performance.getEntriesByType("navigation")[0].type === "back_forward"
     ) {
       overlay.classList.remove("transition-active"); // Hide overlay after fade-in
+
+      Array.from(document.getElementsByClassName("link-container")).forEach(
+        (el) => {
+          el.classList.remove("link-container");
+          // Remove link-container class when back button is used.
+          // fixes bug where cards cover mobile nav bar
+        }
+      );
     }
   });
 });
