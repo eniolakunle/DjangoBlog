@@ -27,7 +27,7 @@
         </style>
     </head>
 
-    <body>
+    <body onclick="closeMenu(event)">
         <div id="splash">
             😀
             <h1>Its A Pleasure to See You!</h1>
@@ -51,6 +51,15 @@
                 </p>
             </hgroup>
         </header>
+
+        <div class="top-nav">
+            <div class="nav-title">The Secret Place</div>
+            <button class="menu-button" onclick="toggleMenu()">☰</button>
+            <div class="menu" id="menu">
+                <a href="{% url 'blog:post_list' %}">Home</a>
+                <a href="https://github.com/eniolakunle/DjangoBlog">GitHub</a>
+            </div>
+        </div>
         
         <div id="content">
             {% block content %}
@@ -62,8 +71,22 @@
             </h6>
             <img src="{% static 'images/jeezus.jpg' %}" alt="The Christ" id="jesusimg">
         </footer>
+        <script>
+            function toggleMenu() {
+                var menu = document.getElementById("menu");
+                menu.style.display = menu.style.display === "block" ? "none" : "block";
+            }
+
+            function closeMenu(event) {
+                var menu = document.getElementById("menu");
+                var button = document.querySelector(".menu-button");
+                if (menu.style.display === "block" && !menu.contains(event.target) && !button.contains(event.target)) {
+                    menu.style.display = "none";
+                }
+            }
+        </script>
         <script async defer src="https://dailyverses.net/get/random.js?language=esv"></script>
-        <script src="{% static 'js/transition.js' %}"></script>
+        <script src="{% static 'js/scripts.js' %}"></script>
         <script src="{% static 'js/splash.js' %}"></script>
     </body>
 </html>

@@ -23,3 +23,96 @@ header {
 fieldset {
     width: fit-content;
 }
+
+.top-nav {
+    position:fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: #222;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    z-index: 1000;
+    height: 50px;
+}
+
+.menu-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    color: #333;
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 1001;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+.menu {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background: #444;
+    padding: 10px;
+    text-align: center;
+    z-index: 1001;
+    border-radius: 5px;
+}
+
+.menu a {
+    color: white;
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+}
+.menu a:hover {
+    background: #555;
+}
+.nav-title {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+}
+@media (prefers-color-scheme: dark) {
+    .top-nav {
+        background: #333;
+    }
+    .menu {
+        background: #555;
+    }
+    .menu a:hover {
+        background: #666;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        display: none;
+    }
+    .top-nav {
+        display: flex;
+    }
+    body {
+        padding-top: 50px;
+    }
+}
+@media (min-width: 769px) {
+    .top-nav {
+        display: none;
+    }
+    .menu-button {
+        display: none;
+    }
+}
