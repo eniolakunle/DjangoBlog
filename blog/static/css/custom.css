@@ -43,8 +43,8 @@ fieldset {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: white;
-    color: #333;
+    /* background: white; */
+    /* color: #333; */
     width: 50px;
     height: 50px;
     border: none;
@@ -76,9 +76,10 @@ fieldset {
     padding: 10px;
     text-decoration: none;
 }
+
 .menu a:hover {
     background: #555;
-}
+} 
 .nav-title {
     flex-grow: 1;
     text-align: center;
