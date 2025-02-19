@@ -65,7 +65,9 @@ fieldset {
     font-weight: bold;
     z-index: 1001;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.718);
+    transition: background-color .3s ease-in-out;
 }
+
 .menu {
     display: none;
     position: fixed;
