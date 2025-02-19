@@ -27,7 +27,7 @@
         </style>
     </head>
 
-    <body onclick="closeMenu(event)">
+    <body>
         <div id="splash">
             😀
             <h1>Its A Pleasure to See You!</h1>
@@ -54,7 +54,7 @@
 
         <div class="top-nav">
             <div class="nav-title">The Secret Place</div>
-            <button class="menu-button" onclick="toggleMenu()">☰</button>
+            <button class="menu-button" id="menu-button" onclick="toggleMenu()">☰</button>
             <div class="menu" id="menu">
                 <a href="{% url 'blog:post_list' %}">Home</a>
                 <a href="https://github.com/eniolakunle/DjangoBlog">GitHub</a>
@@ -76,14 +76,21 @@
                 var menu = document.getElementById("menu");
                 menu.style.display = menu.style.display === "block" ? "none" : "block";
             }
-
-            function closeMenu(event) {
-                var menu = document.getElementById("menu");
-                var button = document.querySelector(".menu-button");
-                if (menu.style.display === "block" && !menu.contains(event.target) && !button.contains(event.target)) {
-                    menu.style.display = "none";
+            
+            window.addEventListener('scroll', function() {
+                var menu = document.getElementById('menu');
+                if (menu.style.display !== 'none') {
+                    menu.style.display = 'none';
                 }
+            });
+
+            document.addEventListener('click', function(event) {
+            var menu = document.getElementById('menu');
+            var menuButton = document.getElementById('menu-button');
+            if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
+                menu.style.display = 'none';
             }
+            });
         </script>
         <script async defer src="https://dailyverses.net/get/random.js?language=esv"></script>
         <script src="{% static 'js/scripts.js' %}"></script>
