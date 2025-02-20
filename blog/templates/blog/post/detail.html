@@ -26,11 +26,7 @@
     <hr>
     {{ post.body|linebreaks }}
     <p>
-        <a 
-            href="https://twitter.com/intent/tweet?text=Wow,%20check%20this%20out,%20Jesus%20is%20Lord!&url={{post.get_absolute_url}}&hashtags=jesus" 
-            class="twitter-share-button">
-            <button>Share on X</button>
-        </a>
+        <button id="twitter-share-button">Share on X</button>
         <a href="{% url 'blog:post_share' post.id %}">
             <button>Share with Email</button>
         </a>

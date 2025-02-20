@@ -186,3 +186,16 @@ window.addEventListener("scroll", function () {
   }
   lastScrollY = window.scrollY;
 });
+
+const twitterButton = document.getElementById("twitter-share-button");
+if (twitterButton) {
+  twitterButton.addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent default link behavior
+    const tweetText = encodeURIComponent("Wow, check this out, Jesus is Lord!");
+    const tweetUrl = encodeURIComponent(window.location.href);
+    const hashtags = "jesus";
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${tweetUrl}&hashtags=${hashtags}`;
+
+    window.open(twitterUrl, "_blank");
+  });
+}
