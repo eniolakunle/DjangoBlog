@@ -5,7 +5,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 ### Features ✨
 
 - **Endless Scrolling**: Scroll to your hearts desire and find the perfect article for your situation. 📜
-- **Comments Section**: Readers can leave comments on each post, and share articles through email to engage in discussions. 💬
+- **Comments Section**: Readers can leave comments on each post, and share articles through 𝕏 (Twitter) or email to engage in discussions. 💬
 - **Responsive Design**: Built with mobile-first principles to ensure a seamless experience across devices. 📱💻
   - **Dark/Light Mode Support**: Dynamically adjusts according to device preference! 🌗
 - **CAPTCHA Verification**: Implemented via django-simple-captcha to distinguish between real users and bots. 🔒
