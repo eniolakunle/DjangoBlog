@@ -37,7 +37,7 @@ SECRET_KEY = "django-insecure-2_-zq2o2lz8tj7ag(_pmms%$589b2^&l%t-%)vblkjzz#2lqi!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 CAPTCHA_CHALLENGE_FUNCT = "captcha.helpers.math_challenge"
 CAPTCHA_NOISE_FUNCTIONS = ("captcha.helpers.noise_null",)
