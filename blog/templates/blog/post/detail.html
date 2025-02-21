@@ -4,12 +4,11 @@
 
 {% block head %}
     <meta name="twitter:card" content="summary"></meta>
-    <!-- <meta property="og:url" content="http://bits.blogs.nytimes.com/2011/12/08/a-twitter-for-my-sister/" /> -->
     <meta property="og:description" content="{{ post.body|truncatewords:30 }}" />
     <meta property="og:title" content="{{ post.title }}" />
     {% if post.featured_image %}
         <meta property="og:image" 
-        content="https://eniolakunle.pythonanywhere.com{{ post.featured_image.url }}" />
+        content="{{ request.get_host }}{{ post.featured_image.url }}" />
     {% endif %}
 {% endblock %}
 
