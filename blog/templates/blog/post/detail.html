@@ -2,6 +2,12 @@
 
 {% block title %} {{post.title}} {% endblock %}
 
+{% block head %}
+    <meta name="twitter:card" content="summary"></meta>
+    <!-- <meta property="og:url" content="http://bits.blogs.nytimes.com/2011/12/08/a-twitter-for-my-sister/" /> -->
+    <meta property="og:title" content="{{ post.title }}" />
+{% endblock %}
+
 {% block content %}
 
     <h1>
