@@ -25,6 +25,9 @@
                 text-decoration: underline;
             }
         </style>
+
+        {% block head %}
+        {% endblock %}
     </head>
 
     <body>
@@ -51,6 +54,17 @@
                 </p>
             </hgroup>
         </header>
+
+        <div class="top-nav mobile-nav">
+            <div class="nav-title">The Secret Place</div>
+        </div>
+        <div class="mobile-nav">
+            <button class="menu-button" id="menu-button">☰</button>
+                <div class="menu" id="menu">
+                    <a href="{% url 'blog:post_list' %}">Home</a>
+                    <a href="https://github.com/eniolakunle/DjangoBlog">GitHub</a>
+                </div>
+        </div>
         
         <div id="content">
             {% block content %}
@@ -63,7 +77,7 @@
             <img src="{% static 'images/jeezus.jpg' %}" alt="The Christ" id="jesusimg">
         </footer>
         <script async defer src="https://dailyverses.net/get/random.js?language=esv"></script>
-        <script src="{% static 'js/transition.js' %}"></script>
+        <script src="{% static 'js/scripts.js' %}"></script>
         <script src="{% static 'js/splash.js' %}"></script>
     </body>
 </html>

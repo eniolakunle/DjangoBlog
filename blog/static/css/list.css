@@ -8,8 +8,9 @@
     margin: 1rem auto;       /* Center horizontally and provide vertical spacing */
 }
 
-.blog-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /*Soft lift on hover*/
+.intersecting-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /*Soft background on intersection*/
+    animation: floating 2s ease-in-out infinite; /* Apply Floating Animation on intersection */
 }
 
 .blog-card-image {
@@ -39,7 +40,7 @@
         color: #fff;
     }
     
-    .blog-card:hover {
+    .intersecting-card {
         /* Increased shadow for a more pronounced hover effect in dark mode */
         box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
     }
@@ -50,9 +51,4 @@
 0% { transform: translateY(0); }
 50% { transform: translateY(-8px); } /* Move up */
 100% { transform: translateY(0); }  /* Move back down */
-}
-
-/* Apply Floating Animation on Hover */
-.floating-card:hover {
-animation: floating 2s ease-in-out infinite;
 }

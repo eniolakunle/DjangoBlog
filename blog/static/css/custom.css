@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
 header {
     background-image: url('../images/IMG_0229 2.jpg');
     background-repeat: no-repeat;
@@ -22,4 +25,115 @@ header {
 
 fieldset {
     width: fit-content;
+}
+
+.top-nav {
+    position:fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: #222;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    z-index: 1000;
+    height: 50px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.hide {
+    transform: translateY(-100%);
+}
+
+.menu-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    /* background: white; */
+    /* color: #333; */
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 1001;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.718);
+    transition: background-color .3s ease-in-out;
+}
+
+.menu {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    right: 35px;
+    background: #444;
+    padding: 10px;
+    text-align: center;
+    z-index: 1001;
+    border-radius: 5px;
+}
+
+.menu a {
+    color: white;
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    border-bottom: 1px solid #e9e9e9b0;
+    letter-spacing: 1px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+}
+.menu a:last-child {
+    border-bottom: none;
+}
+
+.menu a:hover {
+    background: #555;
+} 
+.nav-title {
+    flex-grow: 1;
+    text-align: center;
+    /* font-weight: bold; */
+    font-family: 'Dancing Script', cursive;
+    font-weight: 600; /*Makes it stand out*/
+    font-size: 30px;  /* Adjust as needed */
+}
+@media (prefers-color-scheme: dark) {
+    .top-nav {
+        background: #333;
+    }
+    .menu {
+        background: #555;
+    }
+    .menu a:hover {
+        background: #666;
+    }
+    .menu-button {
+        box-shadow: 0 3px 5px rgba(235, 233, 233, 0.718);
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        display: none;
+    }
+    .mobile-nav {
+        display: flex;
+    }
+    body {
+        padding-top: 50px;
+    }
+}
+@media (min-width: 769px) {
+    .mobile-nav {
+        display: none;
+    }
 }
