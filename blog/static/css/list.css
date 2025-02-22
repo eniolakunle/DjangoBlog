@@ -52,3 +52,6 @@
 50% { transform: translateY(-8px); } /* Move up */
 100% { transform: translateY(0); }  /* Move back down */
 }
+
+/* @media (min-width: 769px) {
+} */
