@@ -41,30 +41,20 @@
         
         <div class="transition-overlay"></div>
         <header>
-            <nav>
-                <a href="{% url 'blog:post_list' %}">Home</a>
-                <a href="https://github.com/eniolakunle/DjangoBlog">GitHub</a>
-            </nav>
-            <hgroup>
-                <h1>The Secret Place</h1>
-                <p>
-                    Daily Insights of The Word! 
-                    <br>
-                    <sub>(With the Help of ChatGPT)</sub>
-                </p>
-            </hgroup>
+            <div class="top-nav mobile-nav">
+                <div class="nav-title">The Secret Place</div>
+            </div>
+            <div class="mobile-nav">
+                <nav>
+                    <button class="menu-button" id="menu-button">☰</button>
+                    <div class="menu" id="menu">
+                        <a href="{% url 'blog:post_list' %}">Home</a>
+                        <a href="https://github.com/eniolakunle/DjangoBlog">GitHub</a>
+                    </div>
+                </nav>
+            </div>
         </header>
 
-        <div class="top-nav mobile-nav">
-            <div class="nav-title">The Secret Place</div>
-        </div>
-        <div class="mobile-nav">
-            <button class="menu-button" id="menu-button">☰</button>
-                <div class="menu" id="menu">
-                    <a href="{% url 'blog:post_list' %}">Home</a>
-                    <a href="https://github.com/eniolakunle/DjangoBlog">GitHub</a>
-                </div>
-        </div>
         
         <div id="content">
             {% block content %}

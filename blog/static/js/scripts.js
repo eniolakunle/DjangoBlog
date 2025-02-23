@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Append new items from the response to the container
         const newItems = tempDiv.querySelectorAll(".item");
-        const container = document.getElementById("item-container");
+        const container = document.getElementById("bottom-grid");
         const overlay = document.querySelector(".transition-overlay");
 
         // give newly loaded articles ability to float when intersected
@@ -130,6 +130,11 @@ document.addEventListener("DOMContentLoaded", function () {
           link = item.querySelector(".blog-card-link");
           // ensure new articles added will transition smoothly if clicked
           link.addEventListener("click", linkHandler(link, overlay));
+
+          // remove class additions from new articles, they belong in bottom grid only
+          if (item.classList.contains("main-article")) {
+            item.classList.remove("main-article");
+          }
           container.appendChild(item);
         });
 
@@ -156,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function toggleMenu() {
   var menu = document.getElementById("menu");
-  menu.style.display = menu.style.display === "block" ? "none" : "block";
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
 }
 
 const menuButton = document.getElementById("menu-button");
