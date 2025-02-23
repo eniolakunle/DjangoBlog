@@ -8,6 +8,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 - **Comments Section**: Readers can leave comments on each post, and share articles through 𝕏 (Twitter) or email to engage in discussions. 💬
 - **Responsive Design**: Built with mobile-first principles to ensure a seamless experience across devices. 📱💻
   - **Dark/Light Mode Support**: Dynamically adjusts according to device preference! 🌗
+  - **More Articles on Bigger Screens**: Bigger screens are filled with more articles to choose from. 🧐
 - **CAPTCHA Verification**: Implemented via django-simple-captcha to distinguish between real users and bots. 🔒
 - **Fun Effects**: A few effects that give a pleasant feeling when looking at article previews. 🤪
   - **Card Effect**: Article previews mimic a playing card. 🃏
