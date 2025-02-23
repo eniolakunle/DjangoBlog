@@ -161,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function toggleMenu() {
   var menu = document.getElementById("menu");
-  menu.style.display = menu.style.display === "block" ? "none" : "block";
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
 }
 
 const menuButton = document.getElementById("menu-button");

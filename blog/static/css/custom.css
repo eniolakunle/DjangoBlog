@@ -1,26 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
-header {
-    background-image: url('../images/IMG_0229 2.jpg');
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-attachment: fixed;
-    background-size: cover;
+body > header {
+    padding: 0;
 }
 
-
-@media (prefers-color-scheme: light) {
-    header {
-        background-image: url('../images/IMG_0229 2 light.jpg');
-    }
-  }
-
-  /*ensures iPhone headers are not zoomed in*/
-@supports (-webkit-touch-callout: none) {
-    header {
-        background-attachment: scroll;
-    }
+.mobile-nav {
+    display: flex;
+}
+body {
+    padding-top: 50px;
 }
 
 fieldset {
@@ -51,8 +40,6 @@ fieldset {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    /* background: white; */
-    /* color: #333; */
     width: 50px;
     height: 50px;
     border: none;
@@ -85,14 +72,15 @@ fieldset {
     display: block;
     padding: 10px;
     text-decoration: none;
-    border-bottom: 1px solid #e9e9e9b0;
+    border-right: 1px solid #e9e9e9b0;
+    line-height: 5px;
     letter-spacing: 1px;
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
     font-weight: 600;
 }
 .menu a:last-child {
-    border-bottom: none;
+    border-right: none;
 }
 
 .menu a:hover {
@@ -121,19 +109,43 @@ fieldset {
     }
 }
 
-@media (max-width: 768px) {
-    header {
-        display: none;
+@media (min-width: 769px) and (pointer: fine) {
+    .hide {
+        transform: none;
     }
-    .mobile-nav {
+
+    .menu {
+        display: none;
+        flex-direction: row;
+        position: fixed;
+        top: 5px;
+        right: 65px;
+        background: inherit;
+        padding: 10px;
+        text-align: center;
+        z-index: 1001;
+        border-radius: 5px;
+        height: fit-content;
+    }
+    
+    .menu-button {
+        position: fixed;
+        top: 0px;
+        right: 20px;
+        background: inherit;
+        /* color: #333; */
+        /* width: none;
+        height: none;
+        border: none;
+        border-radius: 0%;    */
         display: flex;
-    }
-    body {
-        padding-top: 50px;
-    }
-}
-@media (min-width: 769px) {
-    .mobile-nav {
-        display: none;
+        align-items: center;
+        justify-content: center;
+        cursor:pointer;
+        font-size: 30px;
+        font-weight: bold;
+        z-index: 1001;
+        box-shadow: none;
+        transition: background-color .3s ease-in-out;
     }
 }
