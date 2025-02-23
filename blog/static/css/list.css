@@ -79,21 +79,28 @@
         display: flex;
         margin: auto;
       }
+
+      .main-article{
+          display: flex;
+          width:fit-content;
+          flex-direction: row;
+      }
       
       /* Bottom Section: Rows of two articles */
     .bottom-grid {
-        column-count: 2;
-        column-gap: 20px;
+        display: flex;
+        gap: 20px;
+        align-items: flex-start;
        }
+
+    .column {
+        flex: 1;
+        flex-direction: column;
+    }
     
     .bottom-grid .blog-card {
         break-inside: avoid;
-       }
-
-    .main-article{
-        display: flex;
-        width:fit-content;
-        flex-direction: row;
     }
+
 
 }

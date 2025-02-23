@@ -16,11 +16,26 @@
         </div>
 
         <div class="bottom-grid" id="bottom-grid">
-            {% for post in posts|slice:"1:" %}
-                <div class="item blog-card" onclick="">
-                    {% include "blog/post/includes/list_detail.html" with post=post %}
-                </div>
-            {% endfor %}
+
+            <div class="column left-column">
+                {% for post in posts|slice:"1:" %}
+                    {% if forloop.counter0|divisibleby:"2" %}
+                        <div class="item blog-card" onclick="">
+                            {% include "blog/post/includes/list_detail.html" with post=post %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div class="column right-column">
+                {% for post in posts|slice:"1:" %}
+                    {% if not forloop.counter0|divisibleby:"2" %}
+                        <div class="item blog-card" onclick="">
+                            {% include "blog/post/includes/list_detail.html" with post=post %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
 
     </div>

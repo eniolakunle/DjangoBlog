@@ -119,6 +119,10 @@ document.addEventListener("DOMContentLoaded", function () {
         // Append new items from the response to the container
         const newItems = tempDiv.querySelectorAll(".item");
         const container = document.getElementById("bottom-grid");
+
+        const leftColumn = container.querySelector(".left-column");
+        const rightColumn = container.querySelector(".right-column");
+
         const overlay = document.querySelector(".transition-overlay");
 
         // give newly loaded articles ability to float when intersected
@@ -135,7 +139,16 @@ document.addEventListener("DOMContentLoaded", function () {
           if (item.classList.contains("main-article")) {
             item.classList.remove("main-article");
           }
-          container.appendChild(item);
+
+          // add new articles to left or right column depending on height of each column
+          console.log("leftColumn.offsetHeight", leftColumn.offsetHeight);
+          console.log("rightColumn.offsetHeight", rightColumn.offsetHeight);
+
+          if (leftColumn.offsetHeight <= rightColumn.offsetHeight) {
+            leftColumn.appendChild(item);
+          } else {
+            rightColumn.appendChild(item);
+          }
         });
 
         // Update the next-page link (if any)
