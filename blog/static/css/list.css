@@ -82,11 +82,12 @@
       
       /* Bottom Section: Rows of two articles */
     .bottom-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-        align-items: start;
-        grid-auto-flow: dense;
+        column-count: 2;
+        column-gap: 20px;
+       }
+    
+    .bottom-grid .blog-card {
+        break-inside: avoid;
        }
 
     .main-article{
