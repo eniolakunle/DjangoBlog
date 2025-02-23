@@ -96,3 +96,15 @@
     }
 
 }
+
+/*main article image will fill until screen is wide enough for entire image */
+@media (769px <= width <= 1136px) {
+    .main-article > a {
+        display: flex;
+    }
+    .main-article .blog-card-image {
+        min-width: 100%;
+        min-height: 100%;
+        object-fit: cover;
+    }
+}
