@@ -133,11 +133,6 @@ fieldset {
         top: 0px;
         right: 20px;
         background: inherit;
-        /* color: #333; */
-        /* width: none;
-        height: none;
-        border: none;
-        border-radius: 0%;    */
         display: flex;
         align-items: center;
         justify-content: center;
