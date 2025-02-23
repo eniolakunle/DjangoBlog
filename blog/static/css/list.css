@@ -77,7 +77,6 @@
 
     .top-grid {
         display: flex;
-        width: 66%;
         margin: auto;
       }
       
@@ -89,5 +88,11 @@
         align-items: start;
         grid-auto-flow: dense;
        }
+
+    .main-article{
+        display: flex;
+        width:fit-content;
+        flex-direction: row;
+    }
 
 }
