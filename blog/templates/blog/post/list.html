@@ -8,26 +8,15 @@
         <link rel="stylesheet" href="{% static 'css/list.css' %}">
     <div id="item-container grid-container">
         <div class="top-grid">
-            {% for post in posts|slice:":3" %}
-
-                {% if forloop.first %}
-                    <div class="item blog-card main-article" onclick="">
-                        {% include "blog/post/includes/list_detail.html" with post=post %}
-                    </div>
-                {% elif forloop.counter == 2 %}
-                    <div class="item blog-card top-right" onclick="">
-                        {% include "blog/post/includes/list_detail.html" with post=post %}
-                    </div>
-                {% elif forloop.counter == 3 %}
-                    <div class="item blog-card bottom-right" onclick="">
-                        {% include "blog/post/includes/list_detail.html" with post=post %}
-                    </div>
-                {% endif %}
+            {% for post in posts|slice:":1" %}
+                <div class="item blog-card main-article" onclick="">
+                    {% include "blog/post/includes/list_detail.html" with post=post %}
+                </div>
             {% endfor %}
         </div>
 
         <div class="bottom-grid" id="bottom-grid">
-            {% for post in posts|slice:"3:" %}
+            {% for post in posts|slice:"1:" %}
                 <div class="item blog-card" onclick="">
                     {% include "blog/post/includes/list_detail.html" with post=post %}
                 </div>
