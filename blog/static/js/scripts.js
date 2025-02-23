@@ -134,10 +134,6 @@ document.addEventListener("DOMContentLoaded", function () {
           // remove class additions from new articles, they belong in bottom grid only
           if (item.classList.contains("main-article")) {
             item.classList.remove("main-article");
-          } else if (item.classList.contains("top-right")) {
-            item.classList.remove("top-right");
-          } else if (item.classList.contains("bottom-right")) {
-            item.classList.remove("bottom-right");
           }
           container.appendChild(item);
         });
