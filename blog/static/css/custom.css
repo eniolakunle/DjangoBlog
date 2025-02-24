@@ -106,7 +106,6 @@ fieldset {
     }
     .menu-button {
         box-shadow: 0 3px 5px rgba(235, 233, 233, 0.718);
-        color: white;
     }
 }
 
@@ -143,5 +142,11 @@ fieldset {
         z-index: 1001;
         box-shadow: none;
         transition: background-color .3s ease-in-out;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .menu-button {
+            color: white;
+        }
     }
 }
