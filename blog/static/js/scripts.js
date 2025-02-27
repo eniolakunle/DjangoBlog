@@ -15,8 +15,6 @@ const intersectingObserver = new IntersectionObserver(
 
 function linkHandler(link, overlay) {
   const transitionLink = (e) => {
-    console.log(link.hostname, link.href);
-    console.log(window.location.hostname, window.location.href);
     if (
       link.hostname === window.location.hostname &&
       link.href !== window.location.href
