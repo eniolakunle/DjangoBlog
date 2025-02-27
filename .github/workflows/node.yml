@@ -20,6 +20,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: cd blog/static/
-      - run: npm install
-      - run: npm test
+
+      - name: Install dependencies
+        working-directory: ./blog/static
+        run: npm install
+
+      - name: Run tests
+        working-directory: ./blog/static
+        run: npm test
