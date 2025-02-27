@@ -6,3 +6,4 @@ mysite/prod
 blog/static/admin/
 media/
 blog/static/node_modules
+blog/static/coverage
