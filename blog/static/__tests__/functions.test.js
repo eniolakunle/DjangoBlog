@@ -2,7 +2,8 @@
  * @jest-environment jsdom
  */
 
-const { intersectingObserver, linkHandler } = require("../js/scripts");
+// const { intersectingObserver, linkHandler } = require("../js/functions");
+import { intersectingObserver, linkHandler } from "../js/functions";
 
 describe("IntersectionObserver functionality", () => {
   test("adds 'intersecting-card' class when element is intersecting", () => {

@@ -1,44 +1,6 @@
 // float blog cards when they are intersecting with the viewport,
 // works well on mobile where hover is iffy and works on desktop well too
-const intersectingObserver = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("intersecting-card");
-      } else {
-        entry.target.classList.remove("intersecting-card"); // Optional: Remove when out of view
-      }
-    });
-  },
-  { threshold: 0.7 }
-); // Trigger when 70% of the element is visible
-
-function linkHandler(link, overlay) {
-  const transitionLink = (e) => {
-    if (
-      link.hostname === window.location.hostname &&
-      link.href !== window.location.href
-    ) {
-      e.preventDefault(); // Prevent default action (navigation)
-
-      let blogCard = link;
-      while (blogCard) {
-        if (blogCard.classList.contains("blog-card")) {
-          blogCard.classList.add("link-container");
-          break;
-        }
-        blogCard = blogCard.parentElement;
-      }
-      // Show the overlay and trigger fade-out effect
-      overlay.classList.add("transition-active");
-
-      setTimeout(() => {
-        window.location.href = link.href; // Navigate after fade-out
-      }, 200); // Duration matches transition time
-    }
-  };
-  return transitionLink;
-}
+import { intersectingObserver, linkHandler } from "./functions.js";
 
 function fadeTransition() {
   const links = document.querySelectorAll("a");
@@ -126,7 +88,7 @@ function endlessScrolling() {
           .forEach((el) => intersectingObserver.observe(el));
 
         newItems.forEach((item) => {
-          link = item.querySelector(".blog-card-link");
+          const link = item.querySelector(".blog-card-link");
           // ensure new articles added will transition smoothly if clicked
           link.addEventListener("click", linkHandler(link, overlay));
 
@@ -218,13 +180,13 @@ document.addEventListener("click", clearMenuOnClick);
 
 window.addEventListener("scroll", clearMenuOnScroll, { passive: true });
 
-module.exports = {
-  intersectingObserver,
-  linkHandler,
-  fadeTransition,
-  endlessScrolling,
-  toggleMenu,
-  formatTwitterButton,
-  clearMenuOnClick,
-  clearMenuOnScroll,
-};
+// module.exports = {
+//   intersectingObserver,
+//   linkHandler,
+//   fadeTransition,
+//   endlessScrolling,
+//   toggleMenu,
+//   formatTwitterButton,
+//   clearMenuOnClick,
+//   clearMenuOnScroll,
+// };
