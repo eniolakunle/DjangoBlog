@@ -21,9 +21,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install dependencies
+      - name: Clean install dependencies
         working-directory: ./blog/static
-        run: npm install
+        run: npm ci
 
       - name: Run tests
         working-directory: ./blog/static
