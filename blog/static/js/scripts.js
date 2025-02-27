@@ -15,6 +15,8 @@ const intersectingObserver = new IntersectionObserver(
 
 function linkHandler(link, overlay) {
   const transitionLink = (e) => {
+    console.log(link.hostname, link.href);
+    console.log(window.location.hostname, window.location.href);
     if (
       link.hostname === window.location.hostname &&
       link.href !== window.location.href
@@ -212,8 +214,19 @@ document.addEventListener("DOMContentLoaded", endlessScrolling);
 document.addEventListener("DOMContentLoaded", formatTwitterButton);
 
 const menuButton = document.getElementById("menu-button");
-menuButton.addEventListener("click", toggleMenu);
+if (menuButton) menuButton.addEventListener("click", toggleMenu);
 
 document.addEventListener("click", clearMenuOnClick);
 
-window.addEventListener("scroll", clearMenuOnScroll);
+window.addEventListener("scroll", clearMenuOnScroll, { passive: true });
+
+module.exports = {
+  intersectingObserver,
+  linkHandler,
+  fadeTransition,
+  endlessScrolling,
+  toggleMenu,
+  formatTwitterButton,
+  clearMenuOnClick,
+  clearMenuOnScroll,
+};
