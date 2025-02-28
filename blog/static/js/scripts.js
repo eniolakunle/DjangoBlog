@@ -1,46 +1,8 @@
-// float blog cards when they are intersecting with the viewport,
-// works well on mobile where hover is iffy and works on desktop well too
-import { intersectingObserver, linkHandler } from "./functions.js";
-
-function fadeTransition() {
-  const links = document.querySelectorAll("a");
-  const overlay = document.querySelector(".transition-overlay");
-
-  // on page load, give all cards ability to float when intersected
-  document
-    .querySelectorAll(".blog-card")
-    .forEach((el) => intersectingObserver.observe(el));
-
-  links.forEach((link) => {
-    link.addEventListener("click", linkHandler(link, overlay));
-  });
-
-  // After the page loads, fade in the content
-  window.addEventListener("load", () => {
-    document.body.classList.add("fade-in");
-    setTimeout(() => {
-      overlay.classList.remove("transition-active"); // Hide overlay after fade-in
-    }, 300); // Fade-in duration
-  });
-
-  // **Fix Back Button Issue: Ensure Page Always Fades Back In**
-  window.addEventListener("pageshow", function (event) {
-    if (
-      event.persisted ||
-      performance.getEntriesByType("navigation")[0].type === "back_forward"
-    ) {
-      overlay.classList.remove("transition-active"); // Hide overlay after fade-in
-
-      Array.from(document.getElementsByClassName("link-container")).forEach(
-        (el) => {
-          el.classList.remove("link-container");
-          // Remove link-container class when back button is used.
-          // fixes bug where cards cover mobile nav bar
-        }
-      );
-    }
-  });
-}
+import {
+  intersectingObserver,
+  linkHandler,
+  fadeTransition,
+} from "./functions.js";
 
 function endlessScrolling() {
   const sentinel = document.getElementById("sentinel");
@@ -179,14 +141,3 @@ if (menuButton) menuButton.addEventListener("click", toggleMenu);
 document.addEventListener("click", clearMenuOnClick);
 
 window.addEventListener("scroll", clearMenuOnScroll, { passive: true });
-
-// module.exports = {
-//   intersectingObserver,
-//   linkHandler,
-//   fadeTransition,
-//   endlessScrolling,
-//   toggleMenu,
-//   formatTwitterButton,
-//   clearMenuOnClick,
-//   clearMenuOnScroll,
-// };
