@@ -7,6 +7,7 @@ import {
   intersectingObserver,
   linkHandler,
   fadeTransition,
+  endlessScrolling,
 } from "../js/functions";
 
 describe("IntersectionObserver functionality", () => {
@@ -149,3 +150,119 @@ describe("fadeTransition", () => {
     expect(remainingLinkContainers.length).toBe(0);
   });
 });
+
+// // Override IntersectionObserver so we can capture its instance and simulate intersection events.
+// let mockObserverInstance;
+// global.IntersectionObserver = class {
+//   constructor(callback, options) {
+//     this.callback = callback;
+//     this.options = options;
+//     this.observe = jest.fn();
+//     this.unobserve = jest.fn();
+//     mockObserverInstance = this;
+//   }
+//   disconnect() {}
+// };
+
+// describe("endlessScrolling", () => {
+//   beforeEach(() => {
+//     // Set up our DOM fixture.
+//     document.body.innerHTML = `
+//       <div id="sentinel"></div>
+//       <a id="next-page-link" href="http://example.com/page1"></a>
+//       <div id="bottom-grid"></div>
+//       <div class="transition-overlay"></div>
+//     `;
+
+//     // Clear any previous mocks.
+//     jest.clearAllMocks();
+//   });
+
+//   afterEach(() => {
+//     // Clean up any mocked globals.
+//     global.fetch && jest.restoreAllMocks();
+//   });
+
+//   test("loads new items and updates next-page-link when sentinel is intersecting", async () => {
+//     // Dummy HTML to be returned by fetch:
+//     // Contains one new item and a new next-page link with an updated URL.
+//     const dummyHTML = `
+//       <div class="item">
+//         <div class="blog-card">
+//           <a href="http://example.com/new" class="blog-card-link">New Item</a>
+//         </div>
+//       </div>
+//       <div id="next-page-link" href="http://example.com/page2"></div>
+//     `;
+//     // Mock fetch to return dummyHTML.
+//     global.fetch = jest.fn(() =>
+//       Promise.resolve({
+//         text: () => Promise.resolve(dummyHTML),
+//       })
+//     );
+
+//     // Call endlessScrolling to set up the observer.
+//     endlessScrolling();
+
+//     // Ensure that the sentinel was observed.
+//     const sentinel = document.getElementById("sentinel");
+//     expect(mockObserverInstance.observe).toHaveBeenCalledWith(sentinel);
+
+//     // Simulate an intersection event on the sentinel.
+//     const fakeEntry = [{ isIntersecting: true, target: sentinel }];
+//     await mockObserverInstance.callback(fakeEntry);
+
+//     // Wait for fetch to resolve and loadMore to finish.
+//     // Use a microtask flush: returning the fetch promise will work since our test is async.
+//     await Promise.resolve();
+
+//     // Check that fetch was called with the correct URL and header.
+//     expect(global.fetch).toHaveBeenCalledWith("http://example.com/page1", {
+//       headers: { "X-Requested-With": "XMLHttpRequest" },
+//     });
+
+//     // Check that a new item was appended to #bottom-grid.
+//     const container = document.getElementById("bottom-grid");
+//     const newItems = container.querySelectorAll(".item");
+//     expect(newItems.length).toBe(1);
+//     // And check that the new next-page link's URL was updated.
+//     const nextPageLink = document.getElementById("next-page-link");
+//     expect(nextPageLink.getAttribute("href")).toBe("http://example.com/page2");
+//   });
+
+//   test("removes next-page-link and unobserves sentinel when no new next-page-link is found", async () => {
+//     // Dummy HTML that does NOT include a new next-page link.
+//     const dummyHTML = `
+//       <div class="item">
+//         <div class="blog-card">
+//           <a href="http://example.com/new" class="blog-card-link">New Item</a>
+//         </div>
+//       </div>
+//     `;
+//     global.fetch = jest.fn(() =>
+//       Promise.resolve({
+//         text: () => Promise.resolve(dummyHTML),
+//       })
+//     );
+
+//     endlessScrolling();
+
+//     const sentinel = document.getElementById("sentinel");
+//     expect(mockObserverInstance.observe).toHaveBeenCalledWith(sentinel);
+
+//     // Simulate an intersection event.
+//     const fakeEntry = [{ isIntersecting: true, target: sentinel }];
+//     await mockObserverInstance.callback(fakeEntry);
+
+//     // Wait for the fetch promise resolution.
+//     await Promise.resolve();
+
+//     // In this scenario, since dummyHTML lacks a new next-page link,
+//     // the existing next-page-link should be removed from the DOM.
+//     const nextPageLink = document.getElementById("next-page-link");
+//     expect(nextPageLink).toBeNull();
+
+//     // And observer.unobserve should have been called with the sentinel.
+//     expect(mockObserverInstance.unobserve).toHaveBeenCalledWith(sentinel);
+//   });
+// });
