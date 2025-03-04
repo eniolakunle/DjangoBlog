@@ -8,6 +8,10 @@
 <div class="blog-card-content">
     <h2 class="blog-card-title">{{post.title}}</h2>
     <!-- <p class="blog-card-excerpt"> -->
+        {% if post.tags %}
+            <small class="tags">Tags: {{ post.tags.all|join:", " }}</small>
+            <br>
+        {% endif %}
         <small class ="date">
             Published {{post.publish}} by {{post.author}}
             <br>
