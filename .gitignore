@@ -5,3 +5,5 @@ db.*
 mysite/prod
 blog/static/admin/
 media/
+blog/static/coverage/
+blog/static/node_modules/
