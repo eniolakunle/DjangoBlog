@@ -150,3 +150,31 @@ fieldset {
         }
     }
 }
+
+.tag {
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.25em 0.75em;
+    margin: 0.25em;
+    border-radius: 100px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  /* Light mode styles */
+  .tag {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+  }
+  
+  /* Dark mode styles */
+  @media (prefers-color-scheme: dark) {
+    .tag {
+      background-color: #333;
+      border: 1px solid #555;
+    }
+  }
+  
+  /* Hover effects for interactivity */
+  .tag:hover {
+    opacity: 0.85;
+  }

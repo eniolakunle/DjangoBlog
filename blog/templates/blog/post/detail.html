@@ -35,6 +35,12 @@
 
     <hr>
     {{ post.body|safe|linebreaks }}
+    {% if post.tags.all %} <strong>Tags:</strong> {% endif %}
+    {% for tag in post.tags.all %}
+       <a class="tag" href="{% url 'blog:post_list_by_tag' tag.slug %}">
+           {{tag.name}}
+       </a>
+   {% endfor %}
     <p>
         <button id="twitter-share-button">Share on X</button>
         <a href="{% url 'blog:post_share' post.id %}">

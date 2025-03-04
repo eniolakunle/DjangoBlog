@@ -16,10 +16,4 @@
         <span>{{ post.body|striptags|truncatewords:30|linebreaks }}</span>
     <!-- </p> -->
     <a href="{{ post.get_absolute_url }}" class="blog-card-link">Read More</a>
-    {% for tag in post.tags.all %}
-        <a class="tag" href="{% url 'blog:post_list_by_tag' tag.slug %}">
-            {{tag.name}}
-        </a>{% if not forloop.last %},{% endif %}
-        <!-- <p class="tags">Tags: {{ post.tags.all|join:", " }}</p> -->
-    {% endfor %}
 </div>
