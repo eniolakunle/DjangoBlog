@@ -198,7 +198,7 @@ class PasswordRequiredViewTest(TestCase):
         self.client = Client()
         self.url = reverse("blog:password_required")
         self.correct_password = "correct_password"
-        self.next_url = "/blog/some-page/"
+        self.next_url = "/blog/"
 
     @patch("blog.views.config")
     def test_password_required_get(self, mock_config):
