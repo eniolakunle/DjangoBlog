@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     "django_ckeditor_5",
 ]
 
+BLOCKED_REFERRERS = ["link.tr", "instagram", "tiktok", "127.0.0.1:8000"]
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -67,6 +69,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "blog.middleware.ReferrerBlockMiddleware",
 ]
 
 ROOT_URLCONF = "mysite.urls"
