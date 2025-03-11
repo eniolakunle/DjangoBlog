@@ -24,8 +24,6 @@ class ReferrerBlockMiddleware:
             for blocked_domain in self.blocked_referrers
         ):
             # Optionally, you can check if the user is already authenticated for the password.
-            # print(request.session.items())
-            # request.session["password_authenticated"] = None
             if not request.session.get("password_authenticated", False):
                 return redirect(
                     f"/blog/password-required/?next={quote(request.get_full_path())}",
