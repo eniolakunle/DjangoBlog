@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     "django_ckeditor_5",
 ]
 
-BLOCKED_REFERRERS = ["link.tr", "instagram", "tiktok", "127.0.0.1:8000"]
+PASSWORD_PROTECTED_REFERRERS = ["linktr.ee", "instagram", "tiktok"]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
