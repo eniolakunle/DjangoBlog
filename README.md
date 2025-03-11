@@ -15,7 +15,7 @@ This is a simple blog application built with **Django 5** to share inspirational
   - **Hover Effect**: Article previews float when in view of user. 🧞‍♂️
   - **Transition Effect**: A slick transition, implemented via JavaScript, for seamless site navigation! 🔥
 - **Splash Page**: A colorful splash page for first time visitors! 💦 **Tip: Clear localStorage to get splashed again.**
-    <!-- - **Ripple Effect (Implemented via Javascript)**: When tapped, article preview "cards" flash a ripple. ⚡️ -->
+- **Password Protected**: When visiting The Secret Place from a social media site(IG, TikTok, Linktree), it is exclusively for followers! 🔐
 
 ### Disabled Features 🚧
 
