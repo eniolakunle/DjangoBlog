@@ -22,7 +22,7 @@ jobs:
       DEBUG: "True"
       ALLOWED_HOSTS: "*"
       STATIC_ROOT: ""
-      REFERRER_PASSWORD: howheriselikethat
+      REFERRER_PASSWORD: "howheriselikethat"
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
