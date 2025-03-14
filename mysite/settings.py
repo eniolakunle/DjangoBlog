@@ -210,7 +210,7 @@ CKEDITOR_5_CONFIGS = {
                 # "fontFamily",
                 # "fontColor",
                 # "fontBackgroundColor",
-                "mediaEmbed",
+                # "mediaEmbed",
                 "removeFormat",
                 "insertTable",
             ],
