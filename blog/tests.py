@@ -1,11 +1,15 @@
 # Create your tests here.
-from django.test import TestCase
+from django.test import TestCase, RequestFactory, Client
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core import mail
+from django.conf import settings
+from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 from .models import Post, Comment, validate_image_max_size
+from .middleware import ReferrerBlockMiddleware
 from django.contrib.auth import get_user_model
+from unittest.mock import patch
 
 
 class PostModelTest(TestCase):
@@ -160,3 +164,65 @@ class PostShareViewTest(TestCase):
         self.assertFalse(response.context["form"].is_valid())
         self.assertContains(response, "This field is required.", html=True)
         self.assertContains(response, "Enter a valid email address.", html=True)
+
+
+class ReferrerBlockMiddlewareTest(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.get_response = lambda request: HttpResponse()
+        self.middleware = ReferrerBlockMiddleware(self.get_response)
+        settings.PASSWORD_PROTECTED_REFERRERS = ["blocked.com"]
+
+    def test_redirects_to_password_protected_page(self):
+        request = self.factory.get("/some-path", HTTP_REFERER="http://blocked.com")
+        request.session = {}
+        response = self.middleware(request)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/blog/password-required/", response.url)
+
+    def test_does_not_redirect_if_authenticated(self):
+        request = self.factory.get("/some-path", HTTP_REFERER="http://blocked.com")
+        request.session = {"password_authenticated": True}
+        response = self.middleware(request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_does_not_redirect_if_referrer_not_blocked(self):
+        request = self.factory.get("/some-path", HTTP_REFERER="http://allowed.com")
+        request.session = {}
+        response = self.middleware(request)
+        self.assertEqual(response.status_code, 200)
+
+
+class PasswordRequiredViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.url = reverse("blog:password_required")
+        self.correct_password = "correct_password"
+        self.next_url = "/blog/"
+
+    @patch("blog.views.config")
+    def test_password_required_get(self, mock_config):
+        response = self.client.get(self.url, {"next": self.next_url})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "blog/password_required.html")
+
+    @patch("blog.views.config")
+    def test_password_required_post_correct_password(self, mock_config):
+        mock_config.return_value = self.correct_password
+        response = self.client.post(
+            self.url, {"password": self.correct_password, "next": self.next_url}
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, self.next_url)
+        self.assertTrue(self.client.session["password_authenticated"])
+
+    @patch("blog.views.config")
+    def test_password_required_post_incorrect_password(self, mock_config):
+        mock_config.return_value = self.correct_password
+        response = self.client.post(
+            self.url, {"password": "wrong_password", "next": self.next_url}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "blog/password_required.html")
+        self.assertContains(response, "Incorrect password. Please try again.")
+        self.assertFalse(self.client.session.get("password_authenticated", False))

@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="{% static 'css/splash.css' %}">
         <link rel="icon" type=”image/x-icon” href="{% static 'images/favicon.ico' %}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% block meta %} {% endblock %}
 
         <!-- style overrides; get rid of underlining on links unless onHover-->
         <style>

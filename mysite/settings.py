@@ -32,12 +32,14 @@ DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL")
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-2_-zq2o2lz8tj7ag(_pmms%$589b2^&l%t-%)vblkjzz#2lqi!"
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", cast=bool)
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = config(
+    "ALLOWED_HOSTS", cast=lambda v: [s.strip() for s in v.split(",")]
+)
 
 CAPTCHA_CHALLENGE_FUNCT = "captcha.helpers.math_challenge"
 CAPTCHA_NOISE_FUNCTIONS = ("captcha.helpers.noise_null",)
@@ -58,6 +60,8 @@ INSTALLED_APPS = [
     "taggit",
 ]
 
+PASSWORD_PROTECTED_REFERRERS = ["linktr.ee", "instagram", "tiktok"]
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -66,6 +70,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "blog.middleware.ReferrerBlockMiddleware",
 ]
 
 ROOT_URLCONF = "mysite.urls"
@@ -136,7 +141,7 @@ STATIC_URL = "static/"
 MEDIA_URL = "media/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
+STATIC_ROOT = config("STATIC_ROOT")
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
