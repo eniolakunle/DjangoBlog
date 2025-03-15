@@ -9,6 +9,11 @@
 {% block content %}
     {% load static %}
         <link rel="stylesheet" href="{% static 'css/list.css' %}">
+
+    {% if tag %}
+        <h2>Posts Tagged With "{{ tag.name }}"</h2>
+    {% endif %}
+
     <div id="item-container grid-container">
         <div class="top-grid">
             {% for post in posts|slice:":1" %}
@@ -27,6 +32,6 @@
         </div>
 
     </div>
-{% include "blog/post/pagination.html" with page=page_obj %}
+{% include "blog/post/pagination.html" with page=posts %}
 <div id="sentinel"></div>
 {% endblock %}

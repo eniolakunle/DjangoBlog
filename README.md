@@ -16,6 +16,7 @@ This is a simple blog application built with **Django 5** to share inspirational
   - **Transition Effect**: A slick transition, implemented via JavaScript, for seamless site navigation! 🔥
 - **Splash Page**: A colorful splash page for first time visitors! 💦 **Tip: Clear localStorage to get splashed again.**
 - **Password Protected**: When visiting The Secret Place from a social media site(IG, TikTok, Linktree), it is exclusively for followers! 🔐
+- **Tagged Posts**: Quickly find related articles by clicking one of the tags at the end of a post! 🏷️
 
 ### Disabled Features 🚧
 

@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "blog.apps.BlogConfig",
     "captcha",
     "django_ckeditor_5",
+    "taggit",
 ]
 
 PASSWORD_PROTECTED_REFERRERS = ["linktr.ee", "instagram", "tiktok"]
