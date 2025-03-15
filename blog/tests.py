@@ -25,6 +25,8 @@ class PostModelTest(TestCase):
             body="This is a test post.",
             status=Post.Status.DRAFT,
         )
+        # Add tags to the post
+        self.post.tags.add("django", "testing")
 
     def test_post_creation(self):
         self.assertEqual(self.post.title, "Test Post")
@@ -32,6 +34,13 @@ class PostModelTest(TestCase):
         self.assertEqual(self.post.author, self.user)
         self.assertEqual(self.post.body, "This is a test post.")
         self.assertEqual(self.post.status, Post.Status.DRAFT)
+
+    def test_post_tags(self):
+        # Check that the tags were added correctly
+        tags = self.post.tags.names()
+        self.assertIn("django", tags)
+        self.assertIn("testing", tags)
+        self.assertEqual(len(tags), 2)
 
     def test_post_str(self):
         self.assertEqual(str(self.post), "Test Post")
@@ -226,3 +235,75 @@ class PasswordRequiredViewTest(TestCase):
         self.assertTemplateUsed(response, "blog/password_required.html")
         self.assertContains(response, "Incorrect password. Please try again.")
         self.assertFalse(self.client.session.get("password_authenticated", False))
+
+
+class PostListViewTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = get_user_model().objects.create_user(
+            username="testuser", password="12345"
+        )
+
+        # Create multiple posts
+        self.post1 = Post.objects.create(
+            title="Post 1",
+            slug="post-1",
+            author=self.user,
+            body="Body of post 1",
+            status=Post.Status.PUBLISHED,
+        )
+        self.post2 = Post.objects.create(
+            title="Post 2",
+            slug="post-2",
+            author=self.user,
+            body="Body of post 2",
+            status=Post.Status.PUBLISHED,
+        )
+        self.post3 = Post.objects.create(
+            title="Post 3",
+            slug="post-3",
+            author=self.user,
+            body="Body of post 3",
+            status=Post.Status.DRAFT,  # This post should not appear in the list
+        )
+
+        # Add tags to posts
+        self.post1.tags.add("django")
+        self.post2.tags.add("testing")
+
+    def test_post_list_view(self):
+        response = self.client.get(reverse("blog:post_list"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "blog/post/list.html")
+        self.assertContains(response, "Post 1")
+        self.assertContains(response, "Post 2")
+        self.assertNotContains(response, "Post 3")  # Draft post should not appear
+
+    def test_post_list_view_with_tag(self):
+        response = self.client.get(
+            reverse("blog:post_list_by_tag", kwargs={"tag_slug": "django"})
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Post 1")
+        self.assertNotContains(response, "Post 2")
+        self.assertNotContains(response, "Post 3")
+
+    def test_post_list_pagination(self):
+        # Create additional posts to test pagination
+        for i in range(8):
+            Post.objects.create(
+                title=f"Post {i + 4}",
+                slug=f"post-{i + 4}",
+                author=self.user,
+                body=f"Body of post {i + 4}",
+                status=Post.Status.PUBLISHED,
+            )
+
+        response = self.client.get(reverse("blog:post_list"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["posts"]), 7)  # Paginate by 7
+
+        # Test second page
+        response = self.client.get(reverse("blog:post_list") + "?page=2")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["posts"]), 3)  # Remaining posts
