@@ -61,12 +61,12 @@ INSTALLED_APPS = [
     "compressor",
 ]
 
-STATICFILES_FINDERS = (
+STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
     # other finders..
     "compressor.finders.CompressorFinder",
-)
+]
 
 PASSWORD_PROTECTED_REFERRERS = ["linktr.ee", "instagram", "tiktok"]
 
