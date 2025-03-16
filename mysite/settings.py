@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "captcha",
     "django_ckeditor_5",
     "taggit",
+    "compressor",
 ]
 
 PASSWORD_PROTECTED_REFERRERS = ["linktr.ee", "instagram", "tiktok"]
