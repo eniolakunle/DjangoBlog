@@ -10,8 +10,6 @@
         <link rel="stylesheet" href="{% static 'css/custom.css' %}">
         <link rel="stylesheet" href="{% static 'css/transition.css' %}">
         <link rel="stylesheet" href="{% static 'css/splash.css' %}">
-        <link rel="icon" type=”image/x-icon” href="{% static 'images/favicon.ico' %}">
-
         <!-- style overrides; get rid of underlining on links unless onHover-->
         <style>
             #content a, 
@@ -24,6 +22,9 @@
                 text-decoration: underline;
             }
         </style>
+        
+        <link rel="icon" type=”image/x-icon” href="{% static 'images/favicon.ico' %}">
+
 
         {% block head %}
         {% endblock %}
