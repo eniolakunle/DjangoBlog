@@ -69,7 +69,9 @@
             <img src="{% static 'images/jeezus.jpg' %}" alt="The Christ" id="jesusimg">
         </footer>
         <script async defer src="https://dailyverses.net/get/random.js?language=esv"></script>
-        <script src="{% static 'js/scripts.js' %}"></script>
-        <script src="{% static 'js/splash.js' %}"></script>
+        {% compress js %}
+            <script src="{% static 'js/scripts.js' %}"></script>
+            <script src="{% static 'js/splash.js' %}"></script>
+        {% endcompress %}
     </body>
 </html>
