@@ -302,3 +302,5 @@ CKEDITOR_5_CUSTOM_CSS = "/" + STATIC_URL + "css/editor.css"
 
 if "test" in sys.argv:
     CAPTCHA_TEST_MODE = True
+
+COMPRESS_ENABLED = True

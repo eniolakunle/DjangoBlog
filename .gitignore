@@ -8,3 +8,4 @@ media/
 blog/static/coverage/
 blog/static/node_modules/
 blog/static/django_ckeditor_5/
+CACHE/

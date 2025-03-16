@@ -8,24 +8,24 @@
 
         <title>{% block title %} {% endblock %}</title>
         {% load compress %}
-        {% compress css %}
         <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
-        <link rel="stylesheet" href="{% static 'css/custom.css' %}">
-        <link rel="stylesheet" href="{% static 'css/transition.css' %}">
-        <link rel="stylesheet" href="{% static 'css/splash.css' %}">
-        {% block style %} {% endblock %}
-        <!-- style overrides; get rid of underlining on links unless onHover-->
-        <style>
-            #content a, 
-            #sidebar a {
-                text-decoration: none;
-            }
-    
-            #content a:hover, 
-            #sidebar a:hover {
-                text-decoration: underline;
-            }
-        </style>
+        {% compress css %}
+            <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+            <link rel="stylesheet" href="{% static 'css/transition.css' %}">
+            <link rel="stylesheet" href="{% static 'css/splash.css' %}">
+            {% block style %} {% endblock %}
+            <!-- style overrides; get rid of underlining on links unless onHover-->
+            <style>
+                #content a, 
+                #sidebar a {
+                    text-decoration: none;
+                }
+        
+                #content a:hover, 
+                #sidebar a:hover {
+                    text-decoration: underline;
+                }
+            </style>
         {% endcompress %}
 
         <link rel="icon" type=”image/x-icon” href="{% static 'images/favicon.ico' %}">
