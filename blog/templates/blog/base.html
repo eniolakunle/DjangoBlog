@@ -5,7 +5,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         {% block meta %} {% endblock %}
+
         <title>{% block title %} {% endblock %}</title>
+
         <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
         <link rel="stylesheet" href="{% static 'css/custom.css' %}">
         <link rel="stylesheet" href="{% static 'css/transition.css' %}">
@@ -22,12 +24,9 @@
                 text-decoration: underline;
             }
         </style>
-        
+
         <link rel="icon" type=”image/x-icon” href="{% static 'images/favicon.ico' %}">
 
-
-        {% block head %}
-        {% endblock %}
     </head>
 
     <body>
