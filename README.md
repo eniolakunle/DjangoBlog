@@ -17,6 +17,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 - **Splash Page**: A colorful splash page for first time visitors! 💦 **Tip: Clear localStorage to get splashed again.**
 - **Password Protected**: When visiting The Secret Place from a social media site(IG, TikTok, Linktree), it is exclusively for followers! 🔐
 - **Tagged Posts**: Quickly find related articles by clicking one of the tags at the end of a post! 🏷️
+- **Compressed Static Files**: CSS & JavaScript files are compressed, requiring fewer requests to the web server, and ensuring the user always gets the latest version of the website via cache-busting! (thanks to [Django Compressor](https://django-compressor.readthedocs.io/en/stable/index.html)) 💥
 
 ### Disabled Features 🚧
 
