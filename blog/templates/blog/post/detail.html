@@ -1,8 +1,6 @@
 {% extends "blog/base.html" %}
 
-{% block title %} {{post.title}} {% endblock %}
-
-{% block head %}
+{% block meta %}
     <meta name="twitter:card" content="summary"></meta>
     <meta property="og:description" content="{{ post.body|truncatewords:30 }}" />
     <meta property="og:title" content="{{ post.title }}" />
@@ -11,6 +9,9 @@
         content="{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image.url }}" />
     {% endif %}
 {% endblock %}
+
+{% block title %} {{post.title}} {% endblock %}
+
 
 {% block content %}
 

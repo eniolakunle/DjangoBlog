@@ -2,33 +2,34 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{% block title %} {% endblock %}</title>
-        <!-- <link rel="stylesheet" href="https://unpkg.com/mvp.css">  -->
-        <!-- <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css"> -->
-        <!-- <link rel="stylesheet" href="{% static 'css/blog.css' %}"> -->
-        <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
-        <link rel="stylesheet" href="{% static 'css/custom.css' %}">
-        <link rel="stylesheet" href="{% static 'css/transition.css' %}">
-        <link rel="stylesheet" href="{% static 'css/splash.css' %}">
-        <link rel="icon" type=”image/x-icon” href="{% static 'images/favicon.ico' %}">
+        <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         {% block meta %} {% endblock %}
 
-        <!-- style overrides; get rid of underlining on links unless onHover-->
-        <style>
-            #content a, 
-            #sidebar a {
-                text-decoration: none;
-            }
-    
-            #content a:hover, 
-            #sidebar a:hover {
-                text-decoration: underline;
-            }
-        </style>
+        <title>{% block title %} {% endblock %}</title>
+        {% load compress %}
+        <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+        {% compress css %}
+            <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+            <link rel="stylesheet" href="{% static 'css/transition.css' %}">
+            <link rel="stylesheet" href="{% static 'css/splash.css' %}">
+            {% block style %} {% endblock %}
+            <!-- style overrides; get rid of underlining on links unless onHover-->
+            <style>
+                #content a, 
+                #sidebar a {
+                    text-decoration: none;
+                }
+        
+                #content a:hover, 
+                #sidebar a:hover {
+                    text-decoration: underline;
+                }
+            </style>
+        {% endcompress %}
 
-        {% block head %}
-        {% endblock %}
+        <link rel="icon" type=”image/x-icon” href="{% static 'images/favicon.ico' %}">
+
     </head>
 
     <body>
@@ -68,7 +69,9 @@
             <img src="{% static 'images/jeezus.jpg' %}" alt="The Christ" id="jesusimg">
         </footer>
         <script async defer src="https://dailyverses.net/get/random.js?language=esv"></script>
-        <script src="{% static 'js/scripts.js' %}"></script>
-        <script src="{% static 'js/splash.js' %}"></script>
+        {% compress js %}
+            <script src="{% static 'js/scripts.js' %}"></script>
+            <script src="{% static 'js/splash.js' %}"></script>
+        {% endcompress %}
     </body>
 </html>

@@ -58,6 +58,14 @@ INSTALLED_APPS = [
     "captcha",
     "django_ckeditor_5",
     "taggit",
+    "compressor",
+]
+
+STATICFILES_FINDERS = [
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    # other finders..
+    "compressor.finders.CompressorFinder",
 ]
 
 PASSWORD_PROTECTED_REFERRERS = ["linktr.ee", "instagram", "tiktok"]
@@ -294,3 +302,5 @@ CKEDITOR_5_CUSTOM_CSS = "/" + STATIC_URL + "css/editor.css"
 
 if "test" in sys.argv:
     CAPTCHA_TEST_MODE = True
+
+COMPRESS_ENABLED = True
