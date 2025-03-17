@@ -10,6 +10,7 @@ from .models import Post, Comment, validate_image_max_size
 from .middleware import ReferrerBlockMiddleware
 from django.contrib.auth import get_user_model
 from unittest.mock import patch
+from django.utils.timezone import now, timedelta
 
 
 class PostModelTest(TestCase):
@@ -27,6 +28,26 @@ class PostModelTest(TestCase):
         )
         # Add tags to the post
         self.post.tags.add("django", "testing")
+
+        # Create a post with a publish date in the past
+        self.post_with_comments_open = Post.objects.create(
+            title="Post with Comments Open",
+            slug="post-comments-open",
+            author=self.user,
+            body="This is a test post.",
+            status=Post.Status.PUBLISHED,
+            publish=now() - timedelta(days=1),  # Published yesterday
+        )
+
+        # Create a post with a publish date far in the past
+        self.post_with_comments_closed = Post.objects.create(
+            title="Post with Comments Closed",
+            slug="post-comments-closed",
+            author=self.user,
+            body="This is another test post.",
+            status=Post.Status.PUBLISHED,
+            publish=now() - timedelta(days=100),  # Published 100 days ago
+        )
 
     def test_post_creation(self):
         self.assertEqual(self.post.title, "Test Post")
@@ -61,6 +82,14 @@ class PostModelTest(TestCase):
         )
         self.assertIn(published_post, Post.published.all())
         self.assertNotIn(self.post, Post.published.all())
+
+    def test_comments_open(self):
+        # Assuming comments are open for posts published within the last 7 days
+        self.assertFalse(self.post_with_comments_open.comments_closed)
+
+    def test_comments_closed(self):
+        # Assuming comments are closed for posts published more than 7 days ago
+        self.assertTrue(self.post_with_comments_closed.comments_closed)
 
 
 class CommentModelTest(TestCase):
