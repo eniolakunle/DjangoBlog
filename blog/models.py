@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.urls import reverse
 from django_ckeditor_5.fields import CKEditor5Field
 from taggit.managers import TaggableManager
+from datetime import datetime, timedelta
 
 # from django.db.models.functions import Now
 
@@ -71,6 +72,10 @@ class Post(models.Model):
                 self.slug,
             ],
         )
+
+    @property
+    def comments_closed(self):
+        return (self.publish + timedelta(days=7)) < datetime.now(self.publish.tzinfo)
 
 
 class Comment(models.Model):

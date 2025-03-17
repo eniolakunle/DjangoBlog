@@ -63,7 +63,14 @@
             {{ comment.body }}
         </blockquote>
     {% empty %}
-        <p>👇What do you think? Leave a comment below!👇 </p>
+        {% if post.comments_closed %}
+            <h3>⌛️ Comments Closed!</h3>
+        {% else %}
+            <p>👇What do you think? Leave a comment below!👇 </p>
+        {% endif %}
     {% endfor %}
-    {% include "blog/post/includes/comment_form.html" %}
+
+    {% if not post.comments_closed %}
+        {% include "blog/post/includes/comment_form.html" %}
+    {% endif %}
 {% endblock %}
