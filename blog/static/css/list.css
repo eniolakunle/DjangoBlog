@@ -9,7 +9,7 @@
 }
 
 .intersecting-card {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /*Soft background on intersection*/
+    box-shadow: var(--card-shadow); /*Soft background on intersection*/
     animation: floating 2s ease-in-out infinite; /* Apply Floating Animation on intersection */
 }
 
@@ -42,7 +42,7 @@
     
     .intersecting-card {
         /* Increased shadow for a more pronounced hover effect in dark mode */
-        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
+        box-shadow: var(--dark-card-shadow);
     }
 }
 
@@ -58,11 +58,11 @@
     @media (pointer: fine) {
         .blog-card:hover {
             animation: floating 2s ease-in-out infinite;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--card-shadow);
         }
         @media (prefers-color-scheme: dark) {
             .blog-card:hover {
-                box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
+                box-shadow: var(--dark-card-shadow);
             }
         }
         .intersecting-card {
