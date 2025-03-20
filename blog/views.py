@@ -11,6 +11,7 @@ from .forms import EmailPostForm, CommentForm
 from django.core.mail import send_mail
 from taggit.models import Tag
 from django.db.models import Count
+from .utils import split_and_randomize_similar_posts
 
 from decouple import config
 
@@ -84,14 +85,13 @@ def post_detail(request, year, month, day, post):
     similar_posts = (
         Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id).distinct()
     )
+    similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
+        "-same_tags"
+    )
+    similar_posts = split_and_randomize_similar_posts(similar_posts)
     # similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
     #     "-same_tags", "-publish"
     # )[:3]
-
-    # shuffle similar posts for now to keep it fresh
-    similar_posts = list(similar_posts)
-    random.shuffle(similar_posts)
-    similar_posts = similar_posts[:4]
 
     return render(
         request,
