@@ -34,10 +34,17 @@
     margin: 0px;
   }
 
+  .similar-post:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Optional hover effect */
+  }
+  
   @media (prefers-color-scheme: dark) {
     .similar-post {
       background-color: #333;  /* Dark background for contrast */
       border-color: #555;      /* Dark border for contrast */
+    }
+    .similar-post:hover {
+      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.401); /* Optional hover effect */
     }
   }
 
