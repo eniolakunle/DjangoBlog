@@ -7,11 +7,11 @@
   .similar-post {
     display: flex;
     align-items: center;        /* Center items vertically */
-    border: 1px solid #ddd;     
-    border-radius: 8px;         
+    border: var(--card-border);  
+    border-radius: var(--card-border-radius);         
     padding: 0px 5px;
     margin: 10px 0;
-    background-color: #f9f9f9;     /* White background for contrast */
+    background-color: var(--card-background);     /* White background for contrast */
     transition: box-shadow 0.3s ease;
   }
 
@@ -40,8 +40,8 @@
 
   @media (prefers-color-scheme: dark) {
     .similar-post {
-      background-color: #333;  /* Dark background for contrast */
-      border-color: #555;      /* Dark border for contrast */
+      background-color: var(--dark-card-background);  /* Dark background for contrast */
+      border: var(--dark-card-border);      /* Dark border for contrast */
     }
     .similar-post:hover {
       box-shadow: var(--dark-card-shadow); /* Optional hover effect */

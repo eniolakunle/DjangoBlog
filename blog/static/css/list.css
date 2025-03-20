@@ -1,8 +1,8 @@
 
 .blog-card {
-    background-color: #fff;
-    border: 1px solid #ddd;      /* Subtle border for a clean separation */
-    border-radius: 4px;          /* Slight rounding for a modern look */
+    background-color: var(--card-background);
+    border: var(--card-border);      /* Subtle border for a clean separation */
+    border-radius: var(--card-border-radius);          /* Slight rounding for a modern look */
     overflow: hidden;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     margin: 1rem auto;       /* Center horizontally and provide vertical spacing */
@@ -32,8 +32,8 @@
 
 @media (prefers-color-scheme: dark) {
     .blog-card {
-        background-color: #1a1a1a;   /* Deeper dark background */
-        border: 1px solid #333;      /* Stronger border for more definition */
+        background-color: var(--dark-card-background);   /* Deeper dark background */
+        border: var(--dark-card-border);      /* Stronger border for more definition */
     }
     
     .blog-card-title {

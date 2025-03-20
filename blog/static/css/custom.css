@@ -4,6 +4,11 @@
 :root {
     --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     --dark-card-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
+    --card-border: 1px solid #ddd;
+    --dark-card-border: 1px solid #333;
+    --card-background: #fff;
+    --dark-card-background: #1a1a1a;
+    --card-border-radius: 4px;
 }
 
 body > header {
