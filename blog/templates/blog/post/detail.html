@@ -80,17 +80,6 @@
     {% endif %}
 
     {% if similar_posts %}
-    <hr>
-    <h2>You May Also Like...</h2>
-        <div class="similar-posts">
-            {% for post in similar_posts %}
-                <div class="similar-post">
-                    <img class="similar-image" src="{{ post.featured_image.url }}" alt="">
-                    <h5 class="similar-title">
-                        <a href="{{ post.get_absolute_url }}"> {{post.title}}</a>
-                    </h5>
-                </div>
-            {% endfor %}
-        </div>
+        {% include "blog/post/includes/similar_posts.html" %}
     {% endif %}
 {% endblock %}

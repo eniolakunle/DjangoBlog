@@ -1,0 +1,15 @@
+<hr>
+<h2>You May Also Like...</h2>
+<div class="similar-posts">
+    {% for post in similar_posts %}
+        <a href="{{ post.get_absolute_url }}" style="text-decoration: none; color: inherit;">
+            <div class="similar-post">
+                <img class="similar-image" src="{{ post.featured_image.url }}" alt="">
+                <h5 class="similar-title">
+                    {{ post.title }}
+                    <!-- <a href="{{ post.get_absolute_url }}"> {{post.title}}</a> -->
+                </h5>
+            </div>
+        </a>
+    {% endfor %}
+</div>

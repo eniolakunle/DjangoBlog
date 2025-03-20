@@ -3,14 +3,15 @@
     display: flex;
     flex-direction: column;
   }
+  
   .similar-post {
     display: flex;
     align-items: center;        /* Center items vertically */
-    border: 1px solid #ddd;     /* Light, clean border */
-    border-radius: 8px;         /* Rounded corners */
-    padding: 2px 5px;
+    border: 1px solid #ddd;     
+    border-radius: 8px;         
+    padding: 0px 5px;
     margin: 10px 0;
-    background-color: #fff;     /* White background for contrast */
+    background-color: #f9f9f9;     /* White background for contrast */
     transition: box-shadow 0.3s ease;
   }
 
@@ -20,14 +21,19 @@
     object-fit: cover;          /* Crop image if necessary */
     border-radius: 4px;         /* Optional: slight rounding on the image */
     margin-right: 15px;         /* Space between image and title */
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
   
   .similar-post h5 {
     flex: 1;                    /* Allow the title to take remaining space */
     text-align: center;         /* Center text horizontally */
     font-size: 1.1rem;
-    color: #333;
+    padding: 5px;
+    color: var(--accent);
+    margin: 0px;
   }
+
   @media (prefers-color-scheme: dark) {
     .similar-post {
       background-color: #333;  /* Dark background for contrast */

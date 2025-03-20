@@ -1,3 +1,5 @@
+import random
+
 from urllib.parse import unquote
 from django.shortcuts import redirect, render, get_object_or_404
 from .models import Post
@@ -80,9 +82,14 @@ def post_detail(request, year, month, day, post):
 
     post_tags_ids = post.tags.values_list("id", flat=True)
     similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
-    similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
-        "-same_tags", "-publish"
-    )[:3]
+    # similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
+    #     "-same_tags", "-publish"
+    # )[:3]
+
+    # shuffle similar posts for now to keep it fresh
+    similar_posts = list(similar_posts)
+    random.shuffle(similar_posts)
+    similar_posts = similar_posts[:3]
 
     return render(
         request,
