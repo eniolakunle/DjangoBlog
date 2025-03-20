@@ -12,6 +12,10 @@
 
 {% block title %} {{post.title}} {% endblock %}
 
+{% block style %} 
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+{% endblock %}
 
 {% block content %}
 

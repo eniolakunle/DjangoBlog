@@ -1,0 +1,36 @@
+
+.similar-posts {
+    display: flex;
+    flex-direction: column;
+  }
+  .similar-post {
+    display: flex;
+    align-items: center;        /* Center items vertically */
+    border: 1px solid #ddd;     /* Light, clean border */
+    border-radius: 8px;         /* Rounded corners */
+    padding: 2px 5px;
+    margin: 10px 0;
+    background-color: #fff;     /* White background for contrast */
+    transition: box-shadow 0.3s ease;
+  }
+
+  .similar-post img {
+    width: 80px;                /* Adjust as needed */
+    height: 80px;               /* Keep image square */
+    object-fit: cover;          /* Crop image if necessary */
+    border-radius: 4px;         /* Optional: slight rounding on the image */
+    margin-right: 15px;         /* Space between image and title */
+  }
+  
+  .similar-post h5 {
+    flex: 1;                    /* Allow the title to take remaining space */
+    text-align: center;         /* Center text horizontally */
+    font-size: 1.1rem;
+    color: #333;
+  }
+  @media (prefers-color-scheme: dark) {
+    .similar-post {
+      background-color: #333;  /* Dark background for contrast */
+      border-color: #555;      /* Dark border for contrast */
+    }
+  }
