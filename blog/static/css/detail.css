@@ -40,3 +40,11 @@
       border-color: #555;      /* Dark border for contrast */
     }
   }
+
+@media (min-width: 769px) {
+    .similar-posts {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+}
