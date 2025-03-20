@@ -89,7 +89,7 @@ def post_detail(request, year, month, day, post):
     # shuffle similar posts for now to keep it fresh
     similar_posts = list(similar_posts)
     random.shuffle(similar_posts)
-    similar_posts = similar_posts[:3]
+    similar_posts = similar_posts[:4]
 
     return render(
         request,
