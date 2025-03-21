@@ -10,6 +10,8 @@
     --dark-card-background: #1a1a1a;
     --card-border-radius: 4px;
     --card-transition: transform 0.2s ease, box-shadow 0.2s ease;
+    --nav-background: #222;
+    --dark-nav-background: #333;
 }
 
 body > header {
@@ -32,7 +34,7 @@ fieldset {
     width: 100%;
     top: 0;
     left: 0;
-    background: #222;
+    background: var(--nav-background);
     padding: 10px;
     display: flex;
     justify-content: space-between;
@@ -41,6 +43,9 @@ fieldset {
     z-index: 1000;
     height: 50px;
     transition: transform 0.3s ease-in-out;
+}
+#svgLogo {
+    background-color: var(--nav-background);
 }
 
 .hide {
@@ -107,7 +112,10 @@ fieldset {
 }
 @media (prefers-color-scheme: dark) {
     .top-nav {
-        background: #333;
+        background: var(--dark-nav-background);
+    }
+    #svgLogo {
+        background-color: var(--dark-nav-background);
     }
     .menu {
         background: #555;
