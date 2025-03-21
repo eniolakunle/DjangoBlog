@@ -398,6 +398,7 @@ class SplitAndRandomizeSimilarPostsTest(TestCase):
 class PostDetailViewTest(TestCase):
     def setUp(self):
         self.client = Client()
+        settings.USE_TZ = False
         self.user = get_user_model().objects.create_user(
             username="testuser", password="12345"
         )
