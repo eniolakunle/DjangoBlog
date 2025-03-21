@@ -13,6 +13,11 @@ from taggit.models import Tag
 from django.db.models import Count
 from .utils import split_and_randomize_similar_posts
 
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
 from decouple import config
 
 # Create your views here.
@@ -81,6 +86,29 @@ def post_detail(request, year, month, day, post):
     #     "-same_tags", "-publish"
     # )[:3]
 
+    # # Get all published posts excluding the current one.
+    posts = Post.objects.filter(status=Post.Status.PUBLISHED).exclude(id=post.id)
+
+    # Build a list (corpus) of the posts' content.
+    # Here we assume that each post has a 'content' field.
+    corpus = [p.body for p in posts]
+    current_text = post.body
+
+    # Combine current post with the corpus for vectorization.
+    documents = [current_text] + corpus
+
+    # Create TF-IDF vectors for each document.
+    vectorizer = TfidfVectorizer(stop_words="english")
+    tfidf_matrix = vectorizer.fit_transform(documents)
+
+    # Compute cosine similarity between the current post (first document)
+    # and the rest of the corpus.
+    cosine_sim = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[1:]).flatten()
+
+    # Get indices for the top 5 similar posts (highest similarity score).
+    top_indices = np.argsort(cosine_sim)[::-1][:4]
+    recommended_posts = [posts[int(i)] for i in top_indices]
+
     return render(
         request,
         "blog/post/detail.html",
@@ -88,7 +116,7 @@ def post_detail(request, year, month, day, post):
             "post": post,
             "form": form,
             "comments": comments,
-            "similar_posts": similar_posts,
+            "similar_posts": recommended_posts,
         },
     )
 
