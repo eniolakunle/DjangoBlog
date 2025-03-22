@@ -8,7 +8,7 @@
 
         <title>{% block title %} {% endblock %}</title>
         {% load compress %}
-        <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+            <link rel="stylesheet" href="{% static 'css/simple.css' %}">
         {% compress css %}
             <link rel="stylesheet" href="{% static 'css/custom.css' %}">
             <link rel="stylesheet" href="{% static 'css/transition.css' %}">
