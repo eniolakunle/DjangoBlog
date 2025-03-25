@@ -1,3 +1,5 @@
+import random
+
 from urllib.parse import unquote
 from django.shortcuts import redirect, render, get_object_or_404
 from .models import Post
@@ -8,6 +10,8 @@ from django.views.generic import ListView
 from .forms import EmailPostForm, CommentForm
 from django.core.mail import send_mail
 from taggit.models import Tag
+from django.db.models import Count
+from .utils import split_and_randomize_similar_posts
 
 from decouple import config
 
@@ -49,18 +53,6 @@ def post_list(request, tag_slug=None):
     )
 
 
-# def post_detail(request, id):
-#     try:
-#         post = Post.published.get(id=id)
-#     except Post.DoesNotExist:
-#         raise Http404("No Post Found")
-#     return render(
-#         request,
-#         'blog/post/detail.html',
-#         {'post': post}
-#     )
-
-
 def post_detail(request, year, month, day, post):
     post = get_object_or_404(
         Post,
@@ -75,6 +67,20 @@ def post_detail(request, year, month, day, post):
 
     form = CommentForm()
 
+    # Similar posts
+
+    post_tags_ids = post.tags.values_list("id", flat=True)
+    similar_posts = (
+        Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id).distinct()
+    )
+    similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
+        "-same_tags"
+    )
+    similar_posts = split_and_randomize_similar_posts(similar_posts)
+    # similar_posts = similar_posts.annotate(same_tags=Count("tags")).order_by(
+    #     "-same_tags", "-publish"
+    # )[:3]
+
     return render(
         request,
         "blog/post/detail.html",
@@ -82,6 +88,7 @@ def post_detail(request, year, month, day, post):
             "post": post,
             "form": form,
             "comments": comments,
+            "similar_posts": similar_posts,
         },
     )
 
