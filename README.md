@@ -9,13 +9,16 @@ This is a simple blog application built with **Django 5** to share inspirational
 - **Responsive Design**: Built with mobile-first principles to ensure a seamless experience across devices. 📱💻
   - **Dark/Light Mode Support**: Dynamically adjusts according to device preference! 🌗
   - **More Articles on Bigger Screens**: Bigger screens are filled with more articles to choose from. 🧐
-- **CAPTCHA Verification**: Implemented via django-simple-captcha to distinguish between real users and bots. 🔒
+- **CAPTCHA Verification**: Implemented via [django-simple-captcha](https://django-simple-captcha.readthedocs.io/en/latest/) to distinguish between real users and bots. 🔒
 - **Fun Effects**: A few effects that give a pleasant feeling when looking at article previews. 🤪
   - **Card Effect**: Article previews mimic a playing card. 🃏
   - **Hover Effect**: Article previews float when in view of user. 🧞‍♂️
   - **Transition Effect**: A slick transition, implemented via JavaScript, for seamless site navigation! 🔥
 - **Splash Page**: A colorful splash page for first time visitors! 💦 **Tip: Clear localStorage to get splashed again.**
-    <!-- - **Ripple Effect (Implemented via Javascript)**: When tapped, article preview "cards" flash a ripple. ⚡️ -->
+- **Password Protected**: When visiting The Secret Place from a social media site(IG, TikTok, Linktree), it is exclusively for followers! 🔐
+- **Tagged Posts**: Quickly find related articles by clicking one of the tags at the end of a post! 🏷️
+  - **Suggested Articles**: Once you finish an article, find a few more suggested articles based on related tags. 📢
+- **Compressed Static Files**: CSS & JavaScript files are compressed, requiring fewer requests to the web server, and ensuring the user always gets the latest version of the website via cache busting! (thanks to [Django Compressor](https://django-compressor.readthedocs.io/en/stable/index.html)) 💥
 
 ### Disabled Features 🚧
 

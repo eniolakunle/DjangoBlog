@@ -1,8 +1,6 @@
 {% extends "blog/base.html" %}
 
-{% block title %} {{post.title}} {% endblock %}
-
-{% block head %}
+{% block meta %}
     <meta name="twitter:card" content="summary"></meta>
     <meta property="og:description" content="{{ post.body|truncatewords:30 }}" />
     <meta property="og:title" content="{{ post.title }}" />
@@ -10,6 +8,13 @@
         <meta property="og:image" 
         content="{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image.url }}" />
     {% endif %}
+{% endblock %}
+
+{% block title %} {{post.title}} {% endblock %}
+
+{% block style %} 
+    {% load static %}
+        <link rel="stylesheet" href="{% static 'css/detail.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -35,15 +40,22 @@
 
     <hr>
     {{ post.body|safe|linebreaks }}
+    {% if post.tags.all %} <hr><br> <strong>Tags:</strong> {% endif %}
+    {% for tag in post.tags.all %}
+       <a class="tag" href="{% url 'blog:post_list_by_tag' tag.slug %}">
+           {{tag.name}}
+       </a>
+   {% endfor %}
     <p>
         <button id="twitter-share-button">Share on X</button>
         <a href="{% url 'blog:post_share' post.id %}">
             <button>Share with Email</button>
         </a>
     </p>
+
     {% with comments.count as total_comments %}
         <h2>
-            {{ total_comments }} comment{{ total_comments|pluralize }}
+            {{ total_comments }} Comment{{ total_comments|pluralize }}
         </h2>
     {% endwith %}
     {% for comment in comments %}
@@ -56,7 +68,18 @@
             {{ comment.body }}
         </blockquote>
     {% empty %}
-        <p>👇What do you think? Leave a comment below!👇 </p>
+        {% if not post.comments_closed %}
+            <p>👇What do you think? Leave a comment below!👇 </p>
+        {% endif %}
     {% endfor %}
-    {% include "blog/post/includes/comment_form.html" %}
+
+    {% if post.comments_closed %}
+        <h3>⌛️ Comments Closed!</h3>
+    {% else %}
+        {% include "blog/post/includes/comment_form.html" %}
+    {% endif %}
+
+    {% if similar_posts %}
+        {% include "blog/post/includes/similar_posts.html" %}
+    {% endif %}
 {% endblock %}

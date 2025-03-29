@@ -1,15 +1,15 @@
 
 .blog-card {
-    background-color: #fff;
-    border: 1px solid #ddd;      /* Subtle border for a clean separation */
-    border-radius: 4px;          /* Slight rounding for a modern look */
+    background-color: var(--card-background);
+    border: var(--card-border);      /* Subtle border for a clean separation */
+    border-radius: var(--card-border-radius);          /* Slight rounding for a modern look */
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: var(--card-transition);
     margin: 1rem auto;       /* Center horizontally and provide vertical spacing */
 }
 
 .intersecting-card {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /*Soft background on intersection*/
+    box-shadow: var(--card-shadow); /*Soft background on intersection*/
     animation: floating 2s ease-in-out infinite; /* Apply Floating Animation on intersection */
 }
 
@@ -32,8 +32,8 @@
 
 @media (prefers-color-scheme: dark) {
     .blog-card {
-        background-color: #1a1a1a;   /* Deeper dark background */
-        border: 1px solid #333;      /* Stronger border for more definition */
+        background-color: var(--dark-card-background);   /* Deeper dark background */
+        border: var(--dark-card-border);      /* Stronger border for more definition */
     }
     
     .blog-card-title {
@@ -42,7 +42,7 @@
     
     .intersecting-card {
         /* Increased shadow for a more pronounced hover effect in dark mode */
-        box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
+        box-shadow: var(--dark-card-shadow);
     }
 }
 
@@ -58,11 +58,11 @@
     @media (pointer: fine) {
         .blog-card:hover {
             animation: floating 2s ease-in-out infinite;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            box-shadow: var(--card-shadow);
         }
         @media (prefers-color-scheme: dark) {
             .blog-card:hover {
-                box-shadow: 0 4px 8px rgba(255, 255, 255, 0.15);
+                box-shadow: var(--dark-card-shadow);
             }
         }
         .intersecting-card {
@@ -94,11 +94,6 @@
         width:fit-content;
         flex-direction: row;
     }
-
-}
-
-/*main article image will fill until screen is wide enough for entire image */
-@media (769px <= width <= 1136px) {
     .main-article > a {
         display: flex;
     }
@@ -107,4 +102,5 @@
         min-height: 100%;
         object-fit: cover;
     }
+
 }

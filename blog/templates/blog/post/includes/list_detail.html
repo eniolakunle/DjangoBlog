@@ -1,7 +1,7 @@
 {% if post.featured_image %}
     <a href="{{ post.get_absolute_url }}">
         <picture>
-            <img src="{{ post.featured_image.url }}" alt="featured image for blog post" class="blog-card-image">
+            <img loading="lazy" src="{{ post.featured_image.url }}" alt="featured image for blog post" class="blog-card-image">
         </picture>
     </a>
 {% endif %}
@@ -13,7 +13,7 @@
             <br>
             <!-- {{post.comments.count}} comment{{post.comments.count|pluralize}} -->
         </small>
-        <span>{{ post.body|striptags|truncatewords:30|linebreaks }}</span>
+        <span>{{ post.body|safe|striptags|truncatewords:30|linebreaks }}</span>
     <!-- </p> -->
     <a href="{{ post.get_absolute_url }}" class="blog-card-link">Read More</a>
 </div>
