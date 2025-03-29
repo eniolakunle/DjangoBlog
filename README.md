@@ -18,7 +18,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 - **Password Protected**: When visiting The Secret Place from a social media site(IG, TikTok, Linktree), it is exclusively for followers! 🔐
 - **Tagged Posts**: Quickly find related articles by clicking one of the tags at the end of a post! 🏷️
   - **Suggested Articles**: Once you finish an article, find a few more suggested articles based on related tags. 📢
-- **Compressed Static Files**: CSS & JavaScript files are compressed, requiring fewer requests to the web server, and ensuring the user always gets the latest version of the website via cache busting! (thanks to [Django Compressor](https://django-compressor.readthedocs.io/en/stable/index.html)) 💥
+- **Compressed Static Files**: CSS files are compressed, requiring fewer requests to the web server, and ensuring the user always gets the latest version of the website via cache busting! (thanks to [Django Compressor](https://django-compressor.readthedocs.io/en/stable/index.html)) 💥
 
 ### Disabled Features 🚧
 

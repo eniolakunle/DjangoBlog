@@ -72,10 +72,10 @@
             </h6>
             <img src="{% static 'images/jeezus.jpg' %}" alt="The Christ" id="jesusimg">
         </footer>
+        
         <script async defer src="https://dailyverses.net/get/random.js?language=esv"></script>
-        {% compress js %}
-            <script src="{% static 'js/scripts.js' %}"></script>
-            <script src="{% static 'js/splash.js' %}"></script>
-        {% endcompress %}
+        <script type="module" src="{% static 'js/scripts.js' %}"></script>
+        <script src="{% static 'js/splash.js' %}"></script>
+
     </body>
 </html>
