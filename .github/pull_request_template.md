@@ -1,13 +1,23 @@
 # Pull Request Checklist
 
 ## Description:
-  
+
 ## Unit Tests:
-  - [ ] Yes
-  - [ ] No
+
+- [ ] Yes
+- [ ] No
+
 ## README Updates:
-  - [ ] Yes
-  - [ ] No
+
+- [ ] Yes
+- [ ] No
+
 ## Dependency Updates (requirements.txt):
-  - [ ] Yes
-  - [ ] No
+
+- [ ] Yes
+- [ ] No
+
+## JavaScript Changes:
+
+- [ ] Yes (Ensure Versioning!)
+- [ ] No
