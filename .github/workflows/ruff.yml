@@ -14,10 +14,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run Ruff Linter
+      - name: Install latest version of ruff
         uses: astral-sh/ruff-action@v3
         with:
           version: "latest"
+
+      - name: Run Ruff Linter
         run: ruff check --fix
 
       - name: Run Ruff Formatter
