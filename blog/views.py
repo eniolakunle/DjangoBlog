@@ -1,9 +1,6 @@
-import random
 
-from urllib.parse import unquote
 from django.shortcuts import redirect, render, get_object_or_404
 from .models import Post
-from django.http import Http404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
