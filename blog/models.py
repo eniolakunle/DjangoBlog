@@ -27,7 +27,6 @@ class PublishedManager(models.Manager):
 
 
 class Post(models.Model):
-
     class Status(models.TextChoices):
         DRAFT = "DF", "Draft"
         PUBLISHED = "PB", "PUBLISHED"

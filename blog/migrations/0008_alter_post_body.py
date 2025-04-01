@@ -5,15 +5,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blog', '0007_alter_post_body'),
+        ("blog", "0007_alter_post_body"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='post',
-            name='body',
+            model_name="post",
+            name="body",
             field=ckeditor.fields.RichTextField(),
         ),
     ]

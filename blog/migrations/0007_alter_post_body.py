@@ -5,15 +5,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blog', '0006_alter_post_featured_image'),
+        ("blog", "0006_alter_post_featured_image"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='post',
-            name='body',
+            model_name="post",
+            name="body",
             field=tinymce.models.HTMLField(),
         ),
     ]
