@@ -1,9 +1,6 @@
-import random
 
-from urllib.parse import unquote
 from django.shortcuts import redirect, render, get_object_or_404
 from .models import Post
-from django.http import Http404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
@@ -19,7 +16,6 @@ from decouple import config
 
 
 class PostListView(ListView):
-
     queryset = Post.published.all()
     context_object_name = "posts"
     paginate_by = 7
@@ -102,9 +98,7 @@ def post_share(request, post_id):
             cd = form.cleaned_data
             post_url = request.build_absolute_uri(post.get_absolute_url())
 
-            subject = (
-                f"{cd['name']} ({cd['email']}) " f"recommends you read {post.title}"
-            )
+            subject = f"{cd['name']} ({cd['email']}) recommends you read {post.title}"
             message = (
                 f"Read {post.title} at {post_url}\n\n"
                 f"{cd['name']}'s comments: {cd['comments']}"

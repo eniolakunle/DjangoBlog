@@ -15,7 +15,6 @@ from blog.utils import split_and_randomize_similar_posts
 
 
 class PostModelTest(TestCase):
-
     def setUp(self):
         self.user = get_user_model().objects.create_user(
             username="testuser", password="12345"
@@ -94,7 +93,6 @@ class PostModelTest(TestCase):
 
 
 class CommentModelTest(TestCase):
-
     def setUp(self):
         self.user = get_user_model().objects.create_user(
             username="testuser", password="12345"
@@ -126,7 +124,6 @@ class CommentModelTest(TestCase):
 
 
 class ValidateImageMaxSizeTest(TestCase):
-
     def test_validate_image_max_size_valid(self):
         image = SimpleUploadedFile(
             name="test_image.jpg",
@@ -149,7 +146,6 @@ class ValidateImageMaxSizeTest(TestCase):
 
 
 class PostShareViewTest(TestCase):
-
     def setUp(self):
         self.user = get_user_model().objects.create_user(
             username="testuser", password="12345"
@@ -404,9 +400,9 @@ class PostDetailViewTest(TestCase):
         )
         image_data = (
             b"\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x80\x00\x00"
-            b"\x00\x00\x00\xFF\xFF\xFF\x21\xF9\x04\x01\x00\x00\x00\x00"
-            b"\x2C\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x4C\x01"
-            b"\x00\x3B"
+            b"\x00\x00\x00\xff\xff\xff\x21\xf9\x04\x01\x00\x00\x00\x00"
+            b"\x2c\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02\x4c\x01"
+            b"\x00\x3b"
         )
         image_file = SimpleUploadedFile(
             "test.gif", image_data, content_type="image/gif"

@@ -5,15 +5,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blog', '0005_post_featured_image'),
+        ("blog", "0005_post_featured_image"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='post',
-            name='featured_image',
-            field=models.ImageField(blank=True, null=True, upload_to='featured_images/', validators=[blog.models.validate_image_max_size]),
+            model_name="post",
+            name="featured_image",
+            field=models.ImageField(
+                blank=True,
+                null=True,
+                upload_to="featured_images/",
+                validators=[blog.models.validate_image_max_size],
+            ),
         ),
     ]

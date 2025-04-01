@@ -4,15 +4,16 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('blog', '0004_alter_comment_options'),
+        ("blog", "0004_alter_comment_options"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='post',
-            name='featured_image',
-            field=models.ImageField(blank=True, null=True, upload_to='featured_images/'),
+            model_name="post",
+            name="featured_image",
+            field=models.ImageField(
+                blank=True, null=True, upload_to="featured_images/"
+            ),
         ),
     ]

@@ -1,0 +1,26 @@
+name: Lint with Ruff
+
+on:
+  push:
+    branches: ["html-for-prod"]
+  pull_request:
+    branches: ["html-for-prod"]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install latest version of ruff
+        uses: astral-sh/ruff-action@v3
+        with:
+          version: "latest"
+
+      - name: Run Ruff Linter
+        run: ruff check --fix
+
+      - name: Run Ruff Formatter
+        run: ruff format
