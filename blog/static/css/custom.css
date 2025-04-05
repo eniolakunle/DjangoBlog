@@ -93,12 +93,12 @@ fieldset {
 .menu {
     display: none;
     position: fixed;
-    bottom: 80px;
-    right: 35px;
+    bottom: 30px;
+    right: 65px;
     background: #444;
     padding: 10px;
     text-align: center;
-    z-index: 1001;
+    z-index: 1000;
     border-radius: 5px;
 }
 
