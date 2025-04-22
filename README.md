@@ -4,7 +4,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 
 ### Features ✨
 
-- **AI Powered Search**: Using [TensorFlow's Universal Sentence Encoder model](https://www.kaggle.com/models/tensorflow/universal-sentence-encoder), get search results depending on your mood! 🤖
+- **AI Powered Search**: Using [TensorFlow's Universal Sentence Encoder model](https://www.kaggle.com/models/tensorflow/universal-sentence-encoder), get article recommendations depending on your mood! 🤖
 - **Endless Scrolling**: Scroll to your hearts desire and find the perfect article for your situation. 📜
 - **Comments Section**: Readers can leave comments on each post, and share articles through 𝕏 (Twitter) or email to engage in discussions. 💬
 - **Responsive Design**: Built with mobile-first principles to ensure a seamless experience across devices. 📱💻
