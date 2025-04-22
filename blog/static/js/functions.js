@@ -1,5 +1,7 @@
 // float blog cards when they are intersecting with the viewport,
 // works well on mobile where hover is iffy and works on desktop well too
+// import * as tf from "@tensorflow/tfjs";
+// import * as use from "@tensorflow-models/universal-sentence-encoder";
 
 export const intersectingObserver = new IntersectionObserver(
   (entries) => {
@@ -157,4 +159,30 @@ export function endlessScrolling() {
         loading = false;
       });
   }
+}
+
+export async function suggestTags(userInput, tags) {
+  const model = await use.load();
+  const tagTensor = await model.embed(tags);
+  const tagEmbeddings = await tagTensor.array();
+  const embeddings = await model.embed([userInput]);
+  const [inputTensor] = embeddings.arraySync();
+
+  console.log(inputTensor);
+  function cosine(a, b) {
+    let d = 0,
+      nA = 0,
+      nB = 0;
+    for (let i = 0; i < a.length; i++) {
+      d += a[i] * b[i];
+      nA += a[i] ** 2;
+      nB += b[i] ** 2;
+    }
+    return d / (Math.sqrt(nA) * Math.sqrt(nB));
+  }
+  return tags
+    .map((t, i) => ({ t, score: cosine(inputTensor, tagEmbeddings[i]) }))
+    .sort((x, y) => y.score - x.score)
+    .slice(0, 3)
+    .map((x) => x.t);
 }
