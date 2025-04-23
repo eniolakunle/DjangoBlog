@@ -77,6 +77,9 @@
             </h6>
             <img src="{% static 'images/jeezus.jpg' %}" alt="The Christ" id="jesusimg">
         </footer>
+        <script id="all-tags-data" type="application/json">
+            {{ all_tags|json_script:"all-tags-data"}}
+        </script>
         <script type="module" src="{% static 'js/scripts.js' %}"></script>
         <script type="module" src="{% static 'js/search.js' %}"></script>
         <script src="{% static 'js/splash.js' %}"></script>
