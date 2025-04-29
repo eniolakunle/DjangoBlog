@@ -46,6 +46,7 @@ CAPTCHA_NOISE_FUNCTIONS = ("captcha.helpers.noise_null",)
 CAPTCHA_LETTER_ROTATION = (-1, 1)
 
 # Application definition
+SITE_ID = 1
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -54,6 +55,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
+    "django.contrib.sitemaps",
     "blog.apps.BlogConfig",
     "captcha",
     "django_ckeditor_5",
