@@ -110,6 +110,40 @@ fieldset {
     font-weight: 600; /*Makes it stand out*/
     font-size: 30px;  /* Adjust as needed */
 }
+.share-button {
+    color: white;
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.share {
+    font-weight: bold;
+    position: relative;
+}
+.share:before {
+    content: ".";
+    font-size: 2.2em;
+    position: absolute;
+    bottom: -2.5px;
+    left: -4px;
+}
+.share:after {
+    content: ":";
+    font-size: 2em;
+    position: absolute;
+    bottom: -6px;
+    right: -7px;
+}
+/* .share-button:hover {
+    background-color:;
+} */
+
 @media (prefers-color-scheme: dark) {
     .top-nav {
         background: var(--dark-nav-background);
