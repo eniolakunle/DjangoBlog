@@ -62,7 +62,7 @@ function shareOnClick() {
       try {
         await navigator.share({
           title: document.title,
-          // text: "Check out this amazing content!",
+          text: "You came to mind immediately, so I had to share this.",
           url: window.location.href,
         });
         console.log("Content shared successfully!");
