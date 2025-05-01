@@ -62,7 +62,7 @@ function shareOnClick() {
       try {
         await navigator.share({
           title: document.title,
-          text: "You came to mind immediately, I think you'll like this.",
+          text: "\nYou came to mind immediately, I think you'll like this.",
           url: window.location.href,
         });
         console.log("Content shared successfully!");
