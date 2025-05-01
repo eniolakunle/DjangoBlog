@@ -71,7 +71,6 @@ fieldset {
     font-size: 18px;
     font-weight: bold;
     z-index: 1001;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.718);
     transition: background-color .3s ease-in-out;
 }
 
@@ -124,6 +123,7 @@ fieldset {
     padding: 7px 14px;
     z-index: 1001;
     transition: bottom .5s ease-in-out;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.718);
 }
 #share-svg{
     fill: white;
@@ -143,11 +143,13 @@ fieldset {
     .menu a:hover {
         background: #666;
     }
-    .menu-button {
-        box-shadow: 0 3px 5px rgba(235, 233, 233, 0.718);
-    }
+    /* .menu-button {
+    } */
     #share-svg{
         fill: black;
+    }
+    .share-button{
+        box-shadow: 0 3px 5px rgba(235, 233, 233, 0.718);
     }
 }
 
