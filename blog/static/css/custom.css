@@ -123,11 +123,21 @@ fieldset {
     padding: 7px 14px;
     z-index: 1001;
     transition: bottom .5s ease-in-out;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.718);
+    /* box-shadow: 0 5px 10px rgba(0, 0, 0, 0.718); */
+    animation: pulse 5s ease-in-out infinite;
 }
 #share-svg{
     fill: white;
     right: var(--button-right);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.718);
+    }
+    50% {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.718);
+    }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -148,8 +158,15 @@ fieldset {
     #share-svg{
         fill: black;
     }
-    .share-button{
-        box-shadow: 0 3px 5px rgba(235, 233, 233, 0.718);
+    /* .share-button{
+     } */
+    @keyframes pulse {
+        0%, 100% {
+            box-shadow: 0 3px 5px rgba(235, 233, 233, 0.718);
+        }
+        50% {
+            box-shadow: 0 6px 10px rgba(235, 233, 233, 0.718);
+        }
     }
 }
 
