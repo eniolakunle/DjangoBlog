@@ -5,7 +5,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 ### Features ✨
 
 - **Endless Scrolling**: Scroll to your hearts desire and find the perfect article for your situation. 📜
-- **Comments Section**: Readers can leave comments on each post, and share articles through 𝕏 (Twitter) or email to engage in discussions. 💬
+- **Comments Section**: Readers can leave comments on each post, and share any page through the [Web Share API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API). 💬
 - **Responsive Design**: Built with mobile-first principles to ensure a seamless experience across devices. 📱💻
   - **Dark/Light Mode Support**: Dynamically adjusts according to device preference! 🌗
   - **More Articles on Bigger Screens**: Bigger screens are filled with more articles to choose from. 🧐
