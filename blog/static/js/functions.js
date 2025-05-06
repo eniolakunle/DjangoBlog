@@ -184,5 +184,6 @@ export async function suggestTags(userInput, tags) {
     .map((t, i) => ({ t, score: cosine(inputTensor, tagEmbeddings[i]) }))
     .sort((x, y) => y.score - x.score)
     .slice(0, 3)
-    .map((x) => x.t);
+    .map((x) => x.t)
+    .join(",");
 }

@@ -24,7 +24,19 @@ if (match) {
 
 function beginTensorFlowSearch() {
   var searchInput = document.getElementById("search-input").value;
-  suggestTags(searchInput, tags).then(console.log);
+  suggestTags(searchInput, tags)
+    .then((tags) => {
+      fetch(`/blog/tag/${tags}/`, {
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      }).then((response) => {
+        console.log(response);
+        console.log(response.text());
+        window.location.href = response.url;
+      });
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
 }
 
 const startSearch = document.getElementById("start-search-input");
