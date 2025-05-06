@@ -23,10 +23,13 @@ class PostListView(ListView):
 
 def post_list(request, tag_slug=None):
     post_list = Post.published.all()
-    tag = None
+    tags = None
     if tag_slug:
-        tag = get_object_or_404(Tag, slug=tag_slug)
-        post_list = post_list.filter(tags__in=[tag])
+        # Split the tag_slug by comma to get multiple tags
+        tag_slugs = [slug.strip() for slug in tag_slug.split(',')]
+        tags = Tag.objects.filter(slug__in=tag_slugs)
+        if tags:
+            post_list = post_list.filter(tags__in=tags).distinct()
 
     paginator = Paginator(post_list, 7)
     page_number = request.GET.get("page", 1)
@@ -43,7 +46,7 @@ def post_list(request, tag_slug=None):
         "blog/post/list.html",
         {
             "posts": posts,
-            "tag": tag,
+            "tags": tags,
         },
     )
 

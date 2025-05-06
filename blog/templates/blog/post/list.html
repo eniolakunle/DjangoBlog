@@ -17,8 +17,12 @@
 
 {% block content %}
 
-    {% if tag %}
-        <h2>Posts Tagged With "{{ tag.name }}"</h2>
+    {% if tags %}
+        <h2>Posts Tagged With: 
+            {% for tag in tags %}
+                "{{ tag.name }}"{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </h2>
     {% endif %}
 
     <div id="item-container grid-container">
