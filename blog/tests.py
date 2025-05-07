@@ -116,7 +116,6 @@ class CommentModelTest(TestCase):
             body="This is a test comment.",
         )
 
-
     def test_comment_creation(self):
         self.assertEqual(self.comment.post, self.post)
         self.assertEqual(self.comment.name, "Test Commenter")
