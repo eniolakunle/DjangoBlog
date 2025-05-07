@@ -110,12 +110,24 @@ class CommentModelTest(TestCase):
             email="test@example.com",
             body="This is a test comment.",
         )
+        self.comment_no_email = Comment.objects.create(
+            post=self.post,
+            name="Test Commenter",
+            body="This is a test comment.",
+        )
+
 
     def test_comment_creation(self):
         self.assertEqual(self.comment.post, self.post)
         self.assertEqual(self.comment.name, "Test Commenter")
         self.assertEqual(self.comment.email, "test@example.com")
         self.assertEqual(self.comment.body, "This is a test comment.")
+
+    def test_comment_creation_no_email(self):
+        self.assertEqual(self.comment_no_email.post, self.post)
+        self.assertEqual(self.comment_no_email.name, "Test Commenter")
+        self.assertEqual(self.comment_no_email.email, "")
+        self.assertEqual(self.comment_no_email.body, "This is a test comment.")
 
     def test_comment_str(self):
         self.assertEqual(
