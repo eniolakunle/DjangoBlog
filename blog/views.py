@@ -26,7 +26,7 @@ def post_list(request, tag_slug=None):
     tags = None
     if tag_slug:
         # Split the tag_slug by comma to get multiple tags
-        tag_slugs = [slug.strip() for slug in tag_slug.split(',')]
+        tag_slugs = [slug.strip() for slug in tag_slug.split(",")]
         tags = Tag.objects.filter(slug__in=tag_slugs)
         if tags:
             post_list = post_list.filter(tags__in=tags).distinct()
