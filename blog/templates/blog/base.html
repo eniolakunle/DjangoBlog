@@ -64,12 +64,27 @@
                             </g>
                         </svg>
                     </button>
-                    <button class="menu-button" id="menu-button">☰</button>
+                    <button class="menu-button" id="menu-button" title="Menu">☰</button>
                     <div class="menu" id="menu">
                         <a href="{% url 'blog:post_list' %}">Home</a>
                         <a href="https://github.com/eniolakunle/DjangoBlog" target="_blank">GitHub</a>
                     </div>
                 </nav>
+            </div>
+            <div id="share-container">
+                <button id="share-button" class="share share-button" title="Share this page!">
+                    <svg id="share-svg" width="25px" height="25px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <title>Share This Page!</title>
+                        <g id="Layer_2" data-name="Layer 2">
+                          <g id="invisible_box" data-name="invisible box">
+                            <rect width="48" height="48" fill="none"/>
+                          </g>
+                          <g id="Q3_icons" data-name="Q3 icons">
+                            <path d="M28.3,6a1.2,1.2,0,0,0-1.1,1.3V17.9C12,19.4,2.2,29.8,2,40.3c0,.6.2,1,.6,1s.7-.3,1.1-1.1c2.4-5.4,7.8-8.5,23.5-9.2v9.7A1.2,1.2,0,0,0,28.3,42a.9.9,0,0,0,.8-.4L45.6,25.1a1.5,1.5,0,0,0,0-2L29.1,6.4a.9.9,0,0,0-.8-.4Z"/>
+                          </g>
+                        </g>
+                      </svg>
+                </button>
             </div>
         </header>
 
@@ -84,11 +99,14 @@
             </h6>
             <img src="{% static 'images/jeezus.jpg' %}" alt="The Christ" id="jesusimg">
         </footer>
+        
         <script id="all-tags-data" type="application/json">
             {{ all_tags|json_script:"all-tags-data"}}
         </script>
-        <script type="module" src="{% static 'js/scripts.js' %}"></script>
         <script type="module" src="{% static 'js/search.js' %}"></script>
+        
+        <script async defer src="https://dailyverses.net/get/random.js?language=esv"></script>
+        <script type="module" src="{% static 'js/scripts.js' %}?v=1.0.3"></script>
         <script src="{% static 'js/splash.js' %}"></script>
         <script async defer src="https://dailyverses.net/get/random.js?language=esv"></script>
         

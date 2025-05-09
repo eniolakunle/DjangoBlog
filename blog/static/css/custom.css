@@ -12,6 +12,10 @@
     --card-transition: transform 0.2s ease, box-shadow 0.2s ease;
     --nav-background: #222;
     --dark-nav-background: #333;
+    --button-bottom: 20px;
+    --button-right: 20px;
+    --button-width: 50px;
+    --button-height: 50px;
 }
 
 body > header {
@@ -54,10 +58,10 @@ fieldset {
 
 .menu-button {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
+    bottom: var(--button-bottom);
+    right: var(--button-right);
+    width: var( --button-width);
+    height: var( --button-height);
     border: none;
     border-radius: 50%;
     display: flex;
@@ -67,7 +71,6 @@ fieldset {
     font-size: 18px;
     font-weight: bold;
     z-index: 1001;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.718);
     transition: background-color .3s ease-in-out;
 }
 
@@ -93,8 +96,8 @@ fieldset {
 .menu {
     display: none;
     position: fixed;
-    bottom: 30px;
-    right: 65px;
+    bottom: calc(var(--button-bottom) + 12px);
+    right: calc(var(--button-right) + 50px);
     background: #444;
     padding: 10px;
     text-align: center;
@@ -129,6 +132,33 @@ fieldset {
     font-weight: 600; /*Makes it stand out*/
     font-size: 30px;  /* Adjust as needed */
 }
+.share-button {
+    position: fixed;
+    bottom: calc(var(--button-bottom) + 65px);
+    right: var(--button-right);
+    width: var( --button-width);
+    height: var( --button-height);
+    border-radius: 50%;
+    padding: 7px 14px;
+    z-index: 1001;
+    transition: bottom .5s ease-in-out;
+    /* box-shadow: 0 5px 10px rgba(0, 0, 0, 0.718); */
+    animation: pulse 5s ease-in-out infinite;
+}
+#share-svg{
+    fill: white;
+    right: var(--button-right);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.718);
+    }
+    50% {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.718);
+    }
+}
+
 @media (prefers-color-scheme: dark) {
     .top-nav {
         background: var(--dark-nav-background);
@@ -142,8 +172,23 @@ fieldset {
     .menu a:hover {
         background: #666;
     }
-    .menu-button .search-button {
+    .search-button {
         box-shadow: 0 3px 5px rgba(235, 233, 233, 0.718);
+    }
+    /* .menu-button {
+    } */
+    #share-svg{
+        fill: black;
+    }
+    /* .share-button{
+     } */
+    @keyframes pulse {
+        0%, 100% {
+            box-shadow: 0 3px 5px rgba(235, 233, 233, 0.718);
+        }
+        50% {
+            box-shadow: 0 6px 10px rgba(235, 233, 233, 0.718);
+        }
     }
 }
 
@@ -158,12 +203,16 @@ fieldset {
         position: fixed;
         top: 5px;
         right: 65px;
+        margin-right: 0px;
         background: inherit;
         padding: 10px;
         text-align: center;
         z-index: 1001;
         border-radius: 5px;
         height: fit-content;
+    }
+    .share-button {
+        bottom: var(--button-bottom);
     }
     
     .menu-button {

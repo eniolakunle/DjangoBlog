@@ -6,7 +6,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 
 - **AI Powered Search**: Using [TensorFlow's Universal Sentence Encoder model](https://www.kaggle.com/models/tensorflow/universal-sentence-encoder), get article recommendations depending on your mood! 🤖
 - **Endless Scrolling**: Scroll to your hearts desire and find the perfect article for your situation. 📜
-- **Comments Section**: Readers can leave comments on each post, and share articles through 𝕏 (Twitter) or email to engage in discussions. 💬
+- **Comments Section**: Readers can leave comments on each post, and share any page through the [Web Share API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Share_API). 💬
 - **Responsive Design**: Built with mobile-first principles to ensure a seamless experience across devices. 📱💻
   - **Dark/Light Mode Support**: Dynamically adjusts according to device preference! 🌗
   - **More Articles on Bigger Screens**: Bigger screens are filled with more articles to choose from. 🧐
@@ -20,6 +20,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 - **Tagged Posts**: Quickly find related articles by clicking one of the tags at the end of a post! 🏷️
   - **Suggested Articles**: Once you finish an article, find a few more suggested articles based on related tags. 📢
 - **Compressed Static Files**: CSS files are compressed, requiring fewer requests to the web server, and ensuring the user always gets the latest version of the website via cache busting! (thanks to [Django Compressor](https://django-compressor.readthedocs.io/en/stable/index.html)) 💥
+- **SiteMaps**: Utlizes the Django sitemap framework to improve SEO metrics. 🌐
 
 ### Disabled Features 🚧
 

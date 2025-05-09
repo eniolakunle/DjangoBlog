@@ -52,11 +52,36 @@ function clearMenuOnScroll() {
   lastScrollY = window.scrollY;
 }
 
+function shareOnClick() {
+  const shareButton = document.getElementById("share-button");
+
+  if (navigator.share) {
+    shareButton.style.display = "block"; // Show the button if Web Share API is supported
+
+    shareButton.addEventListener("click", async () => {
+      try {
+        await navigator.share({
+          title: document.title,
+          text: "You came to mind immediately, I think you'll like this.",
+          url: window.location.href,
+        });
+        console.log("Content shared successfully!");
+      } catch (error) {
+        console.error("Error sharing content:", error);
+      }
+    });
+  } else {
+    shareButton.style.display = "none"; // Hide the button if Web Share API is not supported
+  }
+}
+
 document.addEventListener("DOMContentLoaded", fadeTransition);
 // endless scrolling is in below listener
 document.addEventListener("DOMContentLoaded", endlessScrolling);
 
 document.addEventListener("DOMContentLoaded", formatTwitterButton);
+
+document.addEventListener("DOMContentLoaded", shareOnClick);
 
 const menuButton = document.getElementById("menu-button");
 if (menuButton) menuButton.addEventListener("click", toggleMenu);
