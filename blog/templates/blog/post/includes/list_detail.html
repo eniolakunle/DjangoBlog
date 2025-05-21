@@ -16,4 +16,5 @@
         <span>{{ post.body|safe|striptags|truncatewords:30|linebreaks }}</span>
     <!-- </p> -->
     <a href="{{ post.get_absolute_url }}" class="blog-card-link">Read More</a>
+    <strong id="read-time">{{ post.read_time }} read</strong>
 </div>

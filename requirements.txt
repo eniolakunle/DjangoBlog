@@ -11,3 +11,4 @@ django-tinymce==4.1.0
 django-ckeditor==6.7.2
 django-taggit==5.0.1
 django_compressor==4.5.1
+readtime==3.0.0
