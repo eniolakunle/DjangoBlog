@@ -1,3 +1,4 @@
+import readtime
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -75,6 +76,11 @@ class Post(models.Model):
     @property
     def comments_closed(self):
         return (self.publish + timedelta(days=7)) < datetime.now(self.publish.tzinfo)
+
+    @property
+    def read_time(self):
+        readTime = readtime.of_html(self.body)
+        return readTime.text
 
 
 class Comment(models.Model):

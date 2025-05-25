@@ -9,11 +9,13 @@
     <h2 class="blog-card-title">{{post.title}}</h2>
     <!-- <p class="blog-card-excerpt"> -->
         <small class ="date">
-            Published {{post.publish}} by {{post.author}}
+            <!-- Published {{post.publish}} by {{post.author}} -->
+            Published {{post.publish}}
             <br>
             <!-- {{post.comments.count}} comment{{post.comments.count|pluralize}} -->
         </small>
         <span>{{ post.body|safe|striptags|truncatewords:30|linebreaks }}</span>
     <!-- </p> -->
     <a href="{{ post.get_absolute_url }}" class="blog-card-link">Read More</a>
+    <strong id="read-time">{{ post.read_time }} read</strong>
 </div>

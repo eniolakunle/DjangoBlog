@@ -30,6 +30,10 @@
     font-weight: 500;
 }
 
+#read-time {
+    float: right;
+}
+
 @media (prefers-color-scheme: dark) {
     .blog-card {
         background-color: var(--dark-card-background);   /* Deeper dark background */
