@@ -71,7 +71,11 @@ STATICFILES_FINDERS = [
     "compressor.finders.CompressorFinder",
 ]
 
-PASSWORD_PROTECTED_REFERRERS = ["linktr.ee", "instagram", "tiktok"]
+PASSWORD_PROTECTED_REFERRERS = [
+    "linktr.ee",
+    # "instagram",
+    "tiktok",
+]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
