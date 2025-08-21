@@ -7,6 +7,6 @@
         "sizes": "512x512"
       }
     ],
-    "start_url": "/blog",
+    "start_url": "./templates/blog/post/list.html",
     "display": "minimal-ui"
   }
