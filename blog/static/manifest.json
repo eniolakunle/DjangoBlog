@@ -2,8 +2,8 @@
     "name": "The Secret Place",
     "icons": [
       {
-        "src": "images/thumbnail.jpg",
-        "type": "image/jpg",
+        "src": "images/thumbnail.png",
+        "type": "image/png",
         "sizes": "512x512"
       }
     ],
