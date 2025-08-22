@@ -4,11 +4,13 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="manifest" href="{% static 'manifest.json' %}" />
         {% block meta %} {% endblock %}
 
         <title>{% block title %} {% endblock %}</title>
         {% load compress %}
+            <link rel="icon" href="{% static 'images/favicon.ico' %}" sizes="any">
+            <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+            <link rel="manifest" href="{% static 'manifest.json' %}" />
             <link rel="stylesheet" href="{% static 'css/simple.css' %}">
         {% compress css %}
             <link rel="stylesheet" href="{% static 'css/custom.css' %}">
