@@ -12,3 +12,4 @@ CACHE/
 *.d.ts
 *.d.ts.map
 *.js.map
+blog/static/js/*.js

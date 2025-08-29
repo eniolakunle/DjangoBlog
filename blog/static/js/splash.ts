@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const randomDelay = Math.random() * 5;
       cross.style.animationDelay = `${randomDelay}s`;
 
-      (splash as HTMLElement).appendChild(cross);
+      splash?.appendChild(cross);
     }
   } else {
     let splashElement = document.getElementById("splash");
