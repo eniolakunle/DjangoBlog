@@ -8,14 +8,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Check if user has been to site before, if not give em a splash...
   if (!localStorage.getItem(key)) {
-    localStorage.setItem(key, Date.now());
+    localStorage.setItem(key, Date.now().toString());
     let splash = document.getElementById("splash");
 
     // Delay then fade out splash screen
     setTimeout(() => {
-      splash.style.opacity = "0";
+      (splash as HTMLElement).style.opacity = "0";
       setTimeout(() => {
-        splash.style.display = "none";
+        (splash as HTMLElement).style.display = "none";
         // mainContent.style.display = "block";
       }, 2500);
     }, 3500);
@@ -39,9 +39,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const randomDelay = Math.random() * 5;
       cross.style.animationDelay = `${randomDelay}s`;
 
-      splash.appendChild(cross);
+      (splash as HTMLElement).appendChild(cross);
     }
   } else {
-    document.getElementById("splash").style.display = "none";
+    let splashElement = document.getElementById("splash");
+    (splashElement as HTMLElement).style.display = "none";
   }
 });
