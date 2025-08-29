@@ -41,7 +41,7 @@ export function linkHandler(link: HTMLAnchorElement, overlay: Element) {
   return transitionLink;
 }
 
-export function fadeTransition() {
+export function fadeTransition(): void {
   const links: NodeListOf<HTMLAnchorElement> = document.querySelectorAll("a");
   const overlay: Element | null = document.querySelector(".transition-overlay");
 
@@ -81,7 +81,7 @@ export function fadeTransition() {
   });
 }
 
-export function endlessScrolling() {
+export function endlessScrolling(): void {
   const sentinel = document.getElementById("sentinel");
 
   if (!sentinel) return;
