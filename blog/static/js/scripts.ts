@@ -5,12 +5,12 @@ import {
   endlessScrolling,
 } from "./functions.js";
 
-function toggleMenu() {
+function toggleMenu(): void {
   var menu = document.getElementById("menu");
-  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+  (menu as HTMLElement).style.display = (menu as HTMLElement).style.display === "flex" ? "none" : "flex";
 }
 
-function formatTwitterButton() {
+function formatTwitterButton(): void {
   const twitterButton = document.getElementById("twitter-share-button");
   if (twitterButton) {
     twitterButton.addEventListener("click", function (event) {
@@ -27,11 +27,11 @@ function formatTwitterButton() {
   }
 }
 
-function clearMenuOnClick(event) {
+function clearMenuOnClick(event: MouseEvent) {
   var menu = document.getElementById("menu");
   var menuButton = document.getElementById("menu-button");
-  if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
-    menu.style.display = "none";
+  if (event.target instanceof Node && !(menu as HTMLElement).contains(event.target) && !(menuButton as HTMLElement).contains(event.target)) {
+    (menu as HTMLElement).style.display = "none";
   }
 }
 
@@ -40,25 +40,25 @@ const navbar = document.querySelector(".top-nav");
 
 function clearMenuOnScroll() {
   var menu = document.getElementById("menu");
-  if (menu.style.display !== "none") {
-    menu.style.display = "none";
+  if ((menu as HTMLElement).style.display !== "none") {
+    (menu as HTMLElement).style.display = "none";
   }
 
   if (window.scrollY > 50 && window.scrollY > lastScrollY) {
-    navbar.classList.add("hide");
+    (navbar as Element).classList.add("hide");
   } else {
-    navbar.classList.remove("hide");
+    (navbar as Element).classList.remove("hide");
   }
   lastScrollY = window.scrollY;
 }
 
-function shareOnClick() {
+function shareOnClick(): void {
   const shareButton = document.getElementById("share-button");
 
   if (navigator.share) {
-    shareButton.style.display = "block"; // Show the button if Web Share API is supported
+    (shareButton as HTMLElement).style.display = "block"; // Show the button if Web Share API is supported
 
-    shareButton.addEventListener("click", async () => {
+    (shareButton as HTMLElement).addEventListener("click", async () => {
       try {
         await navigator.share({
           title: document.title,
@@ -71,7 +71,7 @@ function shareOnClick() {
       }
     });
   } else {
-    shareButton.style.display = "none"; // Hide the button if Web Share API is not supported
+    (shareButton as HTMLElement).style.display = "none"; // Hide the button if Web Share API is not supported
   }
 }
 
