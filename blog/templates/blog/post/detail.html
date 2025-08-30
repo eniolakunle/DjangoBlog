@@ -1,8 +1,9 @@
 {% extends "blog/base.html" %}
 
+{% load replace_nbsp %}
 {% block meta %}
     <meta name="twitter:card" content="summary"></meta>
-    <meta property="og:description" content="{{ post.body|striptags|truncatewords:30 }}" />
+    <meta property="og:description" content="{{ post.body|striptags|truncatewords:30|replace_nbsp }}" />
     <meta property="og:title" content="{{ post.title }}" />
     {% if post.featured_image %}
         <meta property="og:image" 
