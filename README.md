@@ -20,6 +20,7 @@ This is a simple blog application built with **Django 5** to share inspirational
   - **Suggested Articles**: Once you finish an article, find a few more suggested articles based on related tags. 📢
 - **Compressed Static Files**: CSS files are compressed, requiring fewer requests to the web server, and ensuring the user always gets the latest version of the website via cache busting! (thanks to [Django Compressor](https://django-compressor.readthedocs.io/en/stable/index.html)) 💥
 - **SiteMaps**: Utlizes the Django sitemap framework to improve SEO metrics. 🌐
+- **TypeScript**: Migrated from JavaScipt to TypeScript for added confidence during developent! 🦺
 
 ### Disabled Features 🚧
 
@@ -30,7 +31,7 @@ This is a simple blog application built with **Django 5** to share inspirational
 ### Tech Stack 🛠️
 
 - **Backend**: Django 5 (Python-based web framework) 🐍
-- **Frontend**: JavaScript, HTML, CSS (Responsive Design provided by [SimpleCSS](https://simplecss.org)) 🌐
+- **Frontend**: TypeScript, HTML, CSS (Responsive Design provided by [SimpleCSS](https://simplecss.org)) 🌐
 - **Database**: SQLite (default for development) 💾
 - **Authentication**: Django's built-in authentication system 🔑
 <!-- - **Deployment**: Can be deployed using services like Heroku, DigitalOcean, etc. 🚀 -->
