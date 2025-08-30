@@ -25,6 +25,10 @@ jobs:
         working-directory: ./blog/static
         run: npm ci
 
+      - name: Run TypeScript compiler
+        working-directory: ./blog/static
+        run: tsc
+
       - name: Run tests
         working-directory: ./blog/static
         run: npm test

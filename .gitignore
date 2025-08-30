@@ -9,3 +9,6 @@ blog/static/coverage/
 blog/static/node_modules/
 blog/static/django_ckeditor_5/
 CACHE/
+*.d.ts
+*.d.ts.map
+*.js.map
