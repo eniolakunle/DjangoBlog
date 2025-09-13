@@ -72,9 +72,9 @@ STATICFILES_FINDERS = [
 ]
 
 PASSWORD_PROTECTED_REFERRERS = [
-    "linktr.ee",
+    # "linktr.ee",
     # "instagram",
-    "tiktok",
+    # "tiktok",
 ]
 
 MIDDLEWARE = [
