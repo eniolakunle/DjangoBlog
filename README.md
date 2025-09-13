@@ -15,7 +15,6 @@ This is a simple blog application built with **Django 5** to share inspirational
   - **Hover Effect**: Article previews float when in view of user. 🧞‍♂️
   - **Transition Effect**: A slick transition, implemented via JavaScript, for seamless site navigation! 🔥
 - **Splash Page**: A colorful splash page for first time visitors! 💦 **Tip: Clear localStorage to get splashed again.**
-- **Password Protected**: When visiting The Secret Place from a social media site(TikTok, Linktree), it is exclusively for followers! 🔐
 - **Tagged Posts**: Quickly find related articles by clicking one of the tags at the end of a post! 🏷️
   - **Suggested Articles**: Once you finish an article, find a few more suggested articles based on related tags. 📢
 - **Compressed Static Files**: CSS files are compressed, requiring fewer requests to the web server, and ensuring the user always gets the latest version of the website via cache busting! (thanks to [Django Compressor](https://django-compressor.readthedocs.io/en/stable/index.html)) 💥
