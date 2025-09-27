@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Allow: /blog/
+Allow: /blog/tag/
+Allow: /blog/category/
+Allow: /sitemap.xml
+
+# Prevent access to admin and utility pages
+Disallow: /admin/
+Disallow: /private/
+Disallow: /cgi-bin/
+Disallow: /*?*
+
+# Crawl-delay directive (optional - adjust based on server capacity)
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://eniolakunle.pythonanywhere.com/sitemap.xml
