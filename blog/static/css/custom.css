@@ -74,6 +74,20 @@ fieldset {
     transition: background-color .3s ease-in-out;
 }
 
+.search-button {
+    position: fixed;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    z-index: 1001;
+    transition: background-color .3s ease-in-out;
+}
+
 .menu {
     display: none;
     position: fixed;
@@ -208,9 +222,22 @@ fieldset {
         box-shadow: none;
         transition: background-color .3s ease-in-out;
     }
-
+    .search-button {
+            position: fixed;
+            top: -10px;
+            left: 20px;
+            background: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor:pointer;
+            font-size: 50px;
+            z-index: 1001;
+            box-shadow: none;
+            transition: background-color .3s ease-in-out;
+        }
     @media (prefers-color-scheme: dark) {
-        .menu-button {
+        .menu-button, .search-button {
             color: white;
         }
     }
