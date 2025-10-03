@@ -154,4 +154,16 @@ export function extractLinks(xmlDoc) {
     }
     return links;
 }
+export async function searchLinks() {
+    const key = "eniolakunle_XML";
+    const cacheExists = window.sessionStorage.getItem(key);
+    if (!cacheExists) {
+        console.log("No cache, fetching XML");
+        const xmlText = await fetchXmlData(`${window.location.origin}/sitemap.xml`);
+        const xmlDoc = parseXmlString(xmlText);
+        const links = extractLinks(xmlDoc);
+        window.sessionStorage.setItem(key, JSON.stringify(links));
+    }
+    return window.sessionStorage.getItem(key);
+}
 //# sourceMappingURL=functions.js.map
