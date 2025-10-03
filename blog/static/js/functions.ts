@@ -28,7 +28,7 @@ export function linkHandler(link: HTMLAnchorElement, overlay: Element) {
           blogCard.classList.add("link-container");
           break;
         }
-        blogCard = (blogCard.parentElement as HTMLAnchorElement);
+        blogCard = blogCard.parentElement as HTMLAnchorElement;
       }
       // Show the overlay and trigger fade-out effect
       overlay.classList.add("transition-active");
@@ -51,7 +51,7 @@ export function fadeTransition(): void {
     .forEach((el) => intersectingObserver.observe(el));
 
   links.forEach((link) => {
-    link.addEventListener("click", linkHandler(link, (overlay as Element)));
+    link.addEventListener("click", linkHandler(link, overlay as Element));
   });
 
   // After the page loads, fade in the content
@@ -66,7 +66,11 @@ export function fadeTransition(): void {
   window.addEventListener("pageshow", function (event) {
     if (
       event.persisted ||
-      (performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming)?.type === "back_forward"
+      (
+        performance.getEntriesByType(
+          "navigation"
+        )[0] as PerformanceNavigationTiming
+      )?.type === "back_forward"
     ) {
       (overlay as Element).classList.remove("transition-active"); // Hide overlay after fade-in
 
@@ -129,7 +133,10 @@ export function endlessScrolling(): void {
         newItems.forEach((item) => {
           const link = item.querySelector(".blog-card-link");
           // ensure new articles added will transition smoothly if clicked
-          (link as HTMLAnchorElement).addEventListener("click", linkHandler(link as HTMLAnchorElement, overlay as Element));
+          (link as HTMLAnchorElement).addEventListener(
+            "click",
+            linkHandler(link as HTMLAnchorElement, overlay as Element)
+          );
 
           // remove class additions from new articles, they belong in bottom grid only
           if (item.classList.contains("main-article")) {
@@ -157,4 +164,34 @@ export function endlessScrolling(): void {
         loading = false;
       });
   }
+}
+
+export async function fetchXmlData(url: string): Promise<string> {
+  const response = await fetch(url);
+  const xmlText = await response.text();
+  return xmlText;
+}
+export function parseXmlString(xmlString: string): Document {
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+  return xmlDoc;
+}
+
+export function extractLinks(xmlDoc: Document): (string | undefined)[] {
+  const links = [];
+  // Example for sitemap.xml: find all <loc> elements
+  const locElements = xmlDoc.getElementsByTagName("loc");
+  for (let i = 0; i < locElements.length; i++) {
+    links.push(locElements[i]?.textContent);
+  }
+
+  // Example for RSS feeds: find all <link> elements within <item>
+  const itemElements = xmlDoc.getElementsByTagName("item");
+  for (let i = 0; i < itemElements.length; i++) {
+    const linkElement = itemElements[i]?.getElementsByTagName("link")[0];
+    if (linkElement) {
+      links.push(linkElement.textContent);
+    }
+  }
+  return links;
 }

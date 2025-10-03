@@ -1,4 +1,12 @@
-import { intersectingObserver, linkHandler, fadeTransition, endlessScrolling, } from "./functions.js";
+import { fadeTransition, endlessScrolling, fetchXmlData, extractLinks, parseXmlString } from "./functions.js";
+async function searchButton() {
+    console.log(window.location);
+    const xmlText = await fetchXmlData(`${window.location.origin}/sitemap.xml`);
+    const xmlDoc = parseXmlString(xmlText);
+    const links = extractLinks(xmlDoc);
+    console.log(links);
+}
+searchButton();
 function toggleMenu() {
     var menu = document.getElementById("menu");
     menu.style.display = menu.style.display === "flex" ? "none" : "flex";

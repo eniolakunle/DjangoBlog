@@ -1,9 +1,20 @@
 import {
-  intersectingObserver,
-  linkHandler,
   fadeTransition,
   endlessScrolling,
+  fetchXmlData,
+  extractLinks,
+  parseXmlString
 } from "./functions.js";
+
+async function searchButton(): Promise<void> {
+  console.log(window.location);
+  const xmlText = await fetchXmlData(`${window.location.origin}/sitemap.xml`)
+  const xmlDoc = parseXmlString(xmlText);
+  const links = extractLinks(xmlDoc);
+  console.log(links);
+}
+
+searchButton();
 
 function toggleMenu(): void {
   var menu = document.getElementById("menu");

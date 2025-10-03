@@ -127,4 +127,31 @@ export function endlessScrolling() {
         });
     }
 }
+export async function fetchXmlData(url) {
+    const response = await fetch(url);
+    const xmlText = await response.text();
+    return xmlText;
+}
+export function parseXmlString(xmlString) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+    return xmlDoc;
+}
+export function extractLinks(xmlDoc) {
+    const links = [];
+    // Example for sitemap.xml: find all <loc> elements
+    const locElements = xmlDoc.getElementsByTagName("loc");
+    for (let i = 0; i < locElements.length; i++) {
+        links.push(locElements[i]?.textContent);
+    }
+    // Example for RSS feeds: find all <link> elements within <item>
+    const itemElements = xmlDoc.getElementsByTagName("item");
+    for (let i = 0; i < itemElements.length; i++) {
+        const linkElement = itemElements[i]?.getElementsByTagName("link")[0];
+        if (linkElement) {
+            links.push(linkElement.textContent);
+        }
+    }
+    return links;
+}
 //# sourceMappingURL=functions.js.map
