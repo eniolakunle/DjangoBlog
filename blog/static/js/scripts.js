@@ -1,15 +1,21 @@
-import { fadeTransition, endlessScrolling, fetchXmlData, extractLinks, parseXmlString } from "./functions.js";
+import { fadeTransition, endlessScrolling, fetchXmlData, extractLinks, parseXmlString, } from "./functions.js";
+const key = "eniolakunle_XML";
 async function searchButton() {
     console.log(window.location);
-    const xmlText = await fetchXmlData(`${window.location.origin}/sitemap.xml`);
-    const xmlDoc = parseXmlString(xmlText);
-    const links = extractLinks(xmlDoc);
-    console.log(links);
+    const cacheExists = window.sessionStorage.getItem(key);
+    if (!cacheExists) {
+        console.log("No cache, fetching XML");
+        const xmlText = await fetchXmlData(`${window.location.origin}/sitemap.xml`);
+        const xmlDoc = parseXmlString(xmlText);
+        const links = extractLinks(xmlDoc);
+        window.sessionStorage.setItem(key, JSON.stringify(links));
+    }
 }
 searchButton();
 function toggleMenu() {
     var menu = document.getElementById("menu");
-    menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    menu.style.display =
+        menu.style.display === "flex" ? "none" : "flex";
 }
 function formatTwitterButton() {
     const twitterButton = document.getElementById("twitter-share-button");
@@ -27,7 +33,9 @@ function formatTwitterButton() {
 function clearMenuOnClick(event) {
     var menu = document.getElementById("menu");
     var menuButton = document.getElementById("menu-button");
-    if (event.target instanceof Node && !menu.contains(event.target) && !menuButton.contains(event.target)) {
+    if (event.target instanceof Node &&
+        !menu.contains(event.target) &&
+        !menuButton.contains(event.target)) {
         menu.style.display = "none";
     }
 }

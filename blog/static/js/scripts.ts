@@ -3,22 +3,29 @@ import {
   endlessScrolling,
   fetchXmlData,
   extractLinks,
-  parseXmlString
+  parseXmlString,
 } from "./functions.js";
+
+const key = "eniolakunle_XML";
 
 async function searchButton(): Promise<void> {
   console.log(window.location);
-  const xmlText = await fetchXmlData(`${window.location.origin}/sitemap.xml`)
-  const xmlDoc = parseXmlString(xmlText);
-  const links = extractLinks(xmlDoc);
-  console.log(links);
+  const cacheExists = window.sessionStorage.getItem(key);
+  if (!cacheExists) {
+    console.log("No cache, fetching XML");
+    const xmlText = await fetchXmlData(`${window.location.origin}/sitemap.xml`);
+    const xmlDoc = parseXmlString(xmlText);
+    const links = extractLinks(xmlDoc);
+    window.sessionStorage.setItem(key, JSON.stringify(links));
+  }
 }
 
 searchButton();
 
 function toggleMenu(): void {
   var menu = document.getElementById("menu");
-  (menu as HTMLElement).style.display = (menu as HTMLElement).style.display === "flex" ? "none" : "flex";
+  (menu as HTMLElement).style.display =
+    (menu as HTMLElement).style.display === "flex" ? "none" : "flex";
 }
 
 function formatTwitterButton(): void {
@@ -41,7 +48,11 @@ function formatTwitterButton(): void {
 function clearMenuOnClick(event: MouseEvent) {
   var menu = document.getElementById("menu");
   var menuButton = document.getElementById("menu-button");
-  if (event.target instanceof Node && !(menu as HTMLElement).contains(event.target) && !(menuButton as HTMLElement).contains(event.target)) {
+  if (
+    event.target instanceof Node &&
+    !(menu as HTMLElement).contains(event.target) &&
+    !(menuButton as HTMLElement).contains(event.target)
+  ) {
     (menu as HTMLElement).style.display = "none";
   }
 }
