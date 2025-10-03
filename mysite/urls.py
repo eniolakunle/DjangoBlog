@@ -20,6 +20,7 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 from blog.sitemaps import PostSiteMap
 
 sitemaps = {
@@ -36,6 +37,10 @@ urlpatterns = [
     ),
     path("captcha/", include("captcha.urls")),
     path("ckeditor5/", include("django_ckeditor_5.urls")),
+    path(
+        "robots.txt",
+        TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
+    ),
 ]
 
 if settings.DEBUG:

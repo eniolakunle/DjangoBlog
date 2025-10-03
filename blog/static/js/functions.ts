@@ -1,7 +1,8 @@
 // float blog cards when they are intersecting with the viewport,
 // works well on mobile where hover is iffy and works on desktop well too
+
 export const intersectingObserver = new IntersectionObserver(
-  (entries) => {
+  (entries): void => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         entry.target.classList.add("intersecting-card");
@@ -12,23 +13,26 @@ export const intersectingObserver = new IntersectionObserver(
   },
   { threshold: 0.7 }
 ); // Trigger when 70% of the element is visible
-export function linkHandler(link, overlay) {
-  const transitionLink = (e) => {
+
+export function linkHandler(link: HTMLAnchorElement, overlay: Element) {
+  const transitionLink = (e: Event) => {
     if (
       link.hostname === window.location.hostname &&
       link.href !== window.location.href
     ) {
       e.preventDefault(); // Prevent default action (navigation)
-      let blogCard = link;
+
+      let blogCard: HTMLAnchorElement = link;
       while (blogCard) {
         if (blogCard.classList.contains("blog-card")) {
           blogCard.classList.add("link-container");
           break;
         }
-        blogCard = blogCard.parentElement;
+        blogCard = (blogCard.parentElement as HTMLAnchorElement);
       }
       // Show the overlay and trigger fade-out effect
       overlay.classList.add("transition-active");
+
       setTimeout(() => {
         window.location.href = link.href; // Navigate after fade-out
       }, 200); // Duration matches transition time
@@ -36,30 +40,36 @@ export function linkHandler(link, overlay) {
   };
   return transitionLink;
 }
-export function fadeTransition() {
-  const links = document.querySelectorAll("a");
-  const overlay = document.querySelector(".transition-overlay");
+
+export function fadeTransition(): void {
+  const links: NodeListOf<HTMLAnchorElement> = document.querySelectorAll("a");
+  const overlay: Element | null = document.querySelector(".transition-overlay");
+
   // on page load, give all cards ability to float when intersected
   document
     .querySelectorAll(".blog-card")
     .forEach((el) => intersectingObserver.observe(el));
+
   links.forEach((link) => {
-    link.addEventListener("click", linkHandler(link, overlay));
+    link.addEventListener("click", linkHandler(link, (overlay as Element)));
   });
+
   // After the page loads, fade in the content
   window.addEventListener("load", () => {
     document.body.classList.add("fade-in");
     setTimeout(() => {
-      overlay.classList.remove("transition-active"); // Hide overlay after fade-in
+      (overlay as Element).classList.remove("transition-active"); // Hide overlay after fade-in
     }, 300); // Fade-in duration
   });
+
   // **Fix Back Button Issue: Ensure Page Always Fades Back In**
   window.addEventListener("pageshow", function (event) {
     if (
       event.persisted ||
-      performance.getEntriesByType("navigation")[0]?.type === "back_forward"
+      (performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming)?.type === "back_forward"
     ) {
-      overlay.classList.remove("transition-active"); // Hide overlay after fade-in
+      (overlay as Element).classList.remove("transition-active"); // Hide overlay after fade-in
+
       Array.from(document.getElementsByClassName("link-container")).forEach(
         (el) => {
           el.classList.remove("link-container");
@@ -70,9 +80,12 @@ export function fadeTransition() {
     }
   });
 }
-export function endlessScrolling() {
+
+export function endlessScrolling(): void {
   const sentinel = document.getElementById("sentinel");
+
   if (!sentinel) return;
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -80,52 +93,62 @@ export function endlessScrolling() {
       }
     });
   });
+
   observer.observe(sentinel);
+
   let loading = false;
+
   function loadMore() {
     if (loading) return;
+
     const nextPageLink = document.getElementById("next-page-link");
     if (!nextPageLink) {
-      observer.unobserve(sentinel); // No more pages to load
+      observer.unobserve(sentinel as HTMLElement); // No more pages to load
       return;
     }
     loading = true;
     const url = nextPageLink.getAttribute("href");
-    fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } })
+
+    fetch(url as string, { headers: { "X-Requested-With": "XMLHttpRequest" } })
       .then((response) => response.text())
       .then((html) => {
         // Create a temporary element to hold the new HTML
         const tempDiv = document.createElement("div");
         tempDiv.innerHTML = html;
+
         // Append new items from the response to the container
         const newItems = tempDiv.querySelectorAll(".item");
         const container = document.getElementById("bottom-grid");
         const overlay = document.querySelector(".transition-overlay");
+
         // give newly loaded articles ability to float when intersected
         tempDiv
           .querySelectorAll(".blog-card")
           .forEach((el) => intersectingObserver.observe(el));
+
         newItems.forEach((item) => {
           const link = item.querySelector(".blog-card-link");
           // ensure new articles added will transition smoothly if clicked
-          link.addEventListener("click", linkHandler(link, overlay));
+          (link as HTMLAnchorElement).addEventListener("click", linkHandler(link as HTMLAnchorElement, overlay as Element));
+
           // remove class additions from new articles, they belong in bottom grid only
           if (item.classList.contains("main-article")) {
             item.classList.remove("main-article");
           }
-          container.appendChild(item);
+          (container as HTMLElement).appendChild(item);
         });
+
         // Update the next-page link (if any)
         const newNextPageLink = tempDiv.querySelector("#next-page-link");
         if (newNextPageLink) {
           nextPageLink.setAttribute(
             "href",
-            newNextPageLink.getAttribute("href")
+            (newNextPageLink as Element).getAttribute("href") as string
           );
         } else {
           // No next page; remove the link and unobserve the sentinel
           nextPageLink.remove();
-          observer.unobserve(sentinel);
+          observer.unobserve(sentinel as HTMLElement);
         }
         loading = false;
       })
@@ -135,4 +158,3 @@ export function endlessScrolling() {
       });
   }
 }
-//# sourceMappingURL=functions.js.map

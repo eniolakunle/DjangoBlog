@@ -91,6 +91,9 @@ class PostModelTest(TestCase):
         # Assuming comments are closed for posts published more than 7 days ago
         self.assertTrue(self.post_with_comments_closed.comments_closed)
 
+    def test_read_time(self):
+        self.assertEqual(self.post.read_time, "1 min")
+
 
 class CommentModelTest(TestCase):
     def setUp(self):
