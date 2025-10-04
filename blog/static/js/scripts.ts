@@ -81,6 +81,45 @@ function shareOnClick(): void {
   }
 }
 
+// Search Dialog functionality
+function setupSearchDialog(): void {
+    const searchButton = document.getElementById('search-button');
+    const searchDialog = document.getElementById('search-dialog') as HTMLDialogElement;
+    const searchClose = document.getElementById('search-close');
+    const searchForm = searchDialog?.querySelector('form');
+    const searchInput = document.getElementById('search-input') as HTMLInputElement;
+
+    // Open dialog when search button is clicked
+    searchButton?.addEventListener('click', () => {
+        searchDialog?.showModal();
+        searchInput?.focus();
+    });
+
+    // Close dialog when cancel button is clicked
+    searchClose?.addEventListener('click', () => {
+        searchDialog?.close();
+    });
+
+    // Handle form submission
+    searchForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const searchQuery = searchInput?.value.trim();
+        if (searchQuery) {
+            window.location.href = `/search/?q=${encodeURIComponent(searchQuery)}`;
+        }
+        searchDialog?.close();
+    });
+
+    // Close dialog when clicking backdrop
+    searchDialog?.addEventListener('click', (e: MouseEvent) => {
+        if (e.target === searchDialog) {
+            searchDialog?.close();
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', setupSearchDialog);
+
 document.addEventListener("DOMContentLoaded", fadeTransition);
 // endless scrolling is in below listener
 document.addEventListener("DOMContentLoaded", endlessScrolling);
