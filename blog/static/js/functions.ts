@@ -266,7 +266,6 @@ async function postAndStream(fullPrompt: string, articleUrls: string[], geminiQu
   }
 
   const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent?alt=sse";
-
   const response = await fetch(url, {
     method: 'POST',
     headers: headers,
@@ -310,18 +309,23 @@ async function postAndStream(fullPrompt: string, articleUrls: string[], geminiQu
         const newText = jsonData.candidates?.[0]?.content?.parts?.[0]?.text;
         if (newText) {
           accumulatedText += newText;
-          geminiQuestion.textContent = accumulatedText;
+          // geminiQuestion.textContent = accumulatedText;
 
           const finalMatch = accumulatedText.match(/FINAL_LINK:\s*(https?:\/\/[^^\s]+)/i);
           if (finalMatch && finalMatch[1]) {
             const foundUrl = normalizeUrl(finalMatch[1]);
             if (normalizedSet.has(foundUrl)) {
-              window.location.href = foundUrl;
+              // Show a brief well-wish in the header, then redirect.
+              geminiQuestion.textContent = "Here's an article just for you. Enjoy!";
               try {
                 await reader.cancel();
               } catch (e) {
                 /* ignore */
               }
+              // Small delay so the user sees the message briefly before navigation
+              setTimeout(() => {
+                window.location.href = foundUrl;
+              }, 300);
               return;
             }
           }

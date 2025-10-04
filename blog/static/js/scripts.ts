@@ -114,6 +114,18 @@ async function setupSearchDialog(): Promise<void> {
         // searchDialog?.close();
     });
 
+  // Prevent Enter from closing the dialog: intercept Enter and trigger the search button click
+  searchDialog?.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      // Allow Enter inside textareas
+      const active = document.activeElement as HTMLElement | null;
+      if (active && active.tagName.toLowerCase() === 'textarea') return;
+      e.preventDefault();
+      // Trigger the click handler for the search-enter button without closing the dialog
+      searchEnter?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    }
+  });
+
     // Close dialog when clicking backdrop
     searchDialog?.addEventListener('click', (e: MouseEvent) => {
         if (e.target === searchDialog) {

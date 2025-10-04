@@ -91,6 +91,18 @@ async function setupSearchDialog() {
         }
         // searchDialog?.close();
     });
+    // Prevent Enter from closing the dialog: intercept Enter and trigger the search button click
+    searchDialog?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            // Allow Enter inside textareas
+            const active = document.activeElement;
+            if (active && active.tagName.toLowerCase() === 'textarea')
+                return;
+            e.preventDefault();
+            // Trigger the click handler for the search-enter button without closing the dialog
+            searchEnter?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+        }
+    });
     // Close dialog when clicking backdrop
     searchDialog?.addEventListener('click', (e) => {
         if (e.target === searchDialog) {
