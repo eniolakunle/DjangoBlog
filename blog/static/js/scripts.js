@@ -1,4 +1,4 @@
-import { fadeTransition, endlessScrolling, searchLinks } from "./functions.js";
+import { fadeTransition, endlessScrolling, searchLinks, callGemini } from "./functions.js";
 function toggleMenu() {
     var menu = document.getElementById("menu");
     menu.style.display =
@@ -64,12 +64,14 @@ function shareOnClick() {
     }
 }
 // Search Dialog functionality
-function setupSearchDialog() {
+async function setupSearchDialog() {
     const searchButton = document.getElementById('search-button');
     const searchDialog = document.getElementById('search-dialog');
     const searchClose = document.getElementById('search-close');
+    const searchEnter = document.getElementById('search-enter');
     const searchForm = searchDialog?.querySelector('form');
     const searchInput = document.getElementById('search-input');
+    const geminiContext = await searchLinks();
     // Open dialog when search button is clicked
     searchButton?.addEventListener('click', () => {
         searchDialog?.showModal();
@@ -80,13 +82,14 @@ function setupSearchDialog() {
         searchDialog?.close();
     });
     // Handle form submission
-    searchForm?.addEventListener('submit', (e) => {
+    searchEnter?.addEventListener('click', (e) => {
         e.preventDefault();
         const searchQuery = searchInput?.value.trim();
         if (searchQuery) {
-            window.location.href = `/search/?q=${encodeURIComponent(searchQuery)}`;
+            callGemini(searchQuery);
+            // window.location.href = `/search/?q=${encodeURIComponent(searchQuery)}`;
         }
-        searchDialog?.close();
+        // searchDialog?.close();
     });
     // Close dialog when clicking backdrop
     searchDialog?.addEventListener('click', (e) => {

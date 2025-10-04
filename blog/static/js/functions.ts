@@ -210,3 +210,72 @@ export async function searchLinks(): Promise<string | null> {
 
   return window.sessionStorage.getItem(key)
 }
+
+
+const headers = {
+  "Content-Type": "application/json",
+}
+const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent?alt=sse";
+
+export async function callGemini(prompt: string): Promise<void> {
+  const geminiQuestion = document.getElementById('gemini-question') as HTMLHeadingElement;
+  if (!geminiQuestion) return;
+
+  // Clear the current text
+  geminiQuestion.textContent = '';
+  let accumulatedText = '';
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify({
+        contents: [{ 
+          parts: [{ 
+            text: prompt
+          }] 
+        }] 
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const reader = response.body?.getReader();
+    if (!reader) {
+      throw new Error('Response body is null');
+    }
+
+    // Create a text decoder to handle the chunks
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      // Decode the chunk and parse the SSE data
+      const chunk = decoder.decode(value);
+      const lines = chunk.split('\n');
+      
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          try {
+            const jsonData = JSON.parse(line.slice(6)); // Remove 'data: ' prefix
+            if (jsonData.candidates?.[0]?.content?.parts?.[0]?.text) {
+              const newText = jsonData.candidates[0].content.parts[0].text;
+              accumulatedText += newText;
+              geminiQuestion.textContent = accumulatedText;
+            }
+          } catch (e) {
+            // Skip if the line isn't valid JSON
+            continue;
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    geminiQuestion.textContent = 'Sorry, something went wrong. Please try again.';
+  }
+}

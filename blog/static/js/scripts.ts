@@ -1,7 +1,8 @@
 import {
   fadeTransition,
   endlessScrolling,
-  searchLinks
+  searchLinks,
+  callGemini
 } from "./functions.js";
 
 
@@ -82,12 +83,14 @@ function shareOnClick(): void {
 }
 
 // Search Dialog functionality
-function setupSearchDialog(): void {
+async function setupSearchDialog(): Promise<void> {
     const searchButton = document.getElementById('search-button');
     const searchDialog = document.getElementById('search-dialog') as HTMLDialogElement;
     const searchClose = document.getElementById('search-close');
+    const searchEnter = document.getElementById('search-enter');
     const searchForm = searchDialog?.querySelector('form');
     const searchInput = document.getElementById('search-input') as HTMLInputElement;
+    const geminiContext = await searchLinks();
 
     // Open dialog when search button is clicked
     searchButton?.addEventListener('click', () => {
@@ -101,13 +104,14 @@ function setupSearchDialog(): void {
     });
 
     // Handle form submission
-    searchForm?.addEventListener('submit', (e) => {
+    searchEnter?.addEventListener('click', (e) => {
         e.preventDefault();
         const searchQuery = searchInput?.value.trim();
         if (searchQuery) {
-            window.location.href = `/search/?q=${encodeURIComponent(searchQuery)}`;
+          callGemini(searchQuery)
+            // window.location.href = `/search/?q=${encodeURIComponent(searchQuery)}`;
         }
-        searchDialog?.close();
+        // searchDialog?.close();
     });
 
     // Close dialog when clicking backdrop

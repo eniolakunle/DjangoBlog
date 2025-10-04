@@ -319,7 +319,7 @@ fieldset {
     font-size: 14px;
 }
 
-.dialog-buttons button[type="button"] {
+.dialog-buttons button[id="search-close"] {
     background-color: #6c757d;
     color: white;
 }
