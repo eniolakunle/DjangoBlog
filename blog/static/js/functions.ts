@@ -260,7 +260,13 @@ function buildFullPrompt(prompt: string, listForModel: string): string {
 }
 
 // Helper: process streaming response from Gemini, detect FINAL_LINK and redirect
-async function postAndStream(fullPrompt: string, articleUrls: string[], geminiQuestion: HTMLHeadingElement): Promise<void> {
+async function postAndStream(
+  fullPrompt: string,
+  articleUrls: string[],
+  geminiQuestion: HTMLHeadingElement,
+  // optional cleanup callback to remove a loading UI created by caller
+  loaderCleanup?: () => void
+): Promise<void> {
   const headers = {
   "Content-Type": "application/json",
   }
@@ -295,6 +301,9 @@ async function postAndStream(fullPrompt: string, articleUrls: string[], geminiQu
   let accumulatedText = '';
   const normalizedSet = new Set(articleUrls.map(normalizeUrl));
 
+  // Track whether we've removed the loading UI yet
+  let firstChunkHandled = false;
+
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
@@ -308,6 +317,16 @@ async function postAndStream(fullPrompt: string, articleUrls: string[], geminiQu
         const jsonData = JSON.parse(line.slice(6));
         const newText = jsonData.candidates?.[0]?.content?.parts?.[0]?.text;
         if (newText) {
+          // On first non-empty chunk, remove the loading animation (if any)
+          if (!firstChunkHandled) {
+            try {
+              loaderCleanup?.();
+            } catch (e) {
+              /* ignore cleanup errors */
+            }
+            firstChunkHandled = true;
+          }
+
           accumulatedText += newText;
           // geminiQuestion.textContent = accumulatedText;
 
@@ -319,6 +338,11 @@ async function postAndStream(fullPrompt: string, articleUrls: string[], geminiQu
               geminiQuestion.textContent = "Here's an article just for you. Enjoy!";
               try {
                 await reader.cancel();
+              } catch (e) {
+                /* ignore */
+              }
+              try {
+                loaderCleanup?.();
               } catch (e) {
                 /* ignore */
               }
@@ -334,6 +358,13 @@ async function postAndStream(fullPrompt: string, articleUrls: string[], geminiQu
         // ignore parse errors for non-JSON SSE lines
       }
     }
+  }
+
+  // Ensure loader removed if stream completes without final link
+  try {
+    loaderCleanup?.();
+  } catch (e) {
+    /* ignore */
   }
 }
 
@@ -354,9 +385,46 @@ export async function callGemini(prompt: string, urls: string): Promise<void> {
   const fullPrompt = buildFullPrompt(prompt, listForModel);
 
   try {
-    await postAndStream(fullPrompt, articleUrls, geminiQuestion);
+    // create a minimal loading UI (animated dots) inserted into geminiQuestion
+    const cleanup = createGeminiLoader(geminiQuestion);
+
+    await postAndStream(fullPrompt, articleUrls, geminiQuestion, cleanup);
   } catch (error) {
     console.error('Error:', error);
     geminiQuestion.textContent = 'Sorry, something went wrong. Please try again.';
   }
+}
+
+// Create a simple loader inside a parent element and return a cleanup function
+function createGeminiLoader(parent: HTMLElement): () => void {
+  const br = document.createElement('br');
+  const loader = document.createElement('span');
+  loader.className = 'gemini-loader';
+  loader.textContent = 'Thinking';
+  parent.appendChild(br);
+  parent.appendChild(loader);
+
+  let dots = '';
+  const iv = window.setInterval(() => {
+    dots = dots.length < 3 ? dots + '.' : '';
+    loader.textContent = 'Thinking' + dots;
+  }, 400);
+
+  return () => {
+    try {
+      clearInterval(iv);
+    } catch (e) {
+      /* ignore */
+    }
+    try {
+      if (br.parentElement) br.parentElement.removeChild(br);
+    } catch (e) {
+      /* ignore */
+    }
+    try {
+      if (loader.parentElement) loader.parentElement.removeChild(loader);
+    } catch (e) {
+      /* ignore */
+    }
+  };
 }
