@@ -212,68 +212,145 @@ export async function searchLinks(): Promise<string | null> {
 }
 
 
-const headers = {
-  "Content-Type": "application/json",
+// Helper: parse urls string into array
+function parseUrls(urls: string): string[] {
+  try {
+    const trimmed = (urls || '').trim();
+    if (trimmed.startsWith('[')) {
+      return JSON.parse(trimmed) as string[];
+    }
+    return trimmed
+      .split(/,|\n/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  } catch (e) {
+    return (urls || '')
+      .split(/,|\n/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
 }
-const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent?alt=sse";
 
-export async function callGemini(prompt: string): Promise<void> {
+// Helper: normalize url for comparison (strip trailing slash)
+function normalizeUrl(u: string): string {
+  return u.replace(/\/$/, '');
+}
+
+// Helper: build compact title->url lines for model prompt
+function buildListForModel(articleUrls: string[]): string {
+  return articleUrls
+    .map((u) => {
+      try {
+        const tidy = normalizeUrl(u);
+        const parts = tidy.split('/');
+        const slug = parts[parts.length - 1] || tidy;
+        const title = slug.replace(/-/g, ' ');
+        return `${title} -> ${tidy}`;
+      } catch (e) {
+        return u;
+      }
+    })
+    .join('\n');
+}
+
+// Helper: build the model prompt with strict instructions
+function buildFullPrompt(prompt: string, listForModel: string): string {
+  const instructions = `You are a concise article selector. DO NOT ask any follow-up questions. Based only on the user's prompt and the list below, choose the single best article. The final answer MUST be a single line starting with EXACTLY: FINAL_LINK: <url> and the <url> must be one of the provided URLs below. Do not include any other text.`;
+  return `${instructions}\nAvailable articles (title -> url):\n${listForModel}\nUser prompt: ${prompt}`;
+}
+
+// Helper: process streaming response from Gemini, detect FINAL_LINK and redirect
+async function postAndStream(fullPrompt: string, articleUrls: string[], geminiQuestion: HTMLHeadingElement): Promise<void> {
+  const headers = {
+  "Content-Type": "application/json",
+  }
+
+  const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent?alt=sse";
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify({
+      contents: [
+        {
+          parts: [
+            {
+              text: fullPrompt,
+            },
+          ],
+        },
+      ],
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const reader = response.body?.getReader();
+  if (!reader) {
+    throw new Error('Response body is null');
+  }
+
+  const decoder = new TextDecoder();
+  let accumulatedText = '';
+  const normalizedSet = new Set(articleUrls.map(normalizeUrl));
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    const chunk = decoder.decode(value);
+    const lines = chunk.split('\n');
+
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      try {
+        const jsonData = JSON.parse(line.slice(6));
+        const newText = jsonData.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (newText) {
+          accumulatedText += newText;
+          geminiQuestion.textContent = accumulatedText;
+
+          const finalMatch = accumulatedText.match(/FINAL_LINK:\s*(https?:\/\/[^^\s]+)/i);
+          if (finalMatch && finalMatch[1]) {
+            const foundUrl = normalizeUrl(finalMatch[1]);
+            if (normalizedSet.has(foundUrl)) {
+              window.location.href = foundUrl;
+              try {
+                await reader.cancel();
+              } catch (e) {
+                /* ignore */
+              }
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        // ignore parse errors for non-JSON SSE lines
+      }
+    }
+  }
+}
+
+// Refactored main: orchestrate helpers
+export async function callGemini(prompt: string, urls: string): Promise<void> {
   const geminiQuestion = document.getElementById('gemini-question') as HTMLHeadingElement;
   if (!geminiQuestion) return;
 
-  // Clear the current text
   geminiQuestion.textContent = '';
-  let accumulatedText = '';
+
+  const articleUrls = parseUrls(urls);
+  if (!articleUrls.length) {
+    geminiQuestion.textContent = 'No article URLs provided.';
+    return;
+  }
+
+  const listForModel = buildListForModel(articleUrls);
+  const fullPrompt = buildFullPrompt(prompt, listForModel);
 
   try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: headers,
-      body: JSON.stringify({
-        contents: [{ 
-          parts: [{ 
-            text: prompt
-          }] 
-        }] 
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const reader = response.body?.getReader();
-    if (!reader) {
-      throw new Error('Response body is null');
-    }
-
-    // Create a text decoder to handle the chunks
-    const decoder = new TextDecoder();
-
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      // Decode the chunk and parse the SSE data
-      const chunk = decoder.decode(value);
-      const lines = chunk.split('\n');
-      
-      for (const line of lines) {
-        if (line.startsWith('data: ')) {
-          try {
-            const jsonData = JSON.parse(line.slice(6)); // Remove 'data: ' prefix
-            if (jsonData.candidates?.[0]?.content?.parts?.[0]?.text) {
-              const newText = jsonData.candidates[0].content.parts[0].text;
-              accumulatedText += newText;
-              geminiQuestion.textContent = accumulatedText;
-            }
-          } catch (e) {
-            // Skip if the line isn't valid JSON
-            continue;
-          }
-        }
-      }
-    }
+    await postAndStream(fullPrompt, articleUrls, geminiQuestion);
   } catch (error) {
     console.error('Error:', error);
     geminiQuestion.textContent = 'Sorry, something went wrong. Please try again.';

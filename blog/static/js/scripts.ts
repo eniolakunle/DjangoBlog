@@ -88,7 +88,7 @@ async function setupSearchDialog(): Promise<void> {
     const searchDialog = document.getElementById('search-dialog') as HTMLDialogElement;
     const searchClose = document.getElementById('search-close');
     const searchEnter = document.getElementById('search-enter');
-    const searchForm = searchDialog?.querySelector('form');
+    // const searchForm = searchDialog?.querySelector('form');
     const searchInput = document.getElementById('search-input') as HTMLInputElement;
     const geminiContext = await searchLinks();
 
@@ -108,7 +108,7 @@ async function setupSearchDialog(): Promise<void> {
         e.preventDefault();
         const searchQuery = searchInput?.value.trim();
         if (searchQuery) {
-          callGemini(searchQuery)
+          callGemini(searchQuery, geminiContext as string)
             // window.location.href = `/search/?q=${encodeURIComponent(searchQuery)}`;
         }
         // searchDialog?.close();
