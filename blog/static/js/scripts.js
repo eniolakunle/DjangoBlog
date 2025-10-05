@@ -1,6 +1,6 @@
 import { fadeTransition, endlessScrolling, searchLinks, callGemini
 //@ts-expect-error
- } from "./functions.js?v=1.0.1";
+ } from "./functions.js?v=1.0.2";
 function toggleMenu() {
     var menu = document.getElementById("menu");
     menu.style.display =
