@@ -302,7 +302,7 @@ async function postAndStream(
   const normalizedSet = new Set(articleUrls.map(normalizeUrl));
 
   // Track whether we've removed the loading UI yet
-  let firstChunkHandled = false;
+  // let firstChunkHandled = false;
 
   while (true) {
     const { done, value } = await reader.read();
@@ -318,14 +318,14 @@ async function postAndStream(
         const newText = jsonData.candidates?.[0]?.content?.parts?.[0]?.text;
         if (newText) {
           // On first non-empty chunk, remove the loading animation (if any)
-          if (!firstChunkHandled) {
-            try {
-              loaderCleanup?.();
-            } catch (e) {
-              /* ignore cleanup errors */
-            }
-            firstChunkHandled = true;
-          }
+          // if (!firstChunkHandled) {
+          //   try {
+          //     loaderCleanup?.();
+          //   } catch (e) {
+          //     /* ignore cleanup errors */
+          //   }
+          //   firstChunkHandled = true;
+          // }
 
           accumulatedText += newText;
           // geminiQuestion.textContent = accumulatedText;
@@ -335,17 +335,22 @@ async function postAndStream(
             const foundUrl = normalizeUrl(finalMatch[1]);
             if (normalizedSet.has(foundUrl)) {
               // Show a brief well-wish in the header, then redirect.
+              try {
+              loaderCleanup?.();
+              } catch (e) {
+              /* ignore cleanup errors */
+              }
               geminiQuestion.textContent = "Here's an article just for you. Enjoy!";
               try {
                 await reader.cancel();
               } catch (e) {
                 /* ignore */
               }
-              try {
-                loaderCleanup?.();
-              } catch (e) {
-                /* ignore */
-              }
+              // try {
+              //   loaderCleanup?.();
+              // } catch (e) {
+              //   /* ignore */
+              // }
               // Small delay so the user sees the message briefly before navigation
               setTimeout(() => {
                 window.location.href = foundUrl;
