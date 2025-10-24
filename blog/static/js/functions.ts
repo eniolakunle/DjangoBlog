@@ -184,15 +184,6 @@ export function extractLinks(xmlDoc: Document): (string | undefined)[] {
   for (let i = 0; i < locElements.length; i++) {
     links.push(locElements[i]?.textContent);
   }
-
-  // Example for RSS feeds: find all <link> elements within <item>
-  const itemElements = xmlDoc.getElementsByTagName("item");
-  for (let i = 0; i < itemElements.length; i++) {
-    const linkElement = itemElements[i]?.getElementsByTagName("link")[0];
-    if (linkElement) {
-      links.push(linkElement.textContent);
-    }
-  }
   return links;
 }
 
@@ -213,7 +204,7 @@ export async function searchLinks(): Promise<string | null> {
 
 
 // Helper: parse urls string into array
-function parseUrls(urls: string): string[] {
+export function parseUrls(urls: string): string[] {
   try {
     const trimmed = (urls || '').trim();
     if (trimmed.startsWith('[')) {
@@ -237,7 +228,7 @@ function normalizeUrl(u: string): string {
 }
 
 // Helper: build compact title->url lines for model prompt
-function buildListForModel(articleUrls: string[]): string {
+export function buildListForModel(articleUrls: string[]): string {
   return articleUrls
     .map((u) => {
       try {
@@ -260,7 +251,7 @@ function buildFullPrompt(prompt: string, listForModel: string): string {
 }
 
 // Helper: process streaming response from Gemini, detect FINAL_LINK and redirect
-async function postAndStream(
+export async function postAndStream(
   fullPrompt: string,
   articleUrls: string[],
   geminiQuestion: HTMLHeadingElement,
@@ -401,7 +392,7 @@ export async function callGemini(prompt: string, urls: string): Promise<void> {
 }
 
 // Create a simple loader inside a parent element and return a cleanup function
-function createGeminiLoader(parent: HTMLElement): () => void {
+export function createGeminiLoader(parent: HTMLElement): () => void {
   const br = document.createElement('br');
   const loader = document.createElement('span');
   loader.className = 'gemini-loader';

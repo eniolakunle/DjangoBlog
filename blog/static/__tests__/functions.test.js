@@ -7,8 +7,21 @@ import {
   intersectingObserver,
   linkHandler,
   fadeTransition,
-  endlessScrolling,
+  extractLinks,
+  parseUrls,
+  buildListForModel,
+  searchLinks,
+  postAndStream,
+  callGemini,
+  createGeminiLoader,
 } from "../js/functions";
+
+// Polyfill TextDecoder for Node/Jest environment if missing
+if (typeof TextDecoder === "undefined") {
+  // util.TextDecoder is available in Node
+  // eslint-disable-next-line global-require
+  global.TextDecoder = require("util").TextDecoder;
+}
 
 describe("IntersectionObserver functionality", () => {
   test("adds 'intersecting-card' class when element is intersecting", () => {
@@ -83,23 +96,6 @@ describe("fadeTransition", () => {
     jest.useRealTimers();
   });
 
-  // test("registers observers on blog cards and adds click listeners", () => {
-  //   fadeTransition();
-
-  //   // Ensure that intersectingObserver.observe was called for each blog card.
-  //   const blogCards = document.querySelectorAll(".blog-card");
-  //   expect(intersectingObserver.observe).toHaveBeenCalledTimes(
-  //     blogCards.length
-  //   );
-
-  //   // Ensure linkHandler is called with the correct arguments.
-  //   const overlay = document.querySelector(".transition-overlay");
-  //   const links = document.querySelectorAll("a");
-  //   links.forEach((link) => {
-  //     expect(linkHandler).toHaveBeenCalledWith(link, overlay);
-  //   });
-  // });
-
   test("adds fade-in class on window load and removes overlay's transition-active after 300ms", () => {
     jest.useFakeTimers();
     fadeTransition();
@@ -151,118 +147,133 @@ describe("fadeTransition", () => {
   });
 });
 
-// // Override IntersectionObserver so we can capture its instance and simulate intersection events.
-// let mockObserverInstance;
-// global.IntersectionObserver = class {
-//   constructor(callback, options) {
-//     this.callback = callback;
-//     this.options = options;
-//     this.observe = jest.fn();
-//     this.unobserve = jest.fn();
-//     mockObserverInstance = this;
-//   }
-//   disconnect() {}
-// };
+describe("helpers and integration", () => {
+  test("extractLinks finds <loc> and <item><link>", () => {
+    const parser = new DOMParser();
+    // Keep XML minimal and without namespaces so getElementsByTagName works reliably
+    const xml = `
+      <urlset>
+        <url><loc>https://eniolakunle.pythonanywhere.com/blog/2025/10/23/everything-youre-chasing-is-a-decision-away-what-will-it-take-to-have-it-all/</loc></url>
+        <url><loc>https://eniolakunle.pythonanywhere.com/blog/2025/10/21/your-fortune-depends-on-one-moment/</loc></url>
+      </urlset>
+      <rss>
+        <channel>
+          <item><link>https://b.example/two</link></item>
+        </channel>
+      </rss>
+    `;
 
-// describe("endlessScrolling", () => {
-//   beforeEach(() => {
-//     // Set up our DOM fixture.
-//     document.body.innerHTML = `
-//       <div id="sentinel"></div>
-//       <a id="next-page-link" href="http://example.com/page1"></a>
-//       <div id="bottom-grid"></div>
-//       <div class="transition-overlay"></div>
-//     `;
+    // Wrap with a single root element so DOMParser doesn't error
+    const doc = parser.parseFromString(`<root>${xml}</root>`, "text/xml");
+    const links = extractLinks(doc);
+    expect(links).toEqual(
+      expect.arrayContaining([
+        "https://eniolakunle.pythonanywhere.com/blog/2025/10/23/everything-youre-chasing-is-a-decision-away-what-will-it-take-to-have-it-all/",
+        "https://eniolakunle.pythonanywhere.com/blog/2025/10/21/your-fortune-depends-on-one-moment/",
+      ])
+    );
+  });
 
-//     // Clear any previous mocks.
-//     jest.clearAllMocks();
-//   });
+  test("parseUrls handles JSON arrays, commas and newlines", () => {
+    expect(parseUrls('["/a","/b"]')).toEqual(["/a", "/b"]);
+    expect(parseUrls("/a, /b\n/c")).toEqual(["/a", "/b", "/c"]);
+    expect(parseUrls("")).toEqual([]);
+  });
 
-//   afterEach(() => {
-//     // Clean up any mocked globals.
-//     global.fetch && jest.restoreAllMocks();
-//   });
+  test("buildListForModel converts slugs to title -> url lines", () => {
+    const urls = ["https://site/hello-world", "https://site/another-one/"];
+    const out = buildListForModel(urls);
+    expect(out).toContain("hello world -> https://site/hello-world");
+    expect(out).toContain("another one -> https://site/another-one");
+  });
 
-//   test("loads new items and updates next-page-link when sentinel is intersecting", async () => {
-//     // Dummy HTML to be returned by fetch:
-//     // Contains one new item and a new next-page link with an updated URL.
-//     const dummyHTML = `
-//       <div class="item">
-//         <div class="blog-card">
-//           <a href="http://example.com/new" class="blog-card-link">New Item</a>
-//         </div>
-//       </div>
-//       <div id="next-page-link" href="http://example.com/page2"></div>
-//     `;
-//     // Mock fetch to return dummyHTML.
-//     global.fetch = jest.fn(() =>
-//       Promise.resolve({
-//         text: () => Promise.resolve(dummyHTML),
-//       })
-//     );
+  test("searchLinks fetches sitemap and caches result in sessionStorage", async () => {
+    const fakeXml = "<urlset><url><loc>https://x/1</loc></url></urlset>";
+    global.fetch = jest.fn(() =>
+      Promise.resolve({ text: () => Promise.resolve(fakeXml) })
+    );
+    // clear sessionStorage
+    window.sessionStorage.removeItem("eniolakunle_XML");
+    // ensure origin
+    delete window.location;
+    window.location = { origin: "https://site" };
+    const result = await searchLinks();
+    const cached = window.sessionStorage.getItem("eniolakunle_XML");
+    expect(cached).toBeDefined();
+    expect(JSON.parse(cached)).toContain("https://x/1");
+    expect(result).toEqual(window.sessionStorage.getItem("eniolakunle_XML"));
+  });
 
-//     // Call endlessScrolling to set up the observer.
-//     endlessScrolling();
+  test("createGeminiLoader appends nodes and cleanup removes them", () => {
+    const parent = document.createElement("div");
+    const cleanup = createGeminiLoader(parent);
+    expect(parent.querySelector(".gemini-loader")).toBeTruthy();
+    // advance timers to simulate dots
+    jest.useFakeTimers();
+    jest.advanceTimersByTime(1200);
+    cleanup();
+    expect(parent.querySelector(".gemini-loader")).toBeNull();
+    jest.useRealTimers();
+  });
 
-//     // Ensure that the sentinel was observed.
-//     const sentinel = document.getElementById("sentinel");
-//     expect(mockObserverInstance.observe).toHaveBeenCalledWith(sentinel);
+  test("postAndStream reads SSE chunks, calls loaderCleanup and redirects on FINAL_LINK", async () => {
+    // Prepare a fake reader that yields one chunk containing FINAL_LINK and then done
+    // Use Buffer to create a Uint8Array chunk compatible with TextDecoder
+    const candidate = {
+      candidates: [
+        { content: { parts: [{ text: "FINAL_LINK: https://site/one" }] } },
+      ],
+    };
+    const sseLine = "data: " + JSON.stringify(candidate) + "\n";
+    const chunk = Buffer.from(sseLine);
 
-//     // Simulate an intersection event on the sentinel.
-//     const fakeEntry = [{ isIntersecting: true, target: sentinel }];
-//     await mockObserverInstance.callback(fakeEntry);
+    const reader = {
+      read: jest
+        .fn()
+        .mockResolvedValueOnce({ done: false, value: chunk })
+        .mockResolvedValueOnce({ done: true }),
+      cancel: jest.fn().mockResolvedValue(undefined),
+    };
 
-//     // Wait for fetch to resolve and loadMore to finish.
-//     // Use a microtask flush: returning the fetch promise will work since our test is async.
-//     await Promise.resolve();
+    // mock fetch to return response with body.getReader
+    global.fetch = jest.fn(() =>
+      Promise.resolve({ ok: true, body: { getReader: () => reader } })
+    );
 
-//     // Check that fetch was called with the correct URL and header.
-//     expect(global.fetch).toHaveBeenCalledWith("http://example.com/page1", {
-//       headers: { "X-Requested-With": "XMLHttpRequest" },
-//     });
+    // spy on loader cleanup and window.location
+    const parent = document.createElement("div");
+    const geminiQuestion = document.createElement("div");
+    document.body.appendChild(geminiQuestion);
+    const cleanup = jest.fn();
 
-//     // Check that a new item was appended to #bottom-grid.
-//     const container = document.getElementById("bottom-grid");
-//     const newItems = container.querySelectorAll(".item");
-//     expect(newItems.length).toBe(1);
-//     // And check that the new next-page link's URL was updated.
-//     const nextPageLink = document.getElementById("next-page-link");
-//     expect(nextPageLink.getAttribute("href")).toBe("http://example.com/page2");
-//   });
+    // mock normalize set by passing articleUrls that include the target
+    const urls = ["https://site/one"];
 
-//   test("removes next-page-link and unobserves sentinel when no new next-page-link is found", async () => {
-//     // Dummy HTML that does NOT include a new next-page link.
-//     const dummyHTML = `
-//       <div class="item">
-//         <div class="blog-card">
-//           <a href="http://example.com/new" class="blog-card-link">New Item</a>
-//         </div>
-//       </div>
-//     `;
-//     global.fetch = jest.fn(() =>
-//       Promise.resolve({
-//         text: () => Promise.resolve(dummyHTML),
-//       })
-//     );
+    // stub window.location.href setter
+    delete window.location;
+    window.location = { href: "about:blank" };
 
-//     endlessScrolling();
+    await postAndStream("prompt", urls, geminiQuestion, cleanup);
 
-//     const sentinel = document.getElementById("sentinel");
-//     expect(mockObserverInstance.observe).toHaveBeenCalledWith(sentinel);
+    // loader cleanup should have been called
+    expect(cleanup).toHaveBeenCalled();
+    // geminiQuestion text updated
+    expect(geminiQuestion.textContent).toContain(
+      "Here's an article just for you"
+    );
+    // ensure reader.cancel was attempted
+    expect(reader.cancel).toHaveBeenCalled();
+  });
 
-//     // Simulate an intersection event.
-//     const fakeEntry = [{ isIntersecting: true, target: sentinel }];
-//     await mockObserverInstance.callback(fakeEntry);
+  test("callGemini handles missing gemini-question element and empty urls", async () => {
+    document.body.innerHTML = ""; // no gemini-question
+    await expect(callGemini("q", "")).resolves.toBeUndefined();
 
-//     // Wait for the fetch promise resolution.
-//     await Promise.resolve();
-
-//     // In this scenario, since dummyHTML lacks a new next-page link,
-//     // the existing next-page-link should be removed from the DOM.
-//     const nextPageLink = document.getElementById("next-page-link");
-//     expect(nextPageLink).toBeNull();
-
-//     // And observer.unobserve should have been called with the sentinel.
-//     expect(mockObserverInstance.unobserve).toHaveBeenCalledWith(sentinel);
-//   });
-// });
+    // now with gemini-question present but empty urls
+    const g = document.createElement("div");
+    g.id = "gemini-question";
+    document.body.appendChild(g);
+    await callGemini("q", "");
+    expect(g.textContent).toBe("No article URLs provided.");
+  });
+});

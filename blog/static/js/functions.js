@@ -144,14 +144,6 @@ export function extractLinks(xmlDoc) {
     for (let i = 0; i < locElements.length; i++) {
         links.push(locElements[i]?.textContent);
     }
-    // Example for RSS feeds: find all <link> elements within <item>
-    const itemElements = xmlDoc.getElementsByTagName("item");
-    for (let i = 0; i < itemElements.length; i++) {
-        const linkElement = itemElements[i]?.getElementsByTagName("link")[0];
-        if (linkElement) {
-            links.push(linkElement.textContent);
-        }
-    }
     return links;
 }
 export async function searchLinks() {
@@ -167,7 +159,7 @@ export async function searchLinks() {
     return window.sessionStorage.getItem(key);
 }
 // Helper: parse urls string into array
-function parseUrls(urls) {
+export function parseUrls(urls) {
     try {
         const trimmed = (urls || '').trim();
         if (trimmed.startsWith('[')) {
@@ -190,7 +182,7 @@ function normalizeUrl(u) {
     return u.replace(/\/$/, '');
 }
 // Helper: build compact title->url lines for model prompt
-function buildListForModel(articleUrls) {
+export function buildListForModel(articleUrls) {
     return articleUrls
         .map((u) => {
         try {
@@ -212,7 +204,7 @@ function buildFullPrompt(prompt, listForModel) {
     return `${instructions}\nAvailable articles (title -> url):\n${listForModel}\nUser prompt: ${prompt}`;
 }
 // Helper: process streaming response from Gemini, detect FINAL_LINK and redirect
-async function postAndStream(fullPrompt, articleUrls, geminiQuestion, 
+export async function postAndStream(fullPrompt, articleUrls, geminiQuestion, 
 // optional cleanup callback to remove a loading UI created by caller
 loaderCleanup) {
     const headers = {
@@ -339,7 +331,7 @@ export async function callGemini(prompt, urls) {
     }
 }
 // Create a simple loader inside a parent element and return a cleanup function
-function createGeminiLoader(parent) {
+export function createGeminiLoader(parent) {
     const br = document.createElement('br');
     const loader = document.createElement('span');
     loader.className = 'gemini-loader';
