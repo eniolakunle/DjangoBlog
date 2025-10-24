@@ -181,6 +181,51 @@ export function parseUrls(urls) {
 function normalizeUrl(u) {
     return u.replace(/\/$/, '');
 }
+// Top-level helper: decode a Uint8Array chunk to string
+function decodeChunk(value) {
+    const decoder = new TextDecoder();
+    return decoder.decode(value);
+}
+// Top-level helper: extract candidate text from a single SSE line (returns null if none)
+function extractTextFromSseLine(line) {
+    if (!line.startsWith('data: '))
+        return null;
+    try {
+        const jsonData = JSON.parse(line.slice(6));
+        return jsonData.candidates?.[0]?.content?.parts?.[0]?.text || null;
+    }
+    catch (e) {
+        return null;
+    }
+}
+// Top-level helper: check accumulatedText for FINAL_LINK and handle redirect if matched
+async function checkForFinalLinkAndRedirect(accumulated, normalizedSet, loaderCleanup, geminiQuestion, reader) {
+    const finalMatch = accumulated.match(/FINAL_LINK:\s*(https?:\/\/[^^\s]+)/i);
+    if (finalMatch && finalMatch[1]) {
+        const foundUrl = normalizeUrl(finalMatch[1]);
+        if (normalizedSet.has(foundUrl)) {
+            try {
+                loaderCleanup?.();
+            }
+            catch (e) {
+                /* ignore cleanup errors */
+            }
+            geminiQuestion.textContent = "Here's an article just for you. Enjoy!";
+            try {
+                if (reader)
+                    await reader.cancel();
+            }
+            catch (e) {
+                /* ignore */
+            }
+            setTimeout(() => {
+                window.location.href = foundUrl;
+            }, 300);
+            return true;
+        }
+    }
+    return false;
+}
 // Helper: build compact title->url lines for model prompt
 export function buildListForModel(articleUrls) {
     return articleUrls
@@ -236,67 +281,21 @@ loaderCleanup) {
     const decoder = new TextDecoder();
     let accumulatedText = '';
     const normalizedSet = new Set(articleUrls.map(normalizeUrl));
-    // Track whether we've removed the loading UI yet
-    // let firstChunkHandled = false;
+    // Use top-level helpers
     while (true) {
         const { done, value } = await reader.read();
         if (done)
             break;
-        const chunk = decoder.decode(value);
+        const chunk = decodeChunk(value);
         const lines = chunk.split('\n');
         for (const line of lines) {
-            if (!line.startsWith('data: '))
+            const newText = extractTextFromSseLine(line);
+            if (!newText)
                 continue;
-            try {
-                const jsonData = JSON.parse(line.slice(6));
-                const newText = jsonData.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (newText) {
-                    // On first non-empty chunk, remove the loading animation (if any)
-                    // if (!firstChunkHandled) {
-                    //   try {
-                    //     loaderCleanup?.();
-                    //   } catch (e) {
-                    //     /* ignore cleanup errors */
-                    //   }
-                    //   firstChunkHandled = true;
-                    // }
-                    accumulatedText += newText;
-                    // geminiQuestion.textContent = accumulatedText;
-                    const finalMatch = accumulatedText.match(/FINAL_LINK:\s*(https?:\/\/[^^\s]+)/i);
-                    if (finalMatch && finalMatch[1]) {
-                        const foundUrl = normalizeUrl(finalMatch[1]);
-                        if (normalizedSet.has(foundUrl)) {
-                            // Show a brief well-wish in the header, then redirect.
-                            try {
-                                loaderCleanup?.();
-                            }
-                            catch (e) {
-                                /* ignore cleanup errors */
-                            }
-                            geminiQuestion.textContent = "Here's an article just for you. Enjoy!";
-                            try {
-                                await reader.cancel();
-                            }
-                            catch (e) {
-                                /* ignore */
-                            }
-                            // try {
-                            //   loaderCleanup?.();
-                            // } catch (e) {
-                            //   /* ignore */
-                            // }
-                            // Small delay so the user sees the message briefly before navigation
-                            setTimeout(() => {
-                                window.location.href = foundUrl;
-                            }, 300);
-                            return;
-                        }
-                    }
-                }
-            }
-            catch (e) {
-                // ignore parse errors for non-JSON SSE lines
-            }
+            accumulatedText += newText;
+            const handled = await checkForFinalLinkAndRedirect(accumulatedText, normalizedSet, loaderCleanup, geminiQuestion, reader);
+            if (handled)
+                return;
         }
     }
     // Ensure loader removed if stream completes without final link
