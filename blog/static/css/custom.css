@@ -14,6 +14,7 @@
     --dark-nav-background: #333;
     --button-bottom: 20px;
     --button-right: 20px;
+    --button-left: 20px;
     --button-width: 50px;
     --button-height: 50px;
 }
@@ -70,6 +71,23 @@ fieldset {
     cursor: pointer;
     font-size: 18px;
     font-weight: bold;
+    z-index: 1001;
+    transition: background-color .3s ease-in-out;
+}
+
+.search-button {
+    position: fixed;
+    border: none;
+    bottom: var(--button-bottom);
+    left: var(--button-left);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: var(--button-width);
+    height: var(--button-height);
+    font-size: 50px;
     z-index: 1001;
     transition: background-color .3s ease-in-out;
 }
@@ -208,9 +226,21 @@ fieldset {
         box-shadow: none;
         transition: background-color .3s ease-in-out;
     }
-
+    .search-button {
+            position: fixed;
+            top: 0px;
+            left: 20px;
+            background: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor:pointer;
+            z-index: 1001;
+            box-shadow: none;
+            transition: background-color .3s ease-in-out;
+        }
     @media (prefers-color-scheme: dark) {
-        .menu-button {
+        .menu-button, .search-button {
             color: white;
         }
     }
@@ -243,3 +273,68 @@ fieldset {
   .tag:hover {
     opacity: 0.85;
   }
+
+/* Search Dialog Styles */
+.search-dialog {
+    padding: 20px;
+    border-radius: 8px;
+    border: var(--card-border);
+    box-shadow: var(--card-shadow);
+    background: var(--card-background);
+    max-width: 400px;
+    width: 90%;
+}
+
+.search-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.931);
+}
+
+.search-dialog h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.search-dialog input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.dialog-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.dialog-buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+}
+
+.dialog-buttons button[id="search-close"] {
+    background-color: #6c757d;
+    color: white;
+}
+
+@media (prefers-color-scheme: dark) {
+    .search-dialog {
+        background: var(--dark-card-background);
+        border: var(--dark-card-border);
+        color: white;
+    }
+
+    .search-dialog input {
+        background: #333;
+        border-color: #555;
+        color: white;
+    }
+}
+

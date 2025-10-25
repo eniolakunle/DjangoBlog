@@ -1,13 +1,17 @@
 import {
-  intersectingObserver,
-  linkHandler,
   fadeTransition,
   endlessScrolling,
-} from "./functions.js";
+  searchLinks,
+  callGemini
+  //@ts-expect-error
+} from "./functions.js?v=1.0.3";
+
+
 
 function toggleMenu(): void {
   var menu = document.getElementById("menu");
-  (menu as HTMLElement).style.display = (menu as HTMLElement).style.display === "flex" ? "none" : "flex";
+  (menu as HTMLElement).style.display =
+    (menu as HTMLElement).style.display === "flex" ? "none" : "flex";
 }
 
 function formatTwitterButton(): void {
@@ -30,7 +34,11 @@ function formatTwitterButton(): void {
 function clearMenuOnClick(event: MouseEvent) {
   var menu = document.getElementById("menu");
   var menuButton = document.getElementById("menu-button");
-  if (event.target instanceof Node && !(menu as HTMLElement).contains(event.target) && !(menuButton as HTMLElement).contains(event.target)) {
+  if (
+    event.target instanceof Node &&
+    !(menu as HTMLElement).contains(event.target) &&
+    !(menuButton as HTMLElement).contains(event.target)
+  ) {
     (menu as HTMLElement).style.display = "none";
   }
 }
@@ -74,6 +82,60 @@ function shareOnClick(): void {
     (shareButton as HTMLElement).style.display = "none"; // Hide the button if Web Share API is not supported
   }
 }
+
+// Search Dialog functionality
+async function setupSearchDialog(): Promise<void> {
+    const searchButton = document.getElementById('search-button');
+    const searchDialog = document.getElementById('search-dialog') as HTMLDialogElement;
+    const searchClose = document.getElementById('search-close');
+    const searchEnter = document.getElementById('search-enter');
+    // const searchForm = searchDialog?.querySelector('form');
+    const searchInput = document.getElementById('search-input') as HTMLInputElement;
+    const geminiContext = await searchLinks();
+
+    // Open dialog when search button is clicked
+    searchButton?.addEventListener('click', () => {
+        searchDialog?.showModal();
+        searchInput?.focus();
+    });
+
+    // Close dialog when cancel button is clicked
+    searchClose?.addEventListener('click', () => {
+        searchDialog?.close();
+    });
+
+    // Handle form submission
+    searchEnter?.addEventListener('click', (e) => {
+        e.preventDefault();
+        const searchQuery = searchInput?.value.trim();
+        if (searchQuery) {
+          callGemini(searchQuery, geminiContext as string)
+            // window.location.href = `/search/?q=${encodeURIComponent(searchQuery)}`;
+        }
+        // searchDialog?.close();
+    });
+
+  // Prevent Enter from closing the dialog: intercept Enter and trigger the search button click
+  searchDialog?.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      // Allow Enter inside textareas
+      const active = document.activeElement as HTMLElement | null;
+      if (active && active.tagName.toLowerCase() === 'textarea') return;
+      e.preventDefault();
+      // Trigger the click handler for the search-enter button without closing the dialog
+      searchEnter?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    }
+  });
+
+    // Close dialog when clicking backdrop
+    searchDialog?.addEventListener('click', (e: MouseEvent) => {
+        if (e.target === searchDialog) {
+            searchDialog?.close();
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', setupSearchDialog);
 
 document.addEventListener("DOMContentLoaded", fadeTransition);
 // endless scrolling is in below listener

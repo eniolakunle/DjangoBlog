@@ -62,6 +62,7 @@
                         <a href="{% url 'blog:post_list' %}">Home</a>
                         <a href="https://github.com/eniolakunle/DjangoBlog" target="_blank">GitHub</a>
                     </div>
+                    <button class="search-button" id="search-button" title="Search">⌕</button>
                 </nav>
             </div>
             <div id="share-container">
@@ -81,6 +82,17 @@
             </div>
         </header>
 
+        <!-- Search Dialog -->
+        <dialog id="search-dialog" class="search-dialog">
+            <form method="dialog">
+                <h2 id="gemini-question" class="gemini-question">What Are You Looking For?</h2>
+                <input type="text" id="search-input" placeholder="I need some motivation for the week...">
+                <div class="dialog-buttons">
+                    <button type="button" id="search-enter">Enter</button>
+                    <button type="button" id="search-close">Cancel</button>
+                </div>
+            </form>
+        </dialog>
         
         <main id="content">
             {% block content %}
@@ -94,7 +106,7 @@
         </footer>
         
         <script async defer src="https://dailyverses.net/get/random.js?language=esv"></script>
-        <script type="module" src="{% static 'js/scripts.js' %}?v=1.0.4"></script>
+        <script type="module" src="{% static 'js/scripts.js' %}?v=1.0.7"></script>
         <script type="module" src="{% static 'js/splash.js' %}?v=1.0.0"></script>
 
     </body>
