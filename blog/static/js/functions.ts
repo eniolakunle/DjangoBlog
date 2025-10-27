@@ -308,7 +308,6 @@ export async function postAndStream(
   loaderCleanup?: () => void
 ): Promise<void> {
   const headers = {
-  "x-goog-api-key": "AIzaSyBTdkQ1Q-lGBx48rLV025JeMF7NhzSeitI",
   "Content-Type": "application/json",
   }
 

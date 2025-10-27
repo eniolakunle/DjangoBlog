@@ -253,7 +253,6 @@ export async function postAndStream(sysPrompt, articleUrls, geminiQuestion,
 // optional cleanup callback to remove a loading UI created by caller
 loaderCleanup) {
     const headers = {
-        "x-goog-api-key": "AIzaSyBTdkQ1Q-lGBx48rLV025JeMF7NhzSeitI",
         "Content-Type": "application/json",
     };
     const systemPrompt = getSystemInstruction(sysPrompt);
