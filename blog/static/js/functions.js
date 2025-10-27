@@ -244,32 +244,29 @@ export function buildListForModel(articleUrls) {
         .join('\n');
 }
 // Helper: build the model prompt with strict instructions
-function buildFullPrompt(prompt, listForModel) {
-    const instructions = `You are a concise article selector. DO NOT ask any follow-up questions. Based only on the user's prompt and the list below, choose the single best article. The final answer MUST be a single line starting with EXACTLY: FINAL_LINK: <url> and the <url> must be one of the provided URLs below. Do not include any other text.`;
-    return `${instructions}\nAvailable articles (title -> url):\n${listForModel}\nUser prompt: ${prompt}`;
+function buildFullPrompt(listForModel) {
+    const instructions = `You are a concise article selector. Based only on the user's prompt and the list below, choose the single best article. If the user's response doesn't give a clear understanding of what they are looking for, ask a follow-up question. Each follow up question should only be one sentence that is fairly short, but concise, susinct, and effective. If you find an an article that fits the user's request return an answer immediately, otherwise ask at most 3 follow up questions to understand the user's intent better and return a final answer. The final answer MUST be a single line starting with EXACTLY: FINAL_LINK: <url> and the <url> must be one of the provided URLs below. Do not include any other text.`;
+    return `${instructions}\nAvailable articles (title -> url):\n${listForModel}`;
 }
 // Helper: process streaming response from Gemini, detect FINAL_LINK and redirect
-export async function postAndStream(fullPrompt, articleUrls, geminiQuestion, 
+export async function postAndStream(sysPrompt, articleUrls, geminiQuestion, 
 // optional cleanup callback to remove a loading UI created by caller
 loaderCleanup) {
     const headers = {
+        "x-goog-api-key": "AIzaSyBTdkQ1Q-lGBx48rLV025JeMF7NhzSeitI",
         "Content-Type": "application/json",
     };
+    const systemPrompt = getSystemInstruction(sysPrompt);
+    const fetchBody = JSON.stringify({
+        system_instruction: systemPrompt,
+        contents: getConversation(),
+    });
+    console.log(`BODY: ${fetchBody}`);
     const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent?alt=sse";
     const response = await fetch(url, {
         method: 'POST',
         headers: headers,
-        body: JSON.stringify({
-            contents: [
-                {
-                    parts: [
-                        {
-                            text: fullPrompt,
-                        },
-                    ],
-                },
-            ],
-        }),
+        body: fetchBody,
     });
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -305,6 +302,10 @@ loaderCleanup) {
     catch (e) {
         /* ignore */
     }
+    addModelMessage(accumulatedText);
+    geminiQuestion.textContent = accumulatedText;
+    const searchInput = document.getElementById('search-input');
+    searchInput.value = '';
 }
 // Refactored main: orchestrate helpers
 export async function callGemini(prompt, urls) {
@@ -318,16 +319,51 @@ export async function callGemini(prompt, urls) {
         return;
     }
     const listForModel = buildListForModel(articleUrls);
-    const fullPrompt = buildFullPrompt(prompt, listForModel);
+    const fullPrompt = buildFullPrompt(listForModel);
     try {
         // create a minimal loading UI (animated dots) inserted into geminiQuestion
         const cleanup = createGeminiLoader(geminiQuestion);
+        addUserMessage(prompt);
         await postAndStream(fullPrompt, articleUrls, geminiQuestion, cleanup);
     }
     catch (error) {
         console.error('Error:', error);
         geminiQuestion.textContent = 'Sorry, something went wrong. Please try again.';
     }
+}
+// In-memory conversation store (kept simple and small)
+const conversationStore = [];
+// Create a ConversationMessage object (pure, small function)
+export function makeMessage(role, text) {
+    return {
+        role,
+        parts: [{ text }],
+    };
+}
+// Append a user message to the conversation and return it
+export function addUserMessage(text) {
+    const msg = makeMessage('user', text);
+    conversationStore.push(msg);
+    return msg;
+}
+// Append a model message to the conversation and return it
+export function addModelMessage(text) {
+    const msg = makeMessage('model', text);
+    conversationStore.push(msg);
+    return msg;
+}
+// Append a system instruction message to the conversation and return it
+export function getSystemInstruction(text) {
+    const msg = makeMessage('system_instruction', text);
+    return msg;
+}
+// Return a shallow copy of the conversation (prevents accidental external mutation)
+export function getConversation() {
+    return conversationStore.slice();
+}
+// Clear the in-memory conversation (useful for tests or starting new dialogs)
+export function clearConversation() {
+    conversationStore.length = 0;
 }
 // Create a simple loader inside a parent element and return a cleanup function
 export function createGeminiLoader(parent) {

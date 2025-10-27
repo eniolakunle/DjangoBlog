@@ -71,7 +71,7 @@ async function setupSearchDialog() {
     const searchDialog = document.getElementById('search-dialog');
     const searchClose = document.getElementById('search-close');
     const searchEnter = document.getElementById('search-enter');
-    // const searchForm = searchDialog?.querySelector('form');
+    const searchForm = document.getElementById('search-form');
     const searchInput = document.getElementById('search-input');
     const geminiContext = await searchLinks();
     // Open dialog when search button is clicked
@@ -82,6 +82,7 @@ async function setupSearchDialog() {
     // Close dialog when cancel button is clicked
     searchClose?.addEventListener('click', () => {
         searchDialog?.close();
+        searchForm?.reset();
     });
     // Handle form submission
     searchEnter?.addEventListener('click', (e) => {
@@ -109,6 +110,7 @@ async function setupSearchDialog() {
     searchDialog?.addEventListener('click', (e) => {
         if (e.target === searchDialog) {
             searchDialog?.close();
+            searchForm?.reset();
         }
     });
 }
