@@ -187,7 +187,6 @@ export function extractLinks(xmlDoc: Document): (string | undefined)[] {
   return links;
 }
 
-
 export async function searchLinks(): Promise<string | null> {
   const key = "eniolakunle_XML";
   const cacheExists = window.sessionStorage.getItem(key);
@@ -199,15 +198,14 @@ export async function searchLinks(): Promise<string | null> {
     window.sessionStorage.setItem(key, JSON.stringify(links));
   }
 
-  return window.sessionStorage.getItem(key)
+  return window.sessionStorage.getItem(key);
 }
-
 
 // Helper: parse urls string into array
 export function parseUrls(urls: string): string[] {
   try {
-    const trimmed = (urls || '').trim();
-    if (trimmed.startsWith('[')) {
+    const trimmed = (urls || "").trim();
+    if (trimmed.startsWith("[")) {
       return JSON.parse(trimmed) as string[];
     }
     return trimmed
@@ -215,7 +213,7 @@ export function parseUrls(urls: string): string[] {
       .map((s) => s.trim())
       .filter(Boolean);
   } catch (e) {
-    return (urls || '')
+    return (urls || "")
       .split(/,|\n/)
       .map((s) => s.trim())
       .filter(Boolean);
@@ -224,7 +222,7 @@ export function parseUrls(urls: string): string[] {
 
 // Helper: normalize url for comparison (strip trailing slash)
 function normalizeUrl(u: string): string {
-  return u.replace(/\/$/, '');
+  return u.replace(/\/$/, "");
 }
 
 // Top-level helper: decode a Uint8Array chunk to string
@@ -235,7 +233,7 @@ function decodeChunk(value: Uint8Array | undefined | null): string {
 
 // Top-level helper: extract candidate text from a single SSE line (returns null if none)
 function extractTextFromSseLine(line: string): string | null {
-  if (!line.startsWith('data: ')) return null;
+  if (!line.startsWith("data: ")) return null;
   try {
     const jsonData = JSON.parse(line.slice(6));
     return jsonData.candidates?.[0]?.content?.parts?.[0]?.text || null;
@@ -244,36 +242,34 @@ function extractTextFromSseLine(line: string): string | null {
   }
 }
 
-// Top-level helper: check accumulatedText for FINAL_LINK and handle redirect if matched
-async function checkForFinalLinkAndRedirect(
+// Top-level helper: check accumulatedText for FINAL_LINK and return whether the found url
+// is in the provided set. This function only performs the check and returns a boolean.
+export function checkForFinalLink(
   accumulated: string,
-  normalizedSet: Set<string>,
-  loaderCleanup: (() => void) | undefined,
-  geminiQuestion: HTMLHeadingElement,
-  reader?: ReadableStreamDefaultReader<Uint8Array>
-): Promise<boolean> {
-  const finalMatch = accumulated.match(/FINAL_LINK:\s*(https?:\/\/[^^\s]+)/i);
+  normalizedSet: Set<string>
+): [boolean, string] {
+  const finalMatch = accumulated.match(/\s*(https?:\/\/[^^\s]+)/i);
   if (finalMatch && finalMatch[1]) {
     const foundUrl = normalizeUrl(finalMatch[1]);
-    if (normalizedSet.has(foundUrl)) {
-      try {
-        loaderCleanup?.();
-      } catch (e) {
-        /* ignore cleanup errors */
-      }
-      geminiQuestion.textContent = "Here's an article just for you. Enjoy!";
-      try {
-        if (reader) await reader.cancel();
-      } catch (e) {
-        /* ignore */
-      }
-      setTimeout(() => {
-        window.location.href = foundUrl;
-      }, 300);
-      return true;
-    }
+    return [normalizedSet.has(foundUrl), foundUrl];
   }
-  return false;
+  return [false, ""];
+}
+
+// Top-level helper: perform the UI cleanup, cancel the reader and redirect to the
+// FINAL_LINK. This function assumes the link is present and in the set (caller should
+// check with `checkForFinalLink` first). It mirrors the previous behavior exactly.
+export async function redirectToFinalLink(
+  geminiQuestion: HTMLHeadingElement,
+  foundUrl: string,
+  reader?: ReadableStreamDefaultReader<Uint8Array>
+): Promise<void> {
+  geminiQuestion.textContent = "Here's an article just for you. Enjoy!";
+  if (reader) await reader.cancel();
+
+  setTimeout(() => {
+    window.location.href = foundUrl;
+  }, 300);
 }
 
 // Helper: build compact title->url lines for model prompt
@@ -282,15 +278,15 @@ export function buildListForModel(articleUrls: string[]): string {
     .map((u) => {
       try {
         const tidy = normalizeUrl(u);
-        const parts = tidy.split('/');
+        const parts = tidy.split("/");
         const slug = parts[parts.length - 1] || tidy;
-        const title = slug.replace(/-/g, ' ');
+        const title = slug.replace(/-/g, " ");
         return `${title} -> ${tidy}`;
       } catch (e) {
         return u;
       }
     })
-    .join('\n');
+    .join("\n");
 }
 
 // Helper: build the model prompt with strict instructions
@@ -308,19 +304,20 @@ export async function postAndStream(
   loaderCleanup?: () => void
 ): Promise<void> {
   const headers = {
-  "Content-Type": "application/json",
-  }
+    "Content-Type": "application/json",
+  };
 
-  const systemPrompt = getSystemInstruction(sysPrompt)
+  const systemPrompt = getSystemInstruction(sysPrompt);
   const fetchBody = JSON.stringify({
-      system_instruction: systemPrompt,
-      contents: getConversation(),
-    })
+    system_instruction: systemPrompt,
+    contents: getConversation(),
+  });
 
   // console.log(`BODY: ${fetchBody}`);
-  const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent?alt=sse";
+  const url =
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent?alt=sse";
   const response = await fetch(url, {
-    method: 'POST',
+    method: "POST",
     headers: headers,
     body: fetchBody,
   });
@@ -331,60 +328,60 @@ export async function postAndStream(
 
   const reader = response.body?.getReader();
   if (!reader) {
-    throw new Error('Response body is null');
+    throw new Error("Response body is null");
   }
 
   const decoder = new TextDecoder();
-  let accumulatedText = '';
+  let accumulatedText = "";
   const normalizedSet = new Set(articleUrls.map(normalizeUrl));
 
   // Use top-level helpers
 
   while (true) {
-      const { done, value } = await reader!.read();
+    const { done, value } = await reader!.read();
     if (done) break;
 
     const chunk = decodeChunk(value as Uint8Array);
-    const lines = chunk.split('\n');
+    const lines = chunk.split("\n");
 
     for (const line of lines) {
       const newText = extractTextFromSseLine(line);
       if (!newText) continue;
       accumulatedText += newText;
-      const handled = await checkForFinalLinkAndRedirect(
-        accumulatedText,
-        normalizedSet,
-        loaderCleanup,
-        geminiQuestion,
-        reader!
-      );
-      if (handled) return;
+      // Split check and redirect responsibilities: first check, then redirect if needed.
+      const [hasFinal, url] = checkForFinalLink(accumulatedText, normalizedSet);
+      if (hasFinal) {
+        loaderCleanup?.();
+
+        await redirectToFinalLink(geminiQuestion, url, reader!);
+        return;
+      }
     }
   }
 
   // Ensure loader removed if stream completes without final link
-  try {
-    loaderCleanup?.();
-  } catch (e) {
-    /* ignore */
-  }
+  loaderCleanup?.();
 
   addModelMessage(accumulatedText);
   geminiQuestion.textContent = accumulatedText;
-  const searchInput = document.getElementById('search-input') as HTMLInputElement;
-  searchInput.value = '';
+  const searchInput = document.getElementById(
+    "search-input"
+  ) as HTMLInputElement;
+  searchInput.value = "";
 }
 
 // Refactored main: orchestrate helpers
 export async function callGemini(prompt: string, urls: string): Promise<void> {
-  const geminiQuestion = document.getElementById('gemini-question') as HTMLHeadingElement;
+  const geminiQuestion = document.getElementById(
+    "gemini-question"
+  ) as HTMLHeadingElement;
   if (!geminiQuestion) return;
 
-  geminiQuestion.textContent = '';
+  geminiQuestion.textContent = "";
 
   const articleUrls = parseUrls(urls);
   if (!articleUrls.length) {
-    geminiQuestion.textContent = 'No article URLs provided.';
+    geminiQuestion.textContent = "No article URLs provided.";
     return;
   }
 
@@ -398,8 +395,9 @@ export async function callGemini(prompt: string, urls: string): Promise<void> {
     addUserMessage(prompt);
     await postAndStream(fullPrompt, articleUrls, geminiQuestion, cleanup);
   } catch (error) {
-    console.error('Error:', error);
-    geminiQuestion.textContent = 'Sorry, something went wrong. Please try again.';
+    console.error("Error:", error);
+    geminiQuestion.textContent =
+      "Sorry, something went wrong. Please try again.";
   }
 }
 
@@ -410,7 +408,7 @@ type ConversationPart = {
 };
 
 type ConversationMessage = {
-  role: 'user' | 'model' | 'system_instruction';
+  role: "user" | "model" | "system_instruction";
   parts: ConversationPart[];
 };
 
@@ -418,7 +416,10 @@ type ConversationMessage = {
 const conversationStore: ConversationMessage[] = [];
 
 // Create a ConversationMessage object (pure, small function)
-export function makeMessage(role: 'user' | 'model' | 'system_instruction', text: string): ConversationMessage {
+export function makeMessage(
+  role: "user" | "model" | "system_instruction",
+  text: string
+): ConversationMessage {
   return {
     role,
     parts: [{ text }],
@@ -427,21 +428,21 @@ export function makeMessage(role: 'user' | 'model' | 'system_instruction', text:
 
 // Append a user message to the conversation and return it
 export function addUserMessage(text: string): ConversationMessage {
-  const msg = makeMessage('user', text);
+  const msg = makeMessage("user", text);
   conversationStore.push(msg);
   return msg;
 }
 
 // Append a model message to the conversation and return it
 export function addModelMessage(text: string): ConversationMessage {
-  const msg = makeMessage('model', text);
+  const msg = makeMessage("model", text);
   conversationStore.push(msg);
   return msg;
 }
 
 // Append a system instruction message to the conversation and return it
 export function getSystemInstruction(text: string): ConversationMessage {
-  const msg = makeMessage('system_instruction', text);
+  const msg = makeMessage("system_instruction", text);
   return msg;
 }
 
@@ -457,17 +458,17 @@ export function clearConversation(): void {
 
 // Create a simple loader inside a parent element and return a cleanup function
 export function createGeminiLoader(parent: HTMLElement): () => void {
-  const br = document.createElement('br');
-  const loader = document.createElement('span');
-  loader.className = 'gemini-loader';
-  loader.textContent = 'Thinking';
+  const br = document.createElement("br");
+  const loader = document.createElement("span");
+  loader.className = "gemini-loader";
+  loader.textContent = "Thinking";
   parent.appendChild(br);
   parent.appendChild(loader);
 
-  let dots = '';
+  let dots = "";
   const iv = window.setInterval(() => {
-    dots = dots.length < 3 ? dots + '.' : '';
-    loader.textContent = 'Thinking' + dots;
+    dots = dots.length < 3 ? dots + "." : "";
+    loader.textContent = "Thinking" + dots;
   }, 400);
 
   return () => {
