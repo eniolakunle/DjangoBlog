@@ -294,6 +294,17 @@ function buildFullPrompt(listForModel: string): string {
   const instructions = `You are a concise article selector. Based only on the user's prompt and the list below, choose the single best article. If the user's response doesn't give a clear understanding of what they are looking for, ask a follow-up question. Each follow up question should only be one sentence that is fairly short, but concise, susinct, and effective. If you find an an article that fits the user's request return an answer immediately, otherwise ask at most 3 follow up questions to understand the user's intent better and return a final answer. The final answer MUST be a single line starting with EXACTLY: FINAL_LINK: <url> and the <url> must be one of the provided URLs below. Do not include any other text.`;
   return `${instructions}\nAvailable articles (title -> url):\n${listForModel}`;
 }
+function checkResponse(response: Response): ReadableStreamDefaultReader {
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const reader = response.body?.getReader();
+  if (!reader) {
+    throw new Error("Response body is null");
+  }
+  return reader;
+}
 
 // Helper: process streaming response from Gemini, detect FINAL_LINK and redirect
 export async function postAndStream(
@@ -322,16 +333,7 @@ export async function postAndStream(
     body: fetchBody,
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  const reader = response.body?.getReader();
-  if (!reader) {
-    throw new Error("Response body is null");
-  }
-
-  const decoder = new TextDecoder();
+  const reader = checkResponse(response);
   let accumulatedText = "";
   const normalizedSet = new Set(articleUrls.map(normalizeUrl));
 
