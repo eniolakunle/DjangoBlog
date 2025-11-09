@@ -2,11 +2,9 @@ import {
   fadeTransition,
   endlessScrolling,
   searchLinks,
-  callGemini
+  callGemini,
   //@ts-expect-error
-} from "./functions.js?v=1.0.4";
-
-
+} from "./functions.js?v=1.0.5";
 
 function toggleMenu(): void {
   var menu = document.getElementById("menu");
@@ -85,59 +83,65 @@ function shareOnClick(): void {
 
 // Search Dialog functionality
 async function setupSearchDialog(): Promise<void> {
-    const searchButton = document.getElementById('search-button');
-    const searchDialog = document.getElementById('search-dialog') as HTMLDialogElement;
-    const searchClose = document.getElementById('search-close');
-    const searchEnter = document.getElementById('search-enter');
-    const searchForm = document.getElementById('search-form') as HTMLFormElement;
-    const searchInput = document.getElementById('search-input') as HTMLInputElement;
-    const geminiContext = await searchLinks();
+  const searchButton = document.getElementById("search-button");
+  const searchDialog = document.getElementById(
+    "search-dialog"
+  ) as HTMLDialogElement;
+  const searchClose = document.getElementById("search-close");
+  const searchEnter = document.getElementById("search-enter");
+  const searchForm = document.getElementById("search-form") as HTMLFormElement;
+  const searchInput = document.getElementById(
+    "search-input"
+  ) as HTMLInputElement;
+  const geminiContext = await searchLinks();
 
-    // Open dialog when search button is clicked
-    searchButton?.addEventListener('click', () => {
-        searchDialog?.showModal();
-        searchInput?.focus();
-    });
+  // Open dialog when search button is clicked
+  searchButton?.addEventListener("click", () => {
+    searchDialog?.showModal();
+    searchInput?.focus();
+  });
 
-    // Close dialog when cancel button is clicked
-    searchClose?.addEventListener('click', () => {
-        searchDialog?.close();
-        searchForm?.reset();
-    });
+  // Close dialog when cancel button is clicked
+  searchClose?.addEventListener("click", () => {
+    searchDialog?.close();
+    searchForm?.reset();
+  });
 
-    // Handle form submission
-    searchEnter?.addEventListener('click', (e) => {
-        e.preventDefault();
-        const searchQuery = searchInput?.value.trim();
-        if (searchQuery) {
-          callGemini(searchQuery, geminiContext as string)
-            // window.location.href = `/search/?q=${encodeURIComponent(searchQuery)}`;
-        }
-        // searchDialog?.close();
-    });
+  // Handle form submission
+  searchEnter?.addEventListener("click", (e) => {
+    e.preventDefault();
+    const searchQuery = searchInput?.value.trim();
+    if (searchQuery) {
+      callGemini(searchQuery, geminiContext as string);
+      // window.location.href = `/search/?q=${encodeURIComponent(searchQuery)}`;
+    }
+    // searchDialog?.close();
+  });
 
   // Prevent Enter from closing the dialog: intercept Enter and trigger the search button click
-  searchDialog?.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (e.key === 'Enter') {
+  searchDialog?.addEventListener("keydown", (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
       // Allow Enter inside textareas
       const active = document.activeElement as HTMLElement | null;
-      if (active && active.tagName.toLowerCase() === 'textarea') return;
+      if (active && active.tagName.toLowerCase() === "textarea") return;
       e.preventDefault();
       // Trigger the click handler for the search-enter button without closing the dialog
-      searchEnter?.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+      searchEnter?.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, cancelable: true })
+      );
     }
   });
 
-    // Close dialog when clicking backdrop
-    searchDialog?.addEventListener('click', (e: MouseEvent) => {
-        if (e.target === searchDialog) {
-            searchDialog?.close();
-            searchForm?.reset();
-        }
-    });
+  // Close dialog when clicking backdrop
+  searchDialog?.addEventListener("click", (e: MouseEvent) => {
+    if (e.target === searchDialog) {
+      searchDialog?.close();
+      searchForm?.reset();
+    }
+  });
 }
 
-document.addEventListener('DOMContentLoaded', setupSearchDialog);
+document.addEventListener("DOMContentLoaded", setupSearchDialog);
 
 document.addEventListener("DOMContentLoaded", fadeTransition);
 // endless scrolling is in below listener
