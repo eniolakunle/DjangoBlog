@@ -10,6 +10,8 @@ import {
   extractLinks,
   parseUrls,
   buildListForModel,
+  checkForFinalLink,
+  redirectToFinalLink,
   searchLinks,
   postAndStream,
   callGemini,
@@ -263,6 +265,46 @@ describe("helpers and integration", () => {
     );
     // ensure reader.cancel was attempted
     expect(reader.cancel).toHaveBeenCalled();
+  });
+
+  test("checkForFinalLink returns expected boolean and url", () => {
+    const accumulated = "Some text\nFINAL_LINK: https://site/one some extra";
+    const normalizedSet = new Set(["https://site/one"]);
+    const [has, found] = checkForFinalLink(accumulated, normalizedSet);
+    expect(has).toBe(true);
+    expect(found).toBe("https://site/one");
+
+    const normalizedSet2 = new Set(["https://site/two"]);
+    const [hasTwo, foundTwo] = checkForFinalLink(accumulated, normalizedSet2);
+    expect(hasTwo).toBe(false);
+    expect(foundTwo).toBe("https://site/one");
+
+    const [noHas, noFound] = checkForFinalLink("no final here", normalizedSet);
+    expect(noHas).toBe(false);
+    expect(noFound).toBe("");
+  });
+
+  test("redirectToFinalLink updates UI, cancels reader and redirects after timeout", async () => {
+    jest.useFakeTimers();
+    const geminiQuestion = document.createElement("h1");
+    const reader = { cancel: jest.fn().mockResolvedValue(undefined) };
+
+    // stub window.location
+    delete window.location;
+    window.location = { href: "about:blank" };
+
+    await redirectToFinalLink(geminiQuestion, "https://site/one", reader);
+
+    // immediate effects
+    expect(geminiQuestion.textContent).toContain(
+      "Here's an article just for you"
+    );
+    expect(reader.cancel).toHaveBeenCalled();
+
+    // after timeout, location should change
+    jest.advanceTimersByTime(300);
+    expect(window.location.href).toBe("https://site/one");
+    jest.useRealTimers();
   });
 
   test("callGemini handles missing gemini-question element and empty urls", async () => {

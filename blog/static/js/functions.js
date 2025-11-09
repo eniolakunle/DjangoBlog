@@ -161,8 +161,8 @@ export async function searchLinks() {
 // Helper: parse urls string into array
 export function parseUrls(urls) {
     try {
-        const trimmed = (urls || '').trim();
-        if (trimmed.startsWith('[')) {
+        const trimmed = (urls || "").trim();
+        if (trimmed.startsWith("[")) {
             return JSON.parse(trimmed);
         }
         return trimmed
@@ -171,7 +171,7 @@ export function parseUrls(urls) {
             .filter(Boolean);
     }
     catch (e) {
-        return (urls || '')
+        return (urls || "")
             .split(/,|\n/)
             .map((s) => s.trim())
             .filter(Boolean);
@@ -179,7 +179,7 @@ export function parseUrls(urls) {
 }
 // Helper: normalize url for comparison (strip trailing slash)
 function normalizeUrl(u) {
-    return u.replace(/\/$/, '');
+    return u.replace(/\/$/, "");
 }
 // Top-level helper: decode a Uint8Array chunk to string
 function decodeChunk(value) {
@@ -188,7 +188,7 @@ function decodeChunk(value) {
 }
 // Top-level helper: extract candidate text from a single SSE line (returns null if none)
 function extractTextFromSseLine(line) {
-    if (!line.startsWith('data: '))
+    if (!line.startsWith("data: "))
         return null;
     try {
         const jsonData = JSON.parse(line.slice(6));
@@ -198,33 +198,26 @@ function extractTextFromSseLine(line) {
         return null;
     }
 }
-// Top-level helper: check accumulatedText for FINAL_LINK and handle redirect if matched
-async function checkForFinalLinkAndRedirect(accumulated, normalizedSet, loaderCleanup, geminiQuestion, reader) {
-    const finalMatch = accumulated.match(/FINAL_LINK:\s*(https?:\/\/[^^\s]+)/i);
+// Top-level helper: check accumulatedText for FINAL_LINK and return whether the found url
+// is in the provided set. This function only performs the check and returns a boolean.
+export function checkForFinalLink(accumulated, normalizedSet) {
+    const finalMatch = accumulated.match(/\s*(https?:\/\/[^^\s]+)/i);
     if (finalMatch && finalMatch[1]) {
         const foundUrl = normalizeUrl(finalMatch[1]);
-        if (normalizedSet.has(foundUrl)) {
-            try {
-                loaderCleanup?.();
-            }
-            catch (e) {
-                /* ignore cleanup errors */
-            }
-            geminiQuestion.textContent = "Here's an article just for you. Enjoy!";
-            try {
-                if (reader)
-                    await reader.cancel();
-            }
-            catch (e) {
-                /* ignore */
-            }
-            setTimeout(() => {
-                window.location.href = foundUrl;
-            }, 300);
-            return true;
-        }
+        return [normalizedSet.has(foundUrl), foundUrl];
     }
-    return false;
+    return [false, ""];
+}
+// Top-level helper: perform the UI cleanup, cancel the reader and redirect to the
+// FINAL_LINK. This function assumes the link is present and in the set (caller should
+// check with `checkForFinalLink` first). It mirrors the previous behavior exactly.
+export async function redirectToFinalLink(geminiQuestion, foundUrl, reader) {
+    geminiQuestion.textContent = "Here's an article just for you. Enjoy!";
+    if (reader)
+        await reader.cancel();
+    setTimeout(() => {
+        window.location.href = foundUrl;
+    }, 300);
 }
 // Helper: build compact title->url lines for model prompt
 export function buildListForModel(articleUrls) {
@@ -232,54 +225,52 @@ export function buildListForModel(articleUrls) {
         .map((u) => {
         try {
             const tidy = normalizeUrl(u);
-            const parts = tidy.split('/');
+            const parts = tidy.split("/");
             const slug = parts[parts.length - 1] || tidy;
-            const title = slug.replace(/-/g, ' ');
+            const title = slug.replace(/-/g, " ");
             return `${title} -> ${tidy}`;
         }
         catch (e) {
             return u;
         }
     })
-        .join('\n');
+        .join("\n");
 }
 // Helper: build the model prompt with strict instructions
-function buildFullPrompt(prompt, listForModel) {
-    const instructions = `You are a concise article selector. DO NOT ask any follow-up questions. Based only on the user's prompt and the list below, choose the single best article. The final answer MUST be a single line starting with EXACTLY: FINAL_LINK: <url> and the <url> must be one of the provided URLs below. Do not include any other text.`;
-    return `${instructions}\nAvailable articles (title -> url):\n${listForModel}\nUser prompt: ${prompt}`;
+function buildFullPrompt(listForModel) {
+    const instructions = `You are a concise article selector. Based only on the user's prompt and the list below, choose the single best article. If the user's response doesn't give a clear understanding of what they are looking for, ask a follow-up question. Each follow up question should only be one sentence that is fairly short, but concise, susinct, and effective. If you find an an article that fits the user's request return an answer immediately, otherwise ask at most 3 follow up questions to understand the user's intent better and return a final answer. The final answer MUST be a single line starting with EXACTLY: FINAL_LINK: <url> and the <url> must be one of the provided URLs below. Do not include any other text.`;
+    return `${instructions}\nAvailable articles (title -> url):\n${listForModel}`;
 }
-// Helper: process streaming response from Gemini, detect FINAL_LINK and redirect
-export async function postAndStream(fullPrompt, articleUrls, geminiQuestion, 
-// optional cleanup callback to remove a loading UI created by caller
-loaderCleanup) {
-    const headers = {
-        "Content-Type": "application/json",
-    };
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent?alt=sse";
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify({
-            contents: [
-                {
-                    parts: [
-                        {
-                            text: fullPrompt,
-                        },
-                    ],
-                },
-            ],
-        }),
-    });
+function checkResponse(response) {
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
     const reader = response.body?.getReader();
     if (!reader) {
-        throw new Error('Response body is null');
+        throw new Error("Response body is null");
     }
-    const decoder = new TextDecoder();
-    let accumulatedText = '';
+    return reader;
+}
+// Helper: process streaming response from Gemini, detect FINAL_LINK and redirect
+export async function postAndStream(sysPrompt, articleUrls, geminiQuestion, 
+// optional cleanup callback to remove a loading UI created by caller
+loaderCleanup) {
+    const headers = {
+        "Content-Type": "application/json",
+    };
+    const systemPrompt = getSystemInstruction(sysPrompt);
+    const fetchBody = JSON.stringify({
+        system_instruction: systemPrompt,
+        contents: getConversation(),
+    });
+    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent?alt=sse";
+    const response = await fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: fetchBody,
+    });
+    const reader = checkResponse(response);
+    let accumulatedText = "";
     const normalizedSet = new Set(articleUrls.map(normalizeUrl));
     // Use top-level helpers
     while (true) {
@@ -287,60 +278,99 @@ loaderCleanup) {
         if (done)
             break;
         const chunk = decodeChunk(value);
-        const lines = chunk.split('\n');
+        const lines = chunk.split("\n");
         for (const line of lines) {
             const newText = extractTextFromSseLine(line);
             if (!newText)
                 continue;
             accumulatedText += newText;
-            const handled = await checkForFinalLinkAndRedirect(accumulatedText, normalizedSet, loaderCleanup, geminiQuestion, reader);
-            if (handled)
+            // Split check and redirect responsibilities: first check, then redirect if needed.
+            const [hasFinal, url] = checkForFinalLink(accumulatedText, normalizedSet);
+            if (hasFinal) {
+                loaderCleanup?.();
+                await redirectToFinalLink(geminiQuestion, url, reader);
                 return;
+            }
         }
     }
     // Ensure loader removed if stream completes without final link
-    try {
-        loaderCleanup?.();
-    }
-    catch (e) {
-        /* ignore */
-    }
+    loaderCleanup?.();
+    addModelMessage(accumulatedText);
+    geminiQuestion.textContent = accumulatedText;
+    const searchInput = document.getElementById("search-input");
+    searchInput.value = "";
 }
 // Refactored main: orchestrate helpers
 export async function callGemini(prompt, urls) {
-    const geminiQuestion = document.getElementById('gemini-question');
+    const geminiQuestion = document.getElementById("gemini-question");
     if (!geminiQuestion)
         return;
-    geminiQuestion.textContent = '';
+    geminiQuestion.textContent = "";
     const articleUrls = parseUrls(urls);
     if (!articleUrls.length) {
-        geminiQuestion.textContent = 'No article URLs provided.';
+        geminiQuestion.textContent = "No article URLs provided.";
         return;
     }
     const listForModel = buildListForModel(articleUrls);
-    const fullPrompt = buildFullPrompt(prompt, listForModel);
+    const fullPrompt = buildFullPrompt(listForModel);
     try {
         // create a minimal loading UI (animated dots) inserted into geminiQuestion
         const cleanup = createGeminiLoader(geminiQuestion);
+        addUserMessage(prompt);
         await postAndStream(fullPrompt, articleUrls, geminiQuestion, cleanup);
     }
     catch (error) {
-        console.error('Error:', error);
-        geminiQuestion.textContent = 'Sorry, something went wrong. Please try again.';
+        console.error("Error:", error);
+        geminiQuestion.textContent =
+            "Sorry, something went wrong. Please try again.";
     }
+}
+// In-memory conversation store (kept simple and small)
+const conversationStore = [];
+// Create a ConversationMessage object (pure, small function)
+export function makeMessage(role, text) {
+    return {
+        role,
+        parts: [{ text }],
+    };
+}
+// Append a user message to the conversation and return it
+export function addUserMessage(text) {
+    const msg = makeMessage("user", text);
+    conversationStore.push(msg);
+    return msg;
+}
+// Append a model message to the conversation and return it
+export function addModelMessage(text) {
+    const msg = makeMessage("model", text);
+    conversationStore.push(msg);
+    return msg;
+}
+// Append a system instruction message to the conversation and return it
+export function getSystemInstruction(text) {
+    const msg = makeMessage("system_instruction", text);
+    return msg;
+}
+// Return a shallow copy of the conversation (prevents accidental external mutation)
+export function getConversation() {
+    return conversationStore.slice();
+}
+// Clear the in-memory conversation (useful for tests or starting new dialogs)
+export function clearConversation() {
+    conversationStore.length = 0;
 }
 // Create a simple loader inside a parent element and return a cleanup function
 export function createGeminiLoader(parent) {
-    const br = document.createElement('br');
-    const loader = document.createElement('span');
-    loader.className = 'gemini-loader';
-    loader.textContent = 'Thinking';
+    const br = document.createElement("br");
+    const loader = document.createElement("span");
+    loader.className = "gemini-loader";
+    loader.textContent = "Thinking";
     parent.appendChild(br);
     parent.appendChild(loader);
-    let dots = '';
+    let dots = "";
     const iv = window.setInterval(() => {
-        dots = dots.length < 3 ? dots + '.' : '';
-        loader.textContent = 'Thinking' + dots;
+        dots = dots.length < 3 ? dots + "." : "";
+        loader.textContent = "Thinking" + dots;
     }, 400);
     return () => {
         try {
