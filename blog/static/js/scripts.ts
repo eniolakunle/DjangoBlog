@@ -104,7 +104,6 @@ async function setupSearchDialog(): Promise<void> {
   // Close dialog when cancel button is clicked
   searchClose?.addEventListener("click", () => {
     searchDialog?.close();
-    searchForm?.reset();
   });
 
   // Handle form submission
@@ -113,9 +112,7 @@ async function setupSearchDialog(): Promise<void> {
     const searchQuery = searchInput?.value.trim();
     if (searchQuery) {
       callGemini(searchQuery, geminiContext as string);
-      // window.location.href = `/search/?q=${encodeURIComponent(searchQuery)}`;
     }
-    // searchDialog?.close();
   });
 
   // Prevent Enter from closing the dialog: intercept Enter and trigger the search button click
@@ -136,7 +133,6 @@ async function setupSearchDialog(): Promise<void> {
   searchDialog?.addEventListener("click", (e: MouseEvent) => {
     if (e.target === searchDialog) {
       searchDialog?.close();
-      searchForm?.reset();
     }
   });
 }

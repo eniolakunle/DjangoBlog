@@ -82,7 +82,6 @@ async function setupSearchDialog() {
     // Close dialog when cancel button is clicked
     searchClose?.addEventListener("click", () => {
         searchDialog?.close();
-        searchForm?.reset();
     });
     // Handle form submission
     searchEnter?.addEventListener("click", (e) => {
@@ -90,9 +89,7 @@ async function setupSearchDialog() {
         const searchQuery = searchInput?.value.trim();
         if (searchQuery) {
             callGemini(searchQuery, geminiContext);
-            // window.location.href = `/search/?q=${encodeURIComponent(searchQuery)}`;
         }
-        // searchDialog?.close();
     });
     // Prevent Enter from closing the dialog: intercept Enter and trigger the search button click
     searchDialog?.addEventListener("keydown", (e) => {
@@ -110,7 +107,6 @@ async function setupSearchDialog() {
     searchDialog?.addEventListener("click", (e) => {
         if (e.target === searchDialog) {
             searchDialog?.close();
-            searchForm?.reset();
         }
     });
 }
