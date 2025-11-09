@@ -171,6 +171,7 @@ export async function fetchXmlData(url: string): Promise<string> {
   const xmlText = await response.text();
   return xmlText;
 }
+
 export function parseXmlString(xmlString: string): Document {
   const parser = new DOMParser();
   const xmlDoc = parser.parseFromString(xmlString, "text/xml");
@@ -294,6 +295,7 @@ function buildFullPrompt(listForModel: string): string {
   const instructions = `You are a concise article selector. Based only on the user's prompt and the list below, choose the single best article. If the user's response doesn't give a clear understanding of what they are looking for, ask a follow-up question. Each follow up question should only be one sentence that is fairly short, but concise, susinct, and effective. If you find an an article that fits the user's request return an answer immediately, otherwise ask at most 3 follow up questions to understand the user's intent better and return a final answer. The final answer MUST be a single line starting with EXACTLY: FINAL_LINK: <url> and the <url> must be one of the provided URLs below. Do not include any other text.`;
   return `${instructions}\nAvailable articles (title -> url):\n${listForModel}`;
 }
+
 function checkResponse(response: Response): ReadableStreamDefaultReader {
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
@@ -324,7 +326,6 @@ export async function postAndStream(
     contents: getConversation(),
   });
 
-  // console.log(`BODY: ${fetchBody}`);
   const url =
     "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent?alt=sse";
   const response = await fetch(url, {
