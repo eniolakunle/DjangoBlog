@@ -7,6 +7,39 @@
     {% load static %}
         <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/thumbnail.jpg' %}" />
 {% endblock %}
+{% block script %}
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Blog",
+            "name": "The Secret Place",
+            "description": "Daily exploration of the mysteries behind God's Word.",
+            "url": "{{ request.build_absolute_uri }}",
+            "blogPost": [
+                {% for post in posts %}
+                    {
+                        "@type": "BlogPosting",
+                        "headline": "{{ post.title }}",
+                        "url": "{{ request.scheme }}://{{ request.get_host }}{{ post.get_absolute_url }}",
+                        "datePublished": "{{ post.published_date }}",
+                        {% if post.updated_date %}
+                        "dateModified": "{{ post.updated_date }}",
+                        {% endif %}
+                        {% if post.featured_image %}
+                        "image": "{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image.url }}",
+                        {% endif %}
+                        "author": {
+                            "@type": "Person",
+                            "@id": "https://oluwakunleeniola.com",
+                            "name": "Kunle Eniola",
+                            "url": "https://oluwakunleeniola.com"
+                        }
+                    }{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ]
+        }
+    </script>
+{% endblock %}
 
 {% block title %}The Secret Place{% endblock %}
 

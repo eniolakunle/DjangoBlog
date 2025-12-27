@@ -11,6 +11,50 @@
     {% endif %}
 {% endblock %}
 
+{% block script %} 
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org/",
+            "@type": "BlogPosting",
+            "@id": "{{ request.scheme }}://{{ request.get_host }}{{ post.get_absolute_url }}",
+            "mainEntityOfPage": "{{ request.scheme }}://{{ request.get_host }}{{ post.get_absolute_url }}",
+            "headline": "{{post.title}}",
+            "name": "{{post.title}}",
+            "description": "{{ post.body|striptags|truncatewords:30|replace_nbsp }}",
+            "datePublished": "{{post.publish}}",
+            "dateModified": "{{post.updated}}",
+            "author": {
+                "@type": "Person",
+                "@id": "https://oluwakunleeniola.com",
+                "name": "Kunle Eniola",
+                "url": "https://oluwakunleeniola.com"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "@id": "https://oluwakunleeniola.com/blog",
+                "name": "The Secret Place"
+            },
+            "image": {
+                "@type": "ImageObject",
+                "@id": "{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image.url }}",
+                "url": "{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image.url }}",
+                "height": "360",
+                "width": "480"
+            },
+            "url": "{{ request.scheme }}://{{ request.get_host }}{{ post.get_absolute_url }}",
+            "isPartOf": {
+                "@type" : "Blog",
+                "@id": "https://oluwakunleeniola.com/blog",
+                "name": "The Secret Place",
+                "publisher": {
+                    "@type": "Organization",
+                    "@id": "https://oluwakunleeniola.com/blog",
+                    "name": "The Secret Place"
+                }
+            }
+        }
+    </script>
+{% endblock %}
 {% block title %} {{post.title}} {% endblock %}
 
 {% block style %} 
@@ -47,12 +91,6 @@
            {{tag.name}}
        </a>
    {% endfor %}
-    <!-- <p>
-        <button id="twitter-share-button">Share on X</button>
-        <a href="{% url 'blog:post_share' post.id %}">
-            <button>Share with Email</button>
-        </a>
-    </p> -->
 
     {% with comments.count as total_comments %}
         <h2>
