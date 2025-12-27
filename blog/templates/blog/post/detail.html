@@ -91,12 +91,6 @@
            {{tag.name}}
        </a>
    {% endfor %}
-    <!-- <p>
-        <button id="twitter-share-button">Share on X</button>
-        <a href="{% url 'blog:post_share' post.id %}">
-            <button>Share with Email</button>
-        </a>
-    </p> -->
 
     {% with comments.count as total_comments %}
         <h2>
