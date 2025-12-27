@@ -21,9 +21,9 @@
                         "@type": "BlogPosting",
                         "headline": "{{ post.title }}",
                         "url": "{{ request.scheme }}://{{ request.get_host }}{{ post.get_absolute_url }}",
-                        "datePublished": "{{ post.published_date|date:'Y-m-d' }}",
+                        "datePublished": "{{ post.published_date }}",
                         {% if post.updated_date %}
-                        "dateModified": "{{ post.updated_date|date:'Y-m-d' }}",
+                        "dateModified": "{{ post.updated_date }}",
                         {% endif %}
                         {% if post.featured_image %}
                         "image": "{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image.url }}",
@@ -39,8 +39,8 @@
             ]
         }
     </script>
-
 {% endblock %}
+
 {% block title %}The Secret Place{% endblock %}
 
 {% block style %} 
