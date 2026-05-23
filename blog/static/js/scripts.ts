@@ -4,7 +4,7 @@ import {
   searchLinks,
   callGemini,
   //@ts-expect-error
-} from "./functions.js?v=1.0.5";
+} from "./functions.js?v=1.0.6";
 
 function toggleMenu(): void {
   var menu = document.getElementById("menu");
@@ -18,7 +18,7 @@ function formatTwitterButton(): void {
     twitterButton.addEventListener("click", function (event) {
       event.preventDefault(); // Prevent default link behavior
       const tweetText = encodeURIComponent(
-        "Wow, check this out, Jesus is Lord!"
+        "Wow, check this out, Jesus is Lord!",
       );
       const tweetUrl = encodeURIComponent(window.location.href);
       const hashtags = "jesus";
@@ -85,13 +85,13 @@ function shareOnClick(): void {
 async function setupSearchDialog(): Promise<void> {
   const searchButton = document.getElementById("search-button");
   const searchDialog = document.getElementById(
-    "search-dialog"
+    "search-dialog",
   ) as HTMLDialogElement;
   const searchClose = document.getElementById("search-close");
   const searchEnter = document.getElementById("search-enter");
   const searchForm = document.getElementById("search-form") as HTMLFormElement;
   const searchInput = document.getElementById(
-    "search-input"
+    "search-input",
   ) as HTMLInputElement;
   const geminiContext = await searchLinks();
 
@@ -124,7 +124,7 @@ async function setupSearchDialog(): Promise<void> {
       e.preventDefault();
       // Trigger the click handler for the search-enter button without closing the dialog
       searchEnter?.dispatchEvent(
-        new MouseEvent("click", { bubbles: true, cancelable: true })
+        new MouseEvent("click", { bubbles: true, cancelable: true }),
       );
     }
   });
