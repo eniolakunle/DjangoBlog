@@ -327,7 +327,7 @@ export async function postAndStream(
   });
 
   const url =
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:streamGenerateContent";
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:streamGenerateContent?alt=sse";
   const response = await fetch(url, {
     method: "POST",
     headers: headers,

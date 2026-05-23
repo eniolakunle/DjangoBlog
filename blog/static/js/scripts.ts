@@ -4,7 +4,7 @@ import {
   searchLinks,
   callGemini,
   //@ts-expect-error
-} from "./functions.js?v=1.0.6";
+} from "./functions.js?v=1.0.7";
 
 function toggleMenu(): void {
   var menu = document.getElementById("menu");
