@@ -263,7 +263,7 @@ loaderCleanup) {
         system_instruction: systemPrompt,
         contents: getConversation(),
     });
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent?alt=sse";
+    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:streamGenerateContent";
     const response = await fetch(url, {
         method: "POST",
         headers: headers,

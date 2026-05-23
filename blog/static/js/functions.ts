@@ -11,7 +11,7 @@ export const intersectingObserver = new IntersectionObserver(
       }
     });
   },
-  { threshold: 0.7 }
+  { threshold: 0.7 },
 ); // Trigger when 70% of the element is visible
 
 export function linkHandler(link: HTMLAnchorElement, overlay: Element) {
@@ -68,7 +68,7 @@ export function fadeTransition(): void {
       event.persisted ||
       (
         performance.getEntriesByType(
-          "navigation"
+          "navigation",
         )[0] as PerformanceNavigationTiming
       )?.type === "back_forward"
     ) {
@@ -79,7 +79,7 @@ export function fadeTransition(): void {
           el.classList.remove("link-container");
           // Remove link-container class when back button is used.
           // fixes bug where cards cover mobile nav bar
-        }
+        },
       );
     }
   });
@@ -135,7 +135,7 @@ export function endlessScrolling(): void {
           // ensure new articles added will transition smoothly if clicked
           (link as HTMLAnchorElement).addEventListener(
             "click",
-            linkHandler(link as HTMLAnchorElement, overlay as Element)
+            linkHandler(link as HTMLAnchorElement, overlay as Element),
           );
 
           // remove class additions from new articles, they belong in bottom grid only
@@ -150,7 +150,7 @@ export function endlessScrolling(): void {
         if (newNextPageLink) {
           nextPageLink.setAttribute(
             "href",
-            (newNextPageLink as Element).getAttribute("href") as string
+            (newNextPageLink as Element).getAttribute("href") as string,
           );
         } else {
           // No next page; remove the link and unobserve the sentinel
@@ -247,7 +247,7 @@ function extractTextFromSseLine(line: string): string | null {
 // is in the provided set. This function only performs the check and returns a boolean.
 export function checkForFinalLink(
   accumulated: string,
-  normalizedSet: Set<string>
+  normalizedSet: Set<string>,
 ): [boolean, string] {
   const finalMatch = accumulated.match(/\s*(https?:\/\/[^^\s]+)/i);
   if (finalMatch && finalMatch[1]) {
@@ -263,7 +263,7 @@ export function checkForFinalLink(
 export async function redirectToFinalLink(
   geminiQuestion: HTMLHeadingElement,
   foundUrl: string,
-  reader?: ReadableStreamDefaultReader<Uint8Array>
+  reader?: ReadableStreamDefaultReader<Uint8Array>,
 ): Promise<void> {
   geminiQuestion.textContent = "Here's an article just for you. Enjoy!";
   if (reader) await reader.cancel();
@@ -314,7 +314,7 @@ export async function postAndStream(
   articleUrls: string[],
   geminiQuestion: HTMLHeadingElement,
   // optional cleanup callback to remove a loading UI created by caller
-  loaderCleanup?: () => void
+  loaderCleanup?: () => void,
 ): Promise<void> {
   const headers = {
     "Content-Type": "application/json",
@@ -327,7 +327,7 @@ export async function postAndStream(
   });
 
   const url =
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:streamGenerateContent?alt=sse";
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:streamGenerateContent";
   const response = await fetch(url, {
     method: "POST",
     headers: headers,
@@ -368,7 +368,7 @@ export async function postAndStream(
   addModelMessage(accumulatedText);
   geminiQuestion.textContent = accumulatedText;
   const searchInput = document.getElementById(
-    "search-input"
+    "search-input",
   ) as HTMLInputElement;
   searchInput.value = "";
 }
@@ -376,7 +376,7 @@ export async function postAndStream(
 // Refactored main: orchestrate helpers
 export async function callGemini(prompt: string, urls: string): Promise<void> {
   const geminiQuestion = document.getElementById(
-    "gemini-question"
+    "gemini-question",
   ) as HTMLHeadingElement;
   if (!geminiQuestion) return;
 
@@ -421,7 +421,7 @@ const conversationStore: ConversationMessage[] = [];
 // Create a ConversationMessage object (pure, small function)
 export function makeMessage(
   role: "user" | "model" | "system_instruction",
-  text: string
+  text: string,
 ): ConversationMessage {
   return {
     role,
