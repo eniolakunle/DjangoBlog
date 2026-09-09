@@ -1,0 +1,131 @@
+// Simple EntityDB helpers (lazy dynamic import)
+// Exports: initEntityDb, deriveTitleFromUrl, indexTitles, queryTitles
+
+let _db: any = null;
+let _initInProgress = false;
+
+export async function initEntityDb(model = "Xenova/all-MiniLM-L6-v2") {
+  if (_db) return _db;
+  if (_initInProgress) {
+    while (_initInProgress) {
+      // wait for init to finish
+      // eslint-disable-next-line no-await-in-loop
+      await new Promise((r) => setTimeout(r, 50));
+    }
+    return _db;
+  }
+
+  _initInProgress = true;
+  try {
+    // dynamic import so we don't force consumers to bundle the package
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const mod = await import("@babycommando/entity-db");
+    console.log("EntityDB module loaded", mod);
+    const { EntityDB } = mod;
+    const db = new EntityDB({ vectorPath: "eniola_entity_db" });
+    _db = db;
+    console.log("EntityDB initialized");
+    return _db;
+  } catch (e) {
+    console.warn("EntityDB init failed", e);
+    _db = null;
+    return null;
+  } finally {
+    _initInProgress = false;
+  }
+}
+
+export function deriveTitleFromUrl(url: string) {
+  try {
+    const tidy = url.replace(/\/?$/, "");
+    const parts = tidy.split("/");
+    const slug = parts[parts.length - 1] || tidy;
+    return decodeURIComponent(slug.replace(/-/g, " "));
+  } catch (e) {
+    return url;
+  }
+}
+
+export async function indexTitles(urls: string[], opts: { force?: boolean } = {}) {
+  const key = "entitydb_indexed_fingerprint";
+
+  const fingerprint = computeFingerprint(urls);
+
+  if (!opts.force && alreadyIndexed(key, fingerprint)) {
+    console.log("EntityDB: URLs already indexed (fingerprint match)");
+    return;
+  }
+
+  const db = await getDbOrNull();
+  if (!db) {
+    console.warn("EntityDB not available; skipping indexing");
+    return;
+  }
+
+  await insertAll(db, urls);
+
+  markIndexed(key, fingerprint);
+  console.log("EntityDB: indexing complete", urls.length);
+}
+
+// --- internal helpers ---
+
+function computeFingerprint(list: string[]) {
+  // base64 of the JSON representation; keep slice for compactness
+  return btoa(JSON.stringify(list)).slice(0, 64);
+}
+function alreadyIndexed(key: string, fingerprint: string) {
+  try {
+    const seen = window.sessionStorage.getItem(key);
+    return seen === fingerprint;
+  } catch (e) {
+    return false;
+  }
+}
+function markIndexed(key: string, fingerprint: string) {
+  try {
+    window.sessionStorage.setItem(key, fingerprint);
+  } catch (e) {
+    /* ignore storage failures */
+  }
+}
+async function getDbOrNull() {
+  try {
+    const db = await initEntityDb();
+    return db;
+  } catch (e) {
+    return null;
+  }
+}
+async function insertAll(db: any, list: string[]) {
+  for (const u of list) {
+    try {
+      const title = deriveTitleFromUrl(u);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await db.insert({ text: title, metadata: { url: u, title } });
+    } catch (e) {
+      console.warn("EntityDB: failed to insert", u, e);
+    }
+  }
+}
+
+export async function queryTitles(q: string, topK = 5) {
+  try {
+    const db = await initEntityDb();
+    if (!db) return [];
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const res = await db.query(q);
+    if (!res || !Array.isArray(res)) return [];
+    const urls = res.slice(0, topK).map((r: any) => r?.metadata?.url || r?.text || "").filter(Boolean);
+    console.log("EntityDB: query", q, "->", urls.length, "results");
+    return urls;
+  } catch (e) {
+    console.warn("EntityDB: query failed", e);
+    return [];
+  }
+}
+
+export default null;
