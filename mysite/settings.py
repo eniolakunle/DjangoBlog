@@ -11,8 +11,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
-from pathlib import Path
 import sys
+from pathlib import Path
+
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -71,11 +72,6 @@ STATICFILES_FINDERS = [
     "compressor.finders.CompressorFinder",
 ]
 
-PASSWORD_PROTECTED_REFERRERS = [
-    # "linktr.ee",
-    # "instagram",
-    # "tiktok",
-]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -85,7 +81,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "blog.middleware.ReferrerBlockMiddleware",
 ]
 
 ROOT_URLCONF = "mysite.urls"

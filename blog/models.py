@@ -1,12 +1,13 @@
+from datetime import datetime, timedelta
+
 import readtime
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils import timezone
 from django.urls import reverse
+from django.utils import timezone
 from django_ckeditor_5.fields import CKEditor5Field
 from taggit.managers import TaggableManager
-from datetime import datetime, timedelta
 
 # from django.db.models.functions import Now
 
