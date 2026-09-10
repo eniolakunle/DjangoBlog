@@ -1,9 +1,5 @@
 # Create your tests here.
-<<<<<<< HEAD
-from unittest.mock import MagicMock, patch
-=======
 from unittest.mock import MagicMock
->>>>>>> origin/html-for-prod
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
