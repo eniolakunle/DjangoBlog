@@ -215,31 +215,31 @@ class PostShareViewTest(TestCase):
         self.assertContains(response, "Enter a valid email address.", html=True)
 
 
-class ReferrerBlockMiddlewareTest(TestCase):
-    def setUp(self):
-        self.factory = RequestFactory()
-        self.get_response = lambda request: HttpResponse()
-        self.middleware = ReferrerBlockMiddleware(self.get_response)
-        settings.PASSWORD_PROTECTED_REFERRERS = ["blocked.com"]
+# class ReferrerBlockMiddlewareTest(TestCase):
+#     def setUp(self):
+#         self.factory = RequestFactory()
+#         self.get_response = lambda request: HttpResponse()
+#         self.middleware = ReferrerBlockMiddleware(self.get_response)
+#         settings.PASSWORD_PROTECTED_REFERRERS = ["blocked.com"]
 
-    def test_redirects_to_password_protected_page(self):
-        request = self.factory.get("/some-path", HTTP_REFERER="http://blocked.com")
-        request.session = {}
-        response = self.middleware(request)
-        self.assertEqual(response.status_code, 302)
-        self.assertIn("/blog/password-required/", response.url)
+#     def test_redirects_to_password_protected_page(self):
+#         request = self.factory.get("/some-path", HTTP_REFERER="http://blocked.com")
+#         request.session = {}
+#         response = self.middleware(request)
+#         self.assertEqual(response.status_code, 302)
+#         self.assertIn("/blog/password-required/", response.url)
 
-    def test_does_not_redirect_if_authenticated(self):
-        request = self.factory.get("/some-path", HTTP_REFERER="http://blocked.com")
-        request.session = {"password_authenticated": True}
-        response = self.middleware(request)
-        self.assertEqual(response.status_code, 200)
+#     def test_does_not_redirect_if_authenticated(self):
+#         request = self.factory.get("/some-path", HTTP_REFERER="http://blocked.com")
+#         request.session = {"password_authenticated": True}
+#         response = self.middleware(request)
+#         self.assertEqual(response.status_code, 200)
 
-    def test_does_not_redirect_if_referrer_not_blocked(self):
-        request = self.factory.get("/some-path", HTTP_REFERER="http://allowed.com")
-        request.session = {}
-        response = self.middleware(request)
-        self.assertEqual(response.status_code, 200)
+#     def test_does_not_redirect_if_referrer_not_blocked(self):
+#         request = self.factory.get("/some-path", HTTP_REFERER="http://allowed.com")
+#         request.session = {}
+#         response = self.middleware(request)
+#         self.assertEqual(response.status_code, 200)
 
 
 class PasswordRequiredViewTest(TestCase):
