@@ -1,5 +1,6 @@
 // float blog cards when they are intersecting with the viewport,
 // works well on mobile where hover is iffy and works on desktop well too
+import { queryTitles } from "./entitydb.js";
 export const intersectingObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -10,7 +11,6 @@ export const intersectingObserver = new IntersectionObserver((entries) => {
         }
     });
 }, { threshold: 0.7 }); // Trigger when 70% of the element is visible
-import { indexTitles, queryTitles } from "./entitydb.js";
 // Cache for the current search session: candidates only (one-time DB call)
 let cachedCandidates = null;
 // Clear cached candidates (useful to force a fresh DB query)
