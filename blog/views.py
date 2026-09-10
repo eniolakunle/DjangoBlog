@@ -153,15 +153,15 @@ def post_comment(request, post_id):
     )
 
 
-def password_required(request):
-    error = None
-    next_url = next_url = request.GET.get("next") or request.POST.get("next") or "/blog"
-    if request.method == "POST":
-        # Replace 'correct_password' with your actual password or configuration setting.
-        if request.POST.get("password") == config("REFERRER_PASSWORD"):
-            request.session["password_authenticated"] = True
-            # Redirect to the original page or a default page.
-            return redirect(next_url)
-        else:
-            error = "Incorrect password. Please try again."
-    return render(request, "blog/password_required.html", {"error": error})
+# def password_required(request):
+#     error = None
+#     next_url = next_url = request.GET.get("next") or request.POST.get("next") or "/blog"
+#     if request.method == "POST":
+#         # Replace 'correct_password' with your actual password or configuration setting.
+#         if request.POST.get("password") == config("REFERRER_PASSWORD"):
+#             request.session["password_authenticated"] = True
+#             # Redirect to the original page or a default page.
+#             return redirect(next_url)
+#         else:
+#             error = "Incorrect password. Please try again."
+#     return render(request, "blog/password_required.html", {"error": error})
