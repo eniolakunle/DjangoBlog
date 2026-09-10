@@ -1,5 +1,5 @@
 # Create your tests here.
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
