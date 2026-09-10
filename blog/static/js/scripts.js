@@ -1,6 +1,7 @@
 import { fadeTransition, endlessScrolling, searchLinks, callGemini,
 //@ts-expect-error
  } from "./functions.js?v=1.0.7";
+import { indexTitles, initEntityDb } from "./entitydb.js";
 function toggleMenu() {
     var menu = document.getElementById("menu");
     menu.style.display =
@@ -78,6 +79,8 @@ async function setupSearchDialog() {
     searchButton?.addEventListener("click", () => {
         searchDialog?.showModal();
         searchInput?.focus();
+        initEntityDb();
+        indexTitles(geminiContext);
     });
     // Close dialog when cancel button is clicked
     searchClose?.addEventListener("click", () => {

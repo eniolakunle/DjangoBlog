@@ -1,10 +1,12 @@
 // Simple EntityDB helpers (lazy dynamic import)
 // Exports: initEntityDb, deriveTitleFromUrl, indexTitles, queryTitles
 
+import { parseUrls } from "./functions.js";
+
 let _db: any = null;
 let _initInProgress = false;
 
-export async function initEntityDb(model = "Xenova/all-MiniLM-L6-v2") {
+export async function initEntityDb(model = "Xenova/multi-qa-MiniLM-L6-cos-v1") {
   if (_db) return _db;
   if (_initInProgress) {
     while (_initInProgress) {
@@ -20,11 +22,19 @@ export async function initEntityDb(model = "Xenova/all-MiniLM-L6-v2") {
     // dynamic import so we don't force consumers to bundle the package
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
+    const envMod = await import("@xenova/transformers");
+    const { env } = envMod;
+    env.allowRemoteModels = true;
+    env.allowLocalModels = false;
+    
+    // @ts-ignore
     const mod = await import("@babycommando/entity-db");
     console.log("EntityDB module loaded", mod);
     const { EntityDB } = mod;
-    const db = new EntityDB({ vectorPath: "eniola_entity_db" });
+    
+    const db = new EntityDB({ vectorPath: "eniola_entity_db", model: model });
     _db = db;
+
     console.log("EntityDB initialized");
     return _db;
   } catch (e) {
@@ -47,10 +57,10 @@ export function deriveTitleFromUrl(url: string) {
   }
 }
 
-export async function indexTitles(urls: string[], opts: { force?: boolean } = {}) {
+export async function indexTitles(urls: string, opts: { force?: boolean } = {}) {
   const key = "entitydb_indexed_fingerprint";
-
-  const fingerprint = computeFingerprint(urls);
+  const parsedUrls = parseUrls(urls);
+  const fingerprint = computeFingerprint(parsedUrls);
 
   if (!opts.force && alreadyIndexed(key, fingerprint)) {
     console.log("EntityDB: URLs already indexed (fingerprint match)");
@@ -63,10 +73,10 @@ export async function indexTitles(urls: string[], opts: { force?: boolean } = {}
     return;
   }
 
-  await insertAll(db, urls);
+  await insertAll(db, parsedUrls);
 
   markIndexed(key, fingerprint);
-  console.log("EntityDB: indexing complete", urls.length);
+  console.log("EntityDB: indexing complete", parsedUrls.length);
 }
 
 // --- internal helpers ---
@@ -118,6 +128,7 @@ export async function queryTitles(q: string, topK = 5) {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const res = await db.query(q);
+    console.log(res);
     if (!res || !Array.isArray(res)) return [];
     const urls = res.slice(0, topK).map((r: any) => r?.metadata?.url || r?.text || "").filter(Boolean);
     console.log("EntityDB: query", q, "->", urls.length, "results");

@@ -6,6 +6,8 @@ import {
   //@ts-expect-error
 } from "./functions.js?v=1.0.7";
 
+import { indexTitles, initEntityDb } from "./entitydb.js";
+
 function toggleMenu(): void {
   var menu = document.getElementById("menu");
   (menu as HTMLElement).style.display =
@@ -99,6 +101,8 @@ async function setupSearchDialog(): Promise<void> {
   searchButton?.addEventListener("click", () => {
     searchDialog?.showModal();
     searchInput?.focus();
+    initEntityDb()
+    indexTitles(geminiContext)
   });
 
   // Close dialog when cancel button is clicked
