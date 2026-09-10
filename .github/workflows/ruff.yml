@@ -32,7 +32,7 @@ jobs:
           args: "--version"
 
       - name: Run Ruff Linter
-        run: ruff check --fix
+        run: ruff check --fix --unsafe-fixes
 
       - name: Run Ruff Formatter
         run: ruff format
