@@ -21,6 +21,7 @@ jobs:
         uses: astral-sh/ruff-action@v4.1.0
         with:
           version: "latest"
+          args: "--version"
 
       - name: Run Ruff Linter
         run: ruff check --fix
