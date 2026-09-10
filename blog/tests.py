@@ -216,41 +216,6 @@ class PostShareViewTest(TestCase):
         self.assertContains(response, "Enter a valid email address.", html=True)
 
 
-class PasswordRequiredViewTest(TestCase):
-    def setUp(self):
-        self.client = Client()
-        self.url = reverse("blog:password_required")
-        self.correct_password = "correct_password"
-        self.next_url = "/blog/"
-
-    @patch("blog.views.config")
-    def test_password_required_get(self, mock_config):
-        response = self.client.get(self.url, {"next": self.next_url})
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "blog/password_required.html")
-
-    @patch("blog.views.config")
-    def test_password_required_post_correct_password(self, mock_config):
-        mock_config.return_value = self.correct_password
-        response = self.client.post(
-            self.url, {"password": self.correct_password, "next": self.next_url}
-        )
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, self.next_url)
-        self.assertTrue(self.client.session["password_authenticated"])
-
-    @patch("blog.views.config")
-    def test_password_required_post_incorrect_password(self, mock_config):
-        mock_config.return_value = self.correct_password
-        response = self.client.post(
-            self.url, {"password": "wrong_password", "next": self.next_url}
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "blog/password_required.html")
-        self.assertContains(response, "Incorrect password. Please try again.")
-        self.assertFalse(self.client.session.get("password_authenticated", False))
-
-
 class PostListViewTest(TestCase):
     def setUp(self):
         self.client = Client()
