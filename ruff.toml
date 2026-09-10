@@ -1,3 +1,3 @@
-[tool.ruff.lint]
+[lint]
 # Ignore RUF012 completely, or use per-file-ignores for specific folders
 ignore = ["RUF012"]
