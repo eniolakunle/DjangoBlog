@@ -1,17 +1,18 @@
 # Create your tests here.
-from django.test import TestCase, RequestFactory, Client
-from django.core.files.uploadedfile import SimpleUploadedFile
-from django.core import mail
+from unittest.mock import MagicMock, patch
+
 from django.conf import settings
-from django.http import HttpResponse
-from django.core.exceptions import ValidationError
-from django.urls import reverse
-from .models import Post, Comment, validate_image_max_size
-from .middleware import ReferrerBlockMiddleware
 from django.contrib.auth import get_user_model
-from unittest.mock import patch, MagicMock
+from django.core import mail
+from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import Client, TestCase
+from django.urls import reverse
 from django.utils.timezone import now, timedelta
+
 from blog.utils import split_and_randomize_similar_posts
+
+from .models import Comment, Post, validate_image_max_size
 
 
 class PostModelTest(TestCase):

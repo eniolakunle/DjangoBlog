@@ -1,15 +1,14 @@
-from django.shortcuts import redirect, render, get_object_or_404
-from .models import Post
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.mail import send_mail
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db.models import Count
+from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_POST
 from django.views.generic import ListView
-from .forms import EmailPostForm, CommentForm
-from django.core.mail import send_mail
 from taggit.models import Tag
-from django.db.models import Count
-from .utils import split_and_randomize_similar_posts
 
-from decouple import config
+from .forms import CommentForm, EmailPostForm
+from .models import Post
+from .utils import split_and_randomize_similar_posts
 
 # Create your views here.
 
