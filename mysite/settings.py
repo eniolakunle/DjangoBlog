@@ -72,11 +72,6 @@ STATICFILES_FINDERS = [
     "compressor.finders.CompressorFinder",
 ]
 
-PASSWORD_PROTECTED_REFERRERS = [
-    # "linktr.ee",
-    # "instagram",
-    # "tiktok",
-]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -86,7 +81,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "blog.middleware.ReferrerBlockMiddleware",
 ]
 
 ROOT_URLCONF = "mysite.urls"
