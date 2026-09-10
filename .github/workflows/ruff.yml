@@ -18,7 +18,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install latest version of ruff
+<<<<<<< HEAD
         uses: astral-sh/ruff-action@v4.1.0
+=======
+        uses: astral-sh/ruff-action@v4
+>>>>>>> 5a26e94 (v4 ruff)
         with:
           version: "latest"
           args: "--version"
