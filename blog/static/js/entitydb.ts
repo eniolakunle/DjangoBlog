@@ -74,6 +74,7 @@ export async function indexTitles(urls: string, opts: { force?: boolean } = {}) 
     return;
   }
 
+  await clearDB(db);
   await insertAll(db, parsedUrls);
 
   markIndexed(key, fingerprint);
@@ -81,6 +82,24 @@ export async function indexTitles(urls: string, opts: { force?: boolean } = {}) 
 }
 
 // --- internal helpers ---
+async function clearDB(db: any) {
+  console.log("EntityDB: clearing database");
+
+  const dbPromise = await db.dbPromise;
+  const transaction = dbPromise.transaction("vectors", "readwrite");
+  transaction.oncomplete = () => {
+    console.log("Transaction completed.");
+  };
+
+  // create an object store on the transaction
+  const objectStore = transaction.objectStore("vectors");
+
+  // Make a request to clear all the data out of the object store
+  const objectStoreRequest = objectStore.clear();
+  objectStoreRequest.onsuccess = () => {
+    console.log("Database cleared.");
+  };
+}
 
 function computeFingerprint(list: string[]) {
   // base64 of the JSON representation; keep slice for compactness

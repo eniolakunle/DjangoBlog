@@ -66,11 +66,27 @@ export async function indexTitles(urls, opts = {}) {
         console.warn("EntityDB not available; skipping indexing");
         return;
     }
+    await clearDB(db);
     await insertAll(db, parsedUrls);
     markIndexed(key, fingerprint);
     console.log("EntityDB: indexing complete", parsedUrls.length);
 }
 // --- internal helpers ---
+async function clearDB(db) {
+    console.log("EntityDB: clearing database");
+    const dbPromise = await db.dbPromise;
+    const transaction = dbPromise.transaction("vectors", "readwrite");
+    transaction.oncomplete = () => {
+        console.log("Transaction completed.");
+    };
+    // create an object store on the transaction
+    const objectStore = transaction.objectStore("vectors");
+    // Make a request to clear all the data out of the object store
+    const objectStoreRequest = objectStore.clear();
+    objectStoreRequest.onsuccess = () => {
+        console.log("Database cleared.");
+    };
+}
 function computeFingerprint(list) {
     // base64 of the JSON representation; keep slice for compactness
     return btoa(JSON.stringify(list)).slice(0, 64);
