@@ -16,6 +16,52 @@ export const intersectingObserver = new IntersectionObserver(
   { threshold: 0.7 },
 ); // Trigger when 70% of the element is visible
 
+const model: string = "gemini-3.5-flash-lite"
+const url: string = `https://ai.google.dev/gemini-api/docs/models/${model}`;
+const vectorDB: string = "EntityDB";
+const vectorURL: string = "https://entity-db-landing.vercel.app"
+
+// Export simple identifiers for UI/tests
+export const MODEL = model;
+export const VECTOR_DB = vectorDB;
+
+// Minimal Powered By badge helpers (kept intentionally small for tests)
+export function renderPoweredByBadge(): HTMLElement {
+  const el = document.createElement("div");
+  el.className = "powered-by-badge";
+  const modelLink = `<a href="${url}" target="_blank" rel="noopener">${MODEL}</a>`;
+  const dbLink = `<a href="${vectorURL}" target="_blank" rel="noopener">${VECTOR_DB}</a>`;
+  el.innerHTML = `Powered by ${modelLink} & ${dbLink}`;
+  return el;
+}
+
+export function removePoweredByBadge(): void {
+  const el = document.querySelector(".powered-by-badge");
+  if (el && el.parentElement) el.parentElement.removeChild(el);
+}
+
+// Ensure the badge is appended into the search dialog (non-invasive).
+function ensurePoweredByBadgeInDialog(): void {
+  // prefer explicit dialog element; fall back to gemini-question container
+  const dialog =
+    (document.querySelector(".search-dialog") as HTMLElement) ||
+    (document.getElementById("gemini-question") as HTMLElement) ||
+    null;
+  if (!dialog) return;
+
+  // If badge already present inside dialog, nothing to do
+  if (dialog.querySelector(".powered-by-badge")) return;
+
+  // If the dialog is statically positioned, make it relative inline so
+  // the absolute-positioned badge will be positioned relative to it.
+  const computed = window.getComputedStyle(dialog).position;
+  if (!computed || computed === "static") {
+    dialog.style.position = "relative";
+  }
+
+  const badge = renderPoweredByBadge();
+  dialog.appendChild(badge);
+}
 
 // Cache for the current search session: candidates only (one-time DB call)
 let cachedCandidates: string[] | null = null;
@@ -445,6 +491,13 @@ export async function callGemini(prompt: string, urls: string): Promise<void> {
     // create a minimal loading UI (animated dots) inserted into geminiQuestion
     const cleanup = createGeminiLoader(geminiQuestion);
 
+    // non-invasive: ensure Powered By badge is present inside the dialog
+    try {
+      ensurePoweredByBadgeInDialog();
+    } catch (e) {
+      /* ignore badge failures */
+    }
+
     addUserMessage(prompt);
     await postAndStream(fullPrompt, urlsToUse, geminiQuestion, cleanup);
   } catch (error) {
@@ -541,4 +594,30 @@ export function createGeminiLoader(parent: HTMLElement): () => void {
       /* ignore */
     }
   };
+}
+
+// If the search dialog is added to the DOM later (e.g. shown via a click),
+// ensure the Powered By badge is appended. Use a MutationObserver and also
+// perform an immediate attempt. This is non-invasive and disconnects itself
+// after the dialog is found.
+if (typeof window !== "undefined" && typeof document !== "undefined") {
+  try {
+    // immediate attempt
+    ensurePoweredByBadgeInDialog();
+
+    const mo = new MutationObserver((mutations, obs) => {
+      if (document.querySelector(".search-dialog")) {
+        try {
+          ensurePoweredByBadgeInDialog();
+        } catch (e) {
+          /* ignore */
+        }
+        obs.disconnect();
+      }
+    });
+
+    mo.observe(document.body, { childList: true, subtree: true });
+  } catch (e) {
+    /* ignore environment where DOM isn't available */
+  }
 }

@@ -83,6 +83,7 @@ function shareOnClick(): void {
   }
 }
 
+
 // Search Dialog functionality
 async function setupSearchDialog(): Promise<void> {
   const searchButton = document.getElementById("search-button");
@@ -96,13 +97,12 @@ async function setupSearchDialog(): Promise<void> {
     "search-input",
   ) as HTMLInputElement;
   const geminiContext = await searchLinks();
+  indexTitles(geminiContext)
 
   // Open dialog when search button is clicked
   searchButton?.addEventListener("click", () => {
     searchDialog?.showModal();
     searchInput?.focus();
-    initEntityDb()
-    indexTitles(geminiContext)
   });
 
   // Close dialog when cancel button is clicked

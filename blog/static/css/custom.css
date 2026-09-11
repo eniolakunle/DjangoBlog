@@ -304,6 +304,42 @@ fieldset {
     font-size: 16px;
 }
 
+/* Powered By badge (single-class rules). Append into the dialog element so
+   absolute positioning is relative to the dialog. */
+.powered-by-badge {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    /* target roughly 25-33% of the dialog width */
+    width: 20%;
+    min-width: 15%;
+    max-width: 25%;
+    font-size: 9px;
+    margin-bottom: 20px;
+    margin-left: 10px;
+    /* padding: 20px; */
+    color: #666;
+    background: transparent;
+    line-height: 1.2;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    box-sizing: border-box;
+}
+.powered-by-badge a {
+    color: inherit;
+    text-decoration: underline;
+}
+@media (prefers-color-scheme: dark) {
+    .powered-by-badge {
+        color: #ccc;
+    }
+    .powered-by-badge a {
+        color: #fff;
+        opacity: 0.95;
+    }
+}
+
 .dialog-buttons {
     display: flex;
     justify-content: flex-end;

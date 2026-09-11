@@ -75,12 +75,11 @@ async function setupSearchDialog() {
     const searchForm = document.getElementById("search-form");
     const searchInput = document.getElementById("search-input");
     const geminiContext = await searchLinks();
+    indexTitles(geminiContext);
     // Open dialog when search button is clicked
     searchButton?.addEventListener("click", () => {
         searchDialog?.showModal();
         searchInput?.focus();
-        initEntityDb();
-        indexTitles(geminiContext);
     });
     // Close dialog when cancel button is clicked
     searchClose?.addEventListener("click", () => {

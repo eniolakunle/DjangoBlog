@@ -12,7 +12,11 @@
     ],
     "transform": {
       "^.+\\.js$": "babel-jest"
+    },
+    "moduleNameMapper": {
+      "^\\./functions\\.js\\?v=.*$": "<rootDir>/js/functions.js"
     }
+
   },
   "keywords": [],
   "author": "",
