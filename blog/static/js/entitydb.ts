@@ -2,7 +2,7 @@
 // Exports: initEntityDb, deriveTitleFromUrl, indexTitles, queryTitles
 
 //@ts-expect-error
-import { parseUrls } from "./functions.js?v=1.0.8";
+import { parseUrls } from "./functions.js?v=1.1.0";
 
 let _db: any = null;
 let _initInProgress = false;
