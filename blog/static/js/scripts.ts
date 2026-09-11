@@ -4,7 +4,7 @@ import {
   searchLinks,
   callGemini,
   //@ts-expect-error
-} from "./functions.js?v=1.1.0";
+} from "./functions.js?v=1.1.1";
 
 import { indexTitles, initEntityDb } from "./entitydb.js";
 

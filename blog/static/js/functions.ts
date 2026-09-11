@@ -1,7 +1,8 @@
 // float blog cards when they are intersecting with the viewport,
 // works well on mobile where hover is iffy and works on desktop well too
 
-import { queryTitles } from "./entitydb.js";
+//@ts-expect-error
+import { queryTitles } from "./entitydb.js?v=1.0.1";
 
 export const intersectingObserver = new IntersectionObserver(
   (entries): void => {

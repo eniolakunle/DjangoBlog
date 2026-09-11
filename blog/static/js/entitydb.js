@@ -1,7 +1,7 @@
 // Simple EntityDB helpers (lazy dynamic import)
 // Exports: initEntityDb, deriveTitleFromUrl, indexTitles, queryTitles
 //@ts-expect-error
-import { parseUrls } from "./functions.js?v=1.1.0";
+import { parseUrls } from "./functions.js?v=1.1.1";
 let _db = null;
 let _initInProgress = false;
 export async function initEntityDb(model = "Xenova/multi-qa-MiniLM-L6-cos-v1") {
