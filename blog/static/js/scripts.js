@@ -1,6 +1,8 @@
 import { fadeTransition, endlessScrolling, searchLinks, callGemini,
 //@ts-expect-error
- } from "./functions.js?v=1.0.7";
+ } from "./functions.js?v=1.1.2";
+//@ts-expect-error
+import { indexTitles } from "./entitydb.js?v=1.0.2";
 function toggleMenu() {
     var menu = document.getElementById("menu");
     menu.style.display =
@@ -74,6 +76,7 @@ async function setupSearchDialog() {
     const searchForm = document.getElementById("search-form");
     const searchInput = document.getElementById("search-input");
     const geminiContext = await searchLinks();
+    indexTitles(geminiContext);
     // Open dialog when search button is clicked
     searchButton?.addEventListener("click", () => {
         searchDialog?.showModal();

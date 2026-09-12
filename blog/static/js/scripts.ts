@@ -4,7 +4,10 @@ import {
   searchLinks,
   callGemini,
   //@ts-expect-error
-} from "./functions.js?v=1.0.7";
+} from "./functions.js?v=1.1.2";
+
+//@ts-expect-error
+import { indexTitles } from "./entitydb.js?v=1.0.2";
 
 function toggleMenu(): void {
   var menu = document.getElementById("menu");
@@ -81,6 +84,7 @@ function shareOnClick(): void {
   }
 }
 
+
 // Search Dialog functionality
 async function setupSearchDialog(): Promise<void> {
   const searchButton = document.getElementById("search-button");
@@ -94,6 +98,7 @@ async function setupSearchDialog(): Promise<void> {
     "search-input",
   ) as HTMLInputElement;
   const geminiContext = await searchLinks();
+  indexTitles(geminiContext)
 
   // Open dialog when search button is clicked
   searchButton?.addEventListener("click", () => {

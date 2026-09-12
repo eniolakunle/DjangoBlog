@@ -1,5 +1,7 @@
 // float blog cards when they are intersecting with the viewport,
 // works well on mobile where hover is iffy and works on desktop well too
+//@ts-expect-error
+import { queryTitles } from "./entitydb.js?v=1.0.2";
 export const intersectingObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -10,6 +12,78 @@ export const intersectingObserver = new IntersectionObserver((entries) => {
         }
     });
 }, { threshold: 0.7 }); // Trigger when 70% of the element is visible
+const model = "gemini-3.5-flash-lite";
+const url = `https://ai.google.dev/gemini-api/docs/models/${model}`;
+const vectorDB = "EntityDB";
+const vectorURL = "https://entity-db-landing.vercel.app";
+// Export simple identifiers for UI/tests
+export const MODEL = model;
+export const VECTOR_DB = vectorDB;
+// Minimal Powered By badge helpers (kept intentionally small for tests)
+export function renderPoweredByBadge() {
+    const el = document.createElement("div");
+    el.className = "powered-by-badge";
+    const modelLink = `<a href="${url}" target="_blank" rel="noopener">${MODEL}</a>`;
+    const dbLink = `<a href="${vectorURL}" target="_blank" rel="noopener">${VECTOR_DB}</a>`;
+    el.innerHTML = `Powered by ${modelLink} & ${dbLink}`;
+    return el;
+}
+export function removePoweredByBadge() {
+    const el = document.querySelector(".powered-by-badge");
+    if (el && el.parentElement)
+        el.parentElement.removeChild(el);
+}
+// Ensure the badge is appended into the search dialog (non-invasive).
+function ensurePoweredByBadgeInDialog() {
+    // prefer explicit dialog element; fall back to gemini-question container
+    const dialog = document.querySelector(".search-dialog") ||
+        document.getElementById("gemini-question") ||
+        null;
+    if (!dialog)
+        return;
+    // If badge already present inside dialog, nothing to do
+    if (dialog.querySelector(".powered-by-badge"))
+        return;
+    // If the dialog is statically positioned, make it relative inline so
+    // the absolute-positioned badge will be positioned relative to it.
+    const computed = window.getComputedStyle(dialog).position;
+    if (!computed || computed === "static") {
+        dialog.style.position = "relative";
+    }
+    const badge = renderPoweredByBadge();
+    dialog.appendChild(badge);
+}
+// Cache for the current search session: candidates only (one-time DB call)
+let cachedCandidates = null;
+// Clear cached candidates (useful to force a fresh DB query)
+export function resetCachedCandidates() {
+    cachedCandidates = null;
+}
+// Get cached candidates (one DB call). Returns the cached URLs if present,
+// otherwise queries EntityDB once for `topK` results and caches the URLs.
+export async function getCachedCandidates(prompt, articleUrls, topK = 10) {
+    if (cachedCandidates) {
+        console.log("EntityDB: reusing cached candidates ->", cachedCandidates);
+        return cachedCandidates;
+    }
+    try {
+        const candidates = await queryTitles(prompt, topK);
+        if (candidates && candidates.length > 0) {
+            cachedCandidates = candidates;
+            console.log("EntityDB: cached top-" + topK + " candidates ->", candidates);
+            return cachedCandidates;
+        }
+        // No candidates found; cache fallback to full articles list
+        cachedCandidates = articleUrls.slice();
+        console.log("EntityDB: no candidates found; using full article list");
+        return cachedCandidates;
+    }
+    catch (e) {
+        console.warn("EntityDB: error during initial query", e);
+        cachedCandidates = articleUrls.slice();
+        return cachedCandidates;
+    }
+}
 export function linkHandler(link, overlay) {
     const transitionLink = (e) => {
         if (link.hostname === window.location.hostname &&
@@ -263,7 +337,7 @@ loaderCleanup) {
         system_instruction: systemPrompt,
         contents: getConversation(),
     });
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:streamGenerateContent?alt=sse";
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`;
     const response = await fetch(url, {
         method: "POST",
         headers: headers,
@@ -311,13 +385,27 @@ export async function callGemini(prompt, urls) {
         geminiQuestion.textContent = "No article URLs provided.";
         return;
     }
-    const listForModel = buildListForModel(articleUrls);
+    // Feature flag: enable EntityDB narrowing (one-time query, top-10)
+    const USE_ENTITYDB = true;
+    let urlsToUse = articleUrls;
+    // If EntityDB is enabled, obtain the cached candidates (one-time query)
+    if (USE_ENTITYDB) {
+        urlsToUse = await getCachedCandidates(prompt, articleUrls, 10);
+    }
+    const listForModel = buildListForModel(urlsToUse);
     const fullPrompt = buildFullPrompt(listForModel);
     try {
         // create a minimal loading UI (animated dots) inserted into geminiQuestion
         const cleanup = createGeminiLoader(geminiQuestion);
+        // non-invasive: ensure Powered By badge is present inside the dialog
+        try {
+            ensurePoweredByBadgeInDialog();
+        }
+        catch (e) {
+            /* ignore badge failures */
+        }
         addUserMessage(prompt);
-        await postAndStream(fullPrompt, articleUrls, geminiQuestion, cleanup);
+        await postAndStream(fullPrompt, urlsToUse, geminiQuestion, cleanup);
     }
     catch (error) {
         console.error("Error:", error);
@@ -394,5 +482,30 @@ export function createGeminiLoader(parent) {
             /* ignore */
         }
     };
+}
+// If the search dialog is added to the DOM later (e.g. shown via a click),
+// ensure the Powered By badge is appended. Use a MutationObserver and also
+// perform an immediate attempt. This is non-invasive and disconnects itself
+// after the dialog is found.
+if (typeof window !== "undefined" && typeof document !== "undefined") {
+    try {
+        // immediate attempt
+        ensurePoweredByBadgeInDialog();
+        const mo = new MutationObserver((mutations, obs) => {
+            if (document.querySelector(".search-dialog")) {
+                try {
+                    ensurePoweredByBadgeInDialog();
+                }
+                catch (e) {
+                    /* ignore */
+                }
+                obs.disconnect();
+            }
+        });
+        mo.observe(document.body, { childList: true, subtree: true });
+    }
+    catch (e) {
+        /* ignore environment where DOM isn't available */
+    }
 }
 //# sourceMappingURL=functions.js.map

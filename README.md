@@ -6,7 +6,8 @@ This is a simple blog application built with **Django 5** to share inspirational
 
 - **RAG Powered AI Search**: Features a conversational search tool that pulls website article titles to find the best article for a user's search request. 🔎
   - ~~Powered by [Gemini 2.5 Flash Lite](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/2-5-flash-lite)~~
-  - Powered by [Gemini 3.1 Flash Lite](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/3-1-flash-lite)
+  - ~~Powered by [Gemini 3.1 Flash Lite](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/3-1-flash-lite)~~
+  - Powered by [Gemini 3.5 Flash Lite](https://docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/3-5-flash-lite) & [Entity-DB](https://github.com/babycommando/entity-db)
 - **TypeScript**: Migrated from JavaScript to TypeScript for added confidence during development! 🦺
 - **Progressive Web App**: Can be installed as an app on devices (using Chrome, Edge, and other supported browsers)! 📲
 - **Endless Scrolling**: Scroll to your hearts desire and find the perfect article for your situation. 📜
