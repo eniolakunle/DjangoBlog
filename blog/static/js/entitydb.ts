@@ -141,7 +141,7 @@ async function insertAll(db: any, list: string[]) {
   }
 }
 
-export async function queryTitles(q: string, topK = 5) {
+export async function queryTitles(q: string, topK = 5) : Promise<string[]>  {
   try {
     const db = await initEntityDb();
     if (!db) return [];

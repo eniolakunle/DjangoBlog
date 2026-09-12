@@ -89,7 +89,7 @@ export async function getCachedCandidates(
     if (candidates && candidates.length > 0) {
       cachedCandidates = candidates;
       console.log("EntityDB: cached top-" + topK + " candidates ->", candidates);
-      return cachedCandidates;
+      return cachedCandidates!;
     }
     // No candidates found; cache fallback to full articles list
     cachedCandidates = articleUrls.slice();
