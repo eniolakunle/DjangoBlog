@@ -14,7 +14,8 @@
       "^.+\\.js$": "babel-jest"
     },
     "moduleNameMapper": {
-      "^\\./functions\\.js\\?v=.*$": "<rootDir>/js/functions.js"
+      "^\\./functions\\.js\\?v=.*$": "<rootDir>/js/functions.js",
+      "^\\./entitydb\\.js\\?v=.*$": "<rootDir>/js/entitydb.js"
     }
   },
   "keywords": [],
