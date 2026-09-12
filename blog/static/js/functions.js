@@ -1,7 +1,7 @@
 // float blog cards when they are intersecting with the viewport,
 // works well on mobile where hover is iffy and works on desktop well too
 //@ts-expect-error
-import { queryTitles } from "./entitydb.js?v=1.0.1";
+import { queryTitles } from "./entitydb.js?v=1.0.2";
 export const intersectingObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -337,7 +337,7 @@ loaderCleanup) {
         system_instruction: systemPrompt,
         contents: getConversation(),
     });
-    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:streamGenerateContent?alt=sse";
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`;
     const response = await fetch(url, {
         method: "POST",
         headers: headers,

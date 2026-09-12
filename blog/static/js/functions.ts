@@ -2,7 +2,7 @@
 // works well on mobile where hover is iffy and works on desktop well too
 
 //@ts-expect-error
-import { queryTitles } from "./entitydb.js?v=1.0.1";
+import { queryTitles } from "./entitydb.js?v=1.0.2";
 
 export const intersectingObserver = new IntersectionObserver(
   (entries): void => {
@@ -415,7 +415,7 @@ export async function postAndStream(
   });
 
   const url =
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:streamGenerateContent?alt=sse";
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:streamGenerateContent?alt=sse`;
   const response = await fetch(url, {
     method: "POST",
     headers: headers,
