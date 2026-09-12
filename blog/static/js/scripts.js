@@ -2,7 +2,7 @@ import { fadeTransition, endlessScrolling, searchLinks, callGemini,
 //@ts-expect-error
  } from "./functions.js?v=1.1.1";
 //@ts-expect-error
-import { indexTitles, initEntityDb } from "./entitydb.js?v=1.0.1";
+import { indexTitles } from "./entitydb.js?v=1.0.1";
 function toggleMenu() {
     var menu = document.getElementById("menu");
     menu.style.display =
